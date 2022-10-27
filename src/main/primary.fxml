@@ -17,9 +17,9 @@
 	fx:controller="main.PrimaryController" >
 	<children>
 
-		<GridPane alignment="center" hgap="10" vgap="10" styleClass="root">
+		<GridPane alignment="center" hgap="15" vgap="15" styleClass="root">
 			<padding>
-				<Insets top="0" right="0" bottom="0" left="0" />
+				<Insets top="15" right="15" bottom="400" left="1000" />
 			</padding>
 			
 			<gridLinesVisible>false</gridLinesVisible>
