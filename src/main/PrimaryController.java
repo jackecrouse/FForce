@@ -15,7 +15,10 @@ public class PrimaryController {
         
         @FXML protected void handleSubmitButtonAction(ActionEvent event) {
             actiontarget.setText("Sign in button pressed");
+            System.out.println("hello");
         }
+        
+        
 
     
 }
