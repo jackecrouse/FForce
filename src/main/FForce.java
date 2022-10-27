@@ -2,16 +2,10 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.stage.Stage;
-import javafx.*;
-
-
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class FForce extends Application {
 	private static Scene scene;
