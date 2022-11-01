@@ -250,12 +250,6 @@ public class UOFSubjectForm extends Application {
 		btnSubmit.setText("Save and Submit");
 		spnSubmit.getChildren().add(btnSubmit);
 
-		
-
-		
-
-		
-		
 		form.show();
 	}
 	
