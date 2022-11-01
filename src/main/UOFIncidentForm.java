@@ -257,8 +257,8 @@ public class UOFIncidentForm extends Application {
 		Separator sprSubjectSubmit = new Separator();
 		vbxIncidentFull.getChildren().add(sprSubjectSubmit);
 		
-		StackPane spaSubmit = new StackPane();
-		vbxIncidentFull.getChildren().add(spaSubmit);
+		StackPane spnSubmit = new StackPane();
+		vbxIncidentFull.getChildren().add(spnSubmit);
 		
 		Button btnSubmit = new Button();
 		btnSubmit.setText("Finish and Submit");
