@@ -262,7 +262,7 @@ public class UOFIncidentForm extends Application {
 		
 		Button btnSubmit = new Button();
 		btnSubmit.setText("Finish and Submit");
-		spaSubmit.getChildren().add(btnSubmit);
+		spnSubmit.getChildren().add(btnSubmit);
 
 		form.show();
 	}
