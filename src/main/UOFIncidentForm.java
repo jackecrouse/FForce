@@ -29,8 +29,11 @@ import javafx.scene.layout.Pane;
 
 public class UOFIncidentForm extends Application {
 
-	public static void main(String[] args) {
-        launch(args);
+	private Incident report;
+	
+	public Incident create() {
+		launch();
+        return report;
     }
 	
 	@Override
@@ -242,6 +245,13 @@ public class UOFIncidentForm extends Application {
 		
 		Button btnEditSubject = new Button();
 		btnEditSubject.setText("Edit Subject");
+		btnEditSubject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                UOFSubjectForm currentSubjectForm = new UOFSubjectForm();
+                currentSubjectForm.start(new Stage());
+            }
+        });
 		hbxSubjectInteract.getChildren().add(btnEditSubject);
 		
 		Label lblSubjectChoice = new Label();
@@ -257,12 +267,12 @@ public class UOFIncidentForm extends Application {
 		Separator sprSubjectSubmit = new Separator();
 		vbxIncidentFull.getChildren().add(sprSubjectSubmit);
 		
-		StackPane spnSubmit = new StackPane();
-		vbxIncidentFull.getChildren().add(spnSubmit);
+		StackPane spaSubmit = new StackPane();
+		vbxIncidentFull.getChildren().add(spaSubmit);
 		
 		Button btnSubmit = new Button();
 		btnSubmit.setText("Finish and Submit");
-		spnSubmit.getChildren().add(btnSubmit);
+		spaSubmit.getChildren().add(btnSubmit);
 
 		form.show();
 	}
