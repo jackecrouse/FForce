@@ -28,6 +28,10 @@ public class UOFSubjectForm extends Application {
         launch(args);
     }
 	
+	public void run() {
+		launch();
+	}
+	
 	@Override
 	public void start(Stage form) {
 		
