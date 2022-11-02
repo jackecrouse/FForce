@@ -24,13 +24,12 @@ import javafx.scene.text.Text;
 
 public class UOFSubjectForm extends Application {
 
-	public static void main(String[] args) {
-        launch(args);
-    }
+	private Subject subject;
 	
-	public void run() {
-		launch();
-	}
+	public Subject run() {
+        this.start(new Stage());
+        return subject;
+    }
 	
 	@Override
 	public void start(Stage form) {
@@ -39,7 +38,7 @@ public class UOFSubjectForm extends Application {
 		form.setResizable(false);
 		
 		Pane pneSubject = new Pane();
-		form.setScene(new Scene(pneSubject));
+		form.setScene(new Scene(pneSubject, 755, 635));
 		
 		HBox hbxSubject = new HBox();
 		pneSubject.getChildren().add(hbxSubject);
@@ -108,6 +107,14 @@ public class UOFSubjectForm extends Application {
 		cbxSubjectArrested.setText("Subject Was Arrested");
 		vbxSubjectInfo.getChildren().add(cbxSubjectArrested);
 		
+		Label lblInjuries = new Label();
+		lblInjuries.setText("Describe Injuries to Subject");
+		vbxSubjectInfo.getChildren().add(lblInjuries);
+		TextArea txaInjuries = new TextArea();
+		txaInjuries.setPrefHeight(80.0);
+		txaInjuries.setPrefWidth(100.0);
+		vbxSubjectInfo.getChildren().add(txaInjuries);
+		
 		Label lblInfluence = new Label();
 		lblInfluence.setText("Under the Influence of:");
 		vbxSubjectInfo.getChildren().add(lblInfluence);
@@ -134,7 +141,6 @@ public class UOFSubjectForm extends Application {
 		Label lblCharges = new Label();
 		lblCharges.setText("Charges");
 		vbxSubjectInfo.getChildren().add(lblCharges);
-		
 		TextArea txaCharges = new TextArea();
 		txaCharges.setPrefHeight(80.0);
 		txaCharges.setPrefWidth(100.0);
@@ -252,8 +258,14 @@ public class UOFSubjectForm extends Application {
 		
 		Button btnSubmit = new Button();
 		btnSubmit.setText("Save and Submit");
+		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	form.close();
+            }
+        });
 		spnSubmit.getChildren().add(btnSubmit);
-
+		
 		form.show();
 	}
 	
