@@ -1,5 +1,6 @@
 package main;
 
+import database.SQL;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,8 +39,12 @@ public class FForce extends Application {
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
 		submitButton.setOnAction(e -> {
-			 authUserID();
-			System.out.println("pressed");
+			
+			boolean loginValid = validateLogin(_username, _password);
+			
+			if(loginValid) {System.out.println("user is valid"); }
+			else {System.out.println("user is invalid");}
+		
 			window.setScene(homePageScene);
 		}); // need to have an event handler method that
 																		// authenticates the user, for now just change
@@ -53,9 +58,13 @@ public class FForce extends Application {
 		window.show();
 	}
 
-	private void authUserID() {
+	private boolean validateLogin(TextField user, PasswordField pass) {
+		SQL connection = new SQL(user.getText(), pass.getText());
+		return connection.isUser();
 		
 	}
+	
+	
 	private GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
 		GridPane grid = new GridPane();
