@@ -11,6 +11,11 @@ public class Incident {
 	public Date incidentDate;
 	public String location;
 	public String type;
+	boolean hasOfficerSignature;
+	Date officerSignDate;
+	boolean hasSupervisorSignature;
+	Date supervisorSignatureDate;
+	boolean forceIsJustified;
 	
 	public Incident() {
 		officer = new Officer();
@@ -26,7 +31,7 @@ public class Incident {
 			return 1;
 		}
 		else {
-			return 2;
+			return 0;
 		}
 	}
 	
