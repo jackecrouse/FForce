@@ -25,7 +25,6 @@ public class FForce extends Application {
 	private Button submitButton, toLoginButton, createForm, browseForms;
 
 	public FForce() {
-
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class FForce extends Application {
 		createForm.setOnAction(e -> window.setScene(formCreationScene));
 		browseForms.setOnAction(e -> window.setScene(browseFormsScene));
 
-		window.setScene(loginScene); // sets first scene shown
+		window.setScene(loginScene); // sets first scene shown when app is run
 		window.setTitle("Fupo Force App");
 		window.show();
 	}
