@@ -46,8 +46,17 @@ public class FForce extends Application {
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
 		submitButton.setOnAction(e -> {
-			authUserID();
-			System.out.println("pressed");
+			
+
+			if(validateLogin(_username, _password))
+			{
+				System.out.println("Success");
+			}
+			else
+			{
+				System.out.println("Failure");
+			}
+			
 			window.setScene(homePageScene);
 		}); // need to have an event handler method that
 			// authenticates the user, for now just change
@@ -77,9 +86,7 @@ public class FForce extends Application {
 			return false;
 		}
 	}
-	private void authUserID() {
 
-	}
 
 	public static GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
