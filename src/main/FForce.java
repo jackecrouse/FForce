@@ -50,11 +50,11 @@ public class FForce extends Application {
 
 			if(validateLogin(_username, _password))
 			{
-				System.out.println("Success");
+				System.out.println("User " + _username.getText() + " logged in");
 			}
 			else
 			{
-				System.out.println("Failure");
+				System.out.println("User " + _username.getText() + " failed to log in");
 			}
 			
 			window.setScene(homePageScene);
