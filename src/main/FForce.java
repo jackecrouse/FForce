@@ -1,5 +1,7 @@
 package main;
 
+import java.sql.SQLException;
+
 import database.SQL;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -59,9 +61,15 @@ public class FForce extends Application {
 	}
 
 	private boolean validateLogin(TextField user, PasswordField pass) {
-		SQL connection = new SQL(user.getText(), pass.getText());
-		return connection.isUser();
 		
+		try {
+			SQL connection = new SQL(user.getText(), pass.getText());
+			return true;
+		}
+		catch(SQLException e)
+		{
+			return false;
+		}
 	}
 	
 	
