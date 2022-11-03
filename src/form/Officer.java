@@ -22,8 +22,22 @@ public class Officer {
 	public String injuries;
 	
 	public Officer() {
+		badgeNumber = 0;
+		firstName = "";
+		middleName = "";
+		lastName = "";
+		sex = "";
+		race = "";
 		dateOfBirth = new Date();
 		serviceStart = new Date();
+		rank = "";
+		duty = "";
+		wasInjured = false;
+		wasKilled = false;
+		wasOnDuty = false;
+		wasUniformed = false;
+		hadMedicalTreatment = false;
+		injuries = "";
 	}
 	
 }
