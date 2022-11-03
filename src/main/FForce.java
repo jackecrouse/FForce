@@ -14,6 +14,8 @@ public class FForce extends Application {
 	private Scene loginScene, homePageScene, formCreationScene, browseFormsScene;
 	private Stage window;
 	private Button submitButton, toLoginButton, createForm, browseForms;
+	private TextField _username;
+	private PasswordField _password;
 
 	public FForce() {
 
@@ -35,7 +37,11 @@ public class FForce extends Application {
 		GridPane browseGrid = createBrowsePage();
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
-		submitButton.setOnAction(e -> window.setScene(homePageScene)); // need to have an event handler method that
+		submitButton.setOnAction(e -> {
+			 authUserID();
+			System.out.println("pressed");
+			window.setScene(homePageScene);
+		}); // need to have an event handler method that
 																		// authenticates the user, for now just change
 																		// scene
 		toLoginButton.setOnAction(e -> window.setScene(loginScene));
@@ -47,6 +53,9 @@ public class FForce extends Application {
 		window.show();
 	}
 
+	private void authUserID() {
+		
+	}
 	private GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
 		GridPane grid = new GridPane();
@@ -99,17 +108,17 @@ public class FForce extends Application {
 		Label pass = new Label("Password:");
 
 		GridPane grid = new GridPane();
-		TextField username = new TextField();
-		PasswordField password = new PasswordField();
+		_username = new TextField();
+		_password = new PasswordField();
 
 		grid.setHgap(3); // width gap
 		grid.setVgap(3); // vertical gap
 
 		grid.add(welcome, 20, 0, 10, 10);
 		grid.add(user, 0, 0, 1, 2);
-		grid.add(username, 0, 5, 1, 10);
+		grid.add(_username, 0, 5, 1, 10);
 		grid.add(pass, 0, 15, 1, 2);
-		grid.add(password, 0, 20, 1, 10);
+		grid.add(_password, 0, 20, 1, 10);
 		grid.add(submitButton, 0, 30, 1, 10);
 
 		return grid;
