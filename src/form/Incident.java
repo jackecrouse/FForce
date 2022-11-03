@@ -16,6 +16,8 @@ public class Incident {
 		subjects = new Vector<Subject>();
 		subjects.add(new Subject());
 		incidentDate = new Date();
+		location = "";
+		type = "";
 	}
 	
 	private static int boolToInt(boolean bool) {
