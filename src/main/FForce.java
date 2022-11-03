@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-
 public class FForce extends Application {
     public static void main(String[] args) {
         launch(args);
@@ -31,25 +30,19 @@ public class FForce extends Application {
         PasswordField pass = new PasswordField();
         pass.setTranslateY(-10);
         
-        
         btn.setOnAction(new EventHandler<ActionEvent>() 
         {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println(user.getText());
                 System.out.println(pass.getText());
-                
             }
         });
         
         StackPane root = new StackPane();
         
         root.getChildren().addAll(btn, user, pass);
-
-        
         primaryStage.setScene(new Scene(root, 300, 250));
-
-
         primaryStage.show();
     }
 }
