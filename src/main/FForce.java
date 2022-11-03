@@ -1,5 +1,9 @@
 package main;
 
+
+import java.sql.SQLException;
+
+import database.SQL;
 import form.UOFIncidentForm;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -42,8 +46,17 @@ public class FForce extends Application {
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
 		submitButton.setOnAction(e -> {
-			authUserID();
-			System.out.println("pressed");
+			
+
+			if(validateLogin(_username, _password))
+			{
+				System.out.println("Success");
+			}
+			else
+			{
+				System.out.println("Failure");
+			}
+			
 			window.setScene(homePageScene);
 		}); // need to have an event handler method that
 			// authenticates the user, for now just change
@@ -62,9 +75,18 @@ public class FForce extends Application {
 		window.show();
 	}
 
-	private void authUserID() {
-
+	private boolean validateLogin(TextField user, PasswordField pass) {
+		
+		try {
+			SQL connection = new SQL(user.getText(), pass.getText());
+			return true;
+		}
+		catch(SQLException e)
+		{
+			return false;
+		}
 	}
+
 
 	public static GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
