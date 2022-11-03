@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import main.SQL;
+import database.SQL;
 
 class SQLTest {
 	
