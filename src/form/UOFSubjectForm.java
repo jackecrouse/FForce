@@ -147,6 +147,7 @@ public class UOFSubjectForm extends Application {
 		grdSubjectInfo.add(dtpDOB, 1, 5);
 		// Subject's personal information end
 		
+		// Subject's incident information start
 		cbxSubjectInjured = new CheckBox("Subject was Injured");
 		cbxSubjectInjured.setSelected(subject.wasInjured);
 		vbxSubjectInfo.getChildren().add(cbxSubjectInjured);
@@ -169,6 +170,7 @@ public class UOFSubjectForm extends Application {
 		txaInjuries.setPrefSize(100.0, 80.0);
 		vbxSubjectInfo.getChildren().add(txaInjuries);
 		
+		// Subject's conditions start
 		lblInfluence = new Label("Under the Influence of:");
 		vbxSubjectInfo.getChildren().add(lblInfluence);
 		
@@ -190,12 +192,14 @@ public class UOFSubjectForm extends Application {
 		
 		txfOtherCondition = new TextField(subject.otherInfluence);
 		vbxSubjectInfo.getChildren().add(txfOtherCondition);
+		// Subject's conditions start
 		
 		lblCharges = new Label("Charges");
 		vbxSubjectInfo.getChildren().add(lblCharges);
 		txaCharges = new TextArea(subject.charges);
 		txaCharges.setPrefSize(100.0,80.0);
 		vbxSubjectInfo.getChildren().add(txaCharges);
+		// Subject's incident information start
 		// everything on the left half of the screen end
 		
 		sprInformationActions = new Separator(Orientation.VERTICAL);
@@ -303,6 +307,7 @@ public class UOFSubjectForm extends Application {
 		spnSubmit = new StackPane();
 		vbxActions.getChildren().add(spnSubmit);
 		
+		// Submit start
 		btnSubmit = new Button("Save and Submit");
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -360,6 +365,7 @@ public class UOFSubjectForm extends Application {
 			
         });
 		spnSubmit.getChildren().add(btnSubmit);
+		// Submit end
 		
 		form.show();
 	}
