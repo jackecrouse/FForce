@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.Year;
 
 import form.Incident;
 import form.Officer;
@@ -145,58 +146,66 @@ public class SQL {
 		String SQL_Command;
 		
 		String valueFormat = "('%s','%s','%s','%s','%s','%s',%d,'%s','%s',%d,'%s','%s', %d, %d, %d, %d, %d,"
-				 				+ " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',";
+				 				+ " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',"
+				 				+ " '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', %d)";
 		
 		String rowFormat = "(Date, Time, Day, Location, IncidentType, "
 				 + "OfficerName, BadgeNumber, Rank, DutyAssignment, "
 				 + "YearsOfService, OfficerSex, OfficerRace, OfficerAge, "
 				 + "OfficerInjured, OfficerKilled, OfficerOnDuty, OfficerHadUniform, "
 				 + "Subject1Name, Subject1Sex, Subject1Race, Subject1Age, Subject1HadWeapon, "
-				 + "Subject1Injured, Subject1Killed, Subject1InfluencedBy, Subject1Charges, Subject1Actions, Subject1Treatment, ";
-		
-		if (incident.subjects.size() > 1) {
-			for (int i = 1; i <= incident.subjects.size(); i++) {
-				rowFormat += String.format("Subject%dName, Subject%dSex, Subject%dRace, Subject%dAge, Subject%dHadWeapon, Subject%dInjured, Subject%dKilled, Subject%dInfluencedBy, Subject%dCharges, Subject%dActions, Subject%dTreatment, ", i+1);
-				valueFormat += " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',";
-			}
-		}
-			
-		rowFormat += " InjuriesToOfficer, HospitalizedOfficer, InjuriesToSubject, "
-				 + "HospitalizedSubject, OfficerSign, OfficerSignDate, SupervisorSign, "
+				 + "Subject1Injured, Subject1Killed, Subject1InfluencedBy, Subject1Charges, Subject1Actions, Subject1Treatment, InjuriesToOfficer, "
+				 + "HospitalizedOfficer, InjuriesToSubject, HospitalizedSubject, OfficerSign, OfficerSignDate, SupervisorSign, "
 				 + "SupervisorSignDate, ForceJustified)";
+		
+//		if (incident.subjects.size() > 1) {
+//			for (int i = 1; i <= incident.subjects.size(); i++) {
+//				rowFormat += String.format("Subject%dName, Subject%dSex, Subject%dRace, Subject%dAge, Subject%dHadWeapon, Subject%dInjured, Subject%dKilled, Subject%dInfluencedBy, Subject%dCharges, Subject%dActions, Subject%dTreatment, ", i+1);
+//				valueFormat += " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',";
+//			}
+//		}
+			
 		
 		valueFormat += " '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', %d)";
 		
 		insertIntoFormsCommand = String.format("INSERT INTO forms %s VALUES %s", rowFormat, valueFormat);
 		
+		//Section A calculations
+		String date = String.format("%d-%d-%d", Incident.dateToYear(incident.incidentDate), Incident.dateToMonth(incident.incidentDate), Incident.dateToDayOfYear(incident.incidentDate));;
+		String time = String.format("%d:%d:%d", Incident.dateToHours(incident.incidentDate), Incident.dateToMinutes(incident.incidentDate), Incident.dateToSeconds(incident.incidentDate));
+		String dayOfWeek = Incident.dateToDayOfWeek(incident.incidentDate);
+		
+		//Section B: Officer Calculations
 		Officer officer = incident.officer;
+		String officerName = String.format("%s, %s, %s", officer.lastName, officer.firstName, officer.middleName);
+		int yearsOfService = Year.now().getValue() - Incident.dateToYear(officer.serviceStart);
+		int officerAge = Year.now().getValue() - Incident.dateToYear(officer.dateOfBirth);
 		
-		String date = "";
-		String time = "";
-		String dayOfWeek = "";
-		String officerName = String.format("%s, %s, %s", incident.officer.lastName, incident.officer.firstName, incident.officer.middleName);
-		@SuppressWarnings("deprecation")
-		int yearsOfService = 0;//incident.officer.serviceStart.getYear()-Date.;
-		int officerAge = 0;
-		
+		//Section C: Subject Calculations
 		Subject subject1 = incident.subjects.get(0);
 		String subject1Name = String.format("%s, %s, %s", subject1.lastName, subject1.firstName, subject1.middleName);
-		int subject1Age = 0;
+		int subject1Age = Year.now().getValue() - Incident.dateToYear(subject1.dateOfBirth);
 		
+		//Section D
 		String officerSignature = "";
 		String supervisorSignature = "";
 		String officerDate = "";
 		String supervisorDate = "";
 		int forceJustified = 0;
 		
+		
 		SQL_Command = String.format(insertIntoFormsCommand, date, time, dayOfWeek, incident.location, incident.type, 
 				  officerName, officer.badgeNumber, officer.rank, officer.duty, yearsOfService,
-				  officer.sex, officer.race, officerAge, officer.wasInjured, officer.wasKilled, 
-				  officer.wasOnDuty, officer.wasUniformed, subject1Name, subject1.sex, 
-				  subject1.race, subject1Age, subject1.wasWeaponed, subject1.wasInjured, subject1.wasKilled,  influences(subject1),
-				  subject1.charges, actions(subject1), UOF(subject1), incident.officer.injuries, officer.hadMedicalTreatment, 
-				  subject1.injuries, subject1.hadMedicalTreatment, officerSignature, officerDate, 
-				  supervisorSignature, supervisorDate, forceJustified);
+				  officer.sex, officer.race, officerAge, Incident.boolToInt(officer.wasInjured), Incident.boolToInt(officer.wasKilled), 
+				  Incident.boolToInt(officer.wasOnDuty), Incident.boolToInt(officer.wasUniformed), subject1Name, subject1.sex, 
+				  subject1.race, subject1Age, Incident.boolToInt(subject1.wasWeaponed), Incident.boolToInt(subject1.wasInjured), 
+				  Incident.boolToInt(subject1.wasKilled),  influences(subject1), subject1.charges, actions(subject1), UOF(subject1), 
+				  officer.injuries, Incident.boolToInt(officer.hadMedicalTreatment), subject1.injuries, Incident.boolToInt(subject1.hadMedicalTreatment), 
+				  officerSignature, officerDate, supervisorSignature, supervisorDate, forceJustified);
+		
+		//MORE THAN ONE SUBJECT
+		
+		
 //		  form.subject2Name, form.subject2Sex, 
 //		  form.subject2Race, form.subject2Age, form.subject2HadWeapon, form.subject2Injured, form.subject2Killed, 
 //		  form.subject2UnderInfluence, form.subject2Charges, form.subject2Actions, 

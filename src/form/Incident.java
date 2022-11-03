@@ -23,10 +23,10 @@ public class Incident {
 	
 	public static int boolToInt(boolean bool) {
 		if(bool) {
-			return 1;
+			return 0;
 		}
 		else {
-			return 2;
+			return 1;
 		}
 	}
 	
