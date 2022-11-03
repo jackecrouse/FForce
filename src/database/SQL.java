@@ -1,6 +1,5 @@
 package database;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,10 +12,10 @@ import form.Subject;
 public class SQL {
 	
 		//connection information
-		protected Connection _CON;
+		protected static Connection _CON;
 		protected static String _DBurl = "jdbc:mysql://csserver2016.fu.campus/FuPoForce";
-		protected String _DBuser = "jdewey";
-		protected String _DBpassword = "Zse45tgv";
+		protected static String _DBuser = "lkvamme";
+		protected static String _DBpassword = "csc353";
 		
 		//Blocks of information for SQL commands, such as row and value formats
 		protected static final String ROW_FORMAT = "(Date, Time, Day, Location, IncidentType, "
@@ -60,23 +59,6 @@ public class SQL {
 			
 		}
 	}
-	
-	
-	public SQL(String user, String password) {
-		try {
-			_DBuser = user;
-			_DBpassword = password;
-			Class.forName("com.mysql.jdbc.Driver");
-			_CON = DriverManager.getConnection(_DBurl, _DBuser, _DBpassword);
-		}
-		catch (Exception e)
-		{
-			
-		}
-	}
-	
-	
-	
 	public boolean addOfficer() {
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%s')", null);
 		try {
@@ -131,13 +113,12 @@ public class SQL {
 		}
 	}
 
-	public boolean isUser() {
+	public boolean isUser(String username, String password) {
 		
 		try {
-			ResultSet rs = getInformation(_DBuser, _DBpassword);
+			ResultSet rs = getInformation(username, password);
 			return true;
 		}
-		
 		catch (Exception e) {
 			return false;
 		}
