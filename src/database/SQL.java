@@ -3,6 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import form.Incident;
@@ -50,15 +51,34 @@ public class SQL {
 		
 
 		
-	public SQL() {
+	public SQL() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			_CON = DriverManager.getConnection(_DBurl, _DBuser, _DBpassword);
 		}
 		catch (Exception e) {
 			
+			throw new SQLException();
 		}
 	}
+	
+	
+	public SQL(String user, String password) throws SQLException {
+		try {
+			_DBuser = user;
+			_DBpassword = password;
+			Class.forName("com.mysql.jdbc.Driver");
+			_CON = DriverManager.getConnection(_DBurl, _DBuser, _DBpassword);
+		}
+		catch (Exception e)
+		{
+			throw new SQLException();
+		}
+	}
+	
+	
+	
+
 	public boolean addOfficer() {
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%s')", null);
 		try {
@@ -67,8 +87,9 @@ public class SQL {
 			return true;
 		}
 		catch (Exception e){
-			return false;
+			
 		}
+		return false;
 	}
 	
 	public boolean insertNewForm(Incident incident) {
