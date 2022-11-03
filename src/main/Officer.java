@@ -21,4 +21,9 @@ public class Officer {
 	public boolean hadMedicalTreatment;
 	public String injuries;
 	
+	public Officer() {
+		dateOfBirth = new Date();
+		serviceStart = new Date();
+	}
+	
 }

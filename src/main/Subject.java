@@ -13,14 +13,41 @@ public class Subject {
 	public Date dateOfBirth;
 	public boolean wasInjured;
 	public boolean wasKilled;
-	public boolean hadWeapon;
+	public boolean wasWeaponed;
 	public boolean wasArrested;
 	public boolean hadMedicalTreatment;
 	public String injuries;
 	public String charges;
-	public Vector<String> influenceType;
+	public Vector<String> influence;
+	public String otherInfluence;
 	public Vector<String> actions;
+	public String otherActions;
 	public Vector<String> uofAgainst;
-	public int shotsFiredAt;	
+	public String otherUOF;
+	public int numberOfShots;
+	
+	public Subject() {
+		super();
+		this.firstName = "";
+		this.middleName = "";
+		this.lastName = "";
+		this.sex = "";
+		this.race = "";
+		this.dateOfBirth = new Date();
+		this.wasInjured = false;
+		this.wasKilled = false;
+		this.wasWeaponed = false;
+		this.wasArrested = false;
+		this.hadMedicalTreatment = false;
+		this.injuries = "";
+		this.charges = "";
+		this.influence = new Vector<String>();
+		this.otherInfluence = "";
+		this.actions = new Vector<String>();
+		this.otherActions = "";
+		this.uofAgainst = new Vector<String>();
+		this.otherUOF = "";
+		this.numberOfShots = 0;
+	}
 	
 }
