@@ -187,12 +187,10 @@ public class UOFIncidentForm extends Application {
 		lblOfficerInjuriesDesc = new Label("Describe Injuries to Officer");
 		vbxOfficerFull.getChildren().add(lblOfficerInjuriesDesc);
 		txaOfficerInjuriesDesc = new TextArea();
-		txaOfficerInjuriesDesc.setPrefWidth(200);
-		txaOfficerInjuriesDesc.setPrefHeight(150);
+		txaOfficerInjuriesDesc.setPrefSize(200, 150);
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
 
-		sprOfficerIncident = new Separator();
-		sprOfficerIncident.setOrientation(Orientation.VERTICAL);
+		sprOfficerIncident = new Separator(Orientation.VERTICAL);
 		hbxReport.getChildren().add(sprOfficerIncident);
 
 		vbxIncidentFull = new VBox();
@@ -286,8 +284,7 @@ public class UOFIncidentForm extends Application {
 					int index = getCurrentBoxIndex();
 					report.subjects.remove(report.subjects.get(index));
 					cbxSubjectChoice.getItems().remove(index);
-					lastPos--;
-					for (int i = index; i < lastPos; i++) {
+					for (int i = index; i < lastPos--; i++) {
 						cbxSubjectChoice.getItems().set(i, "Subject " + (i + 1));
 					}
 					cbxSubjectChoice.getSelectionModel().select(0);
@@ -307,9 +304,8 @@ public class UOFIncidentForm extends Application {
 		});
 		hbxSubjectInteract.getChildren().add(btnEditSubject);
 
-		lblSubjectChoice = new Label();
+		lblSubjectChoice = new Label("Choose a Subject");
 		lblSubjectChoice.setContentDisplay(ContentDisplay.CENTER);
-		lblSubjectChoice.setText("Choose A Subject");
 		lblSubjectChoice.setAlignment(Pos.CENTER);
 		vbxIncidentFull.getChildren().add(lblSubjectChoice);
 
