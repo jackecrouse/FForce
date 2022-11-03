@@ -61,7 +61,6 @@ public class SQL {
 			throw new SQLException();
 		}
 	}
-<<<<<<< HEAD
 	
 	
 	public SQL(String user, String password) throws SQLException {
@@ -79,8 +78,7 @@ public class SQL {
 	
 	
 	
-=======
->>>>>>> d4aaffd2b2612e1dfc05164b076ee97dbbfcdbbe
+
 	public boolean addOfficer() {
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%s')", null);
 		try {

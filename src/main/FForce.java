@@ -1,12 +1,10 @@
 package main;
 
-<<<<<<< HEAD
+
 import java.sql.SQLException;
 
 import database.SQL;
-=======
 import form.UOFIncidentForm;
->>>>>>> d4aaffd2b2612e1dfc05164b076ee97dbbfcdbbe
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -68,7 +66,6 @@ public class FForce extends Application {
 		window.show();
 	}
 
-<<<<<<< HEAD
 	private boolean validateLogin(TextField user, PasswordField pass) {
 		
 		try {
@@ -79,10 +76,9 @@ public class FForce extends Application {
 		{
 			return false;
 		}
-=======
+	}
 	private void authUserID() {
 
->>>>>>> d4aaffd2b2612e1dfc05164b076ee97dbbfcdbbe
 	}
 
 	public static GridPane createBrowsePage() {
