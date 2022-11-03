@@ -28,8 +28,8 @@ public class Officer {
 		lastName = "";
 		sex = "";
 		race = "";
-		dateOfBirth = new Date();;
-		serviceStart = new Date();;
+		dateOfBirth = new Date();
+		serviceStart = new Date();
 		rank = "";
 		duty = "";
 		wasInjured = false;
