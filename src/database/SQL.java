@@ -10,7 +10,7 @@ public class SQL {
 		//connection information
 		protected static Connection _CON;
 		protected static String _DBurl = "jdbc:mysql://csserver2016.fu.campus/FuPoForce";
-		protected static String _DBuser = "jdewey";
+		protected static String _DBuser = "lkvamme";
 		protected static String _DBpassword = "csc353";
 		
 		//Blocks of information for SQL commands, such as row and value formats
