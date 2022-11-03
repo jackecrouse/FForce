@@ -17,7 +17,7 @@ class SQLTest {
 						  "Signed","2022-11-02","Signed","2022-11-02", "0"};
 
 		SQL connection = new SQL();
-		//assertTrue(connection.insertNewForm(noC2));
+		assertTrue(connection.insertNewForm(noC2));
 		
 		//With Section C2
 		String [] C2 = {"2022-11-02","17:00:00","Wednesday","ITSC","Excessive Force",
@@ -40,7 +40,7 @@ class SQLTest {
 		//Passes
 		String username = "jdewey";
 		String password = "csc353";
-		SQL connection = new SQL(username, password);
+		//SQL connection = new SQL(username, password);
 		//Fails
 		
 	}
