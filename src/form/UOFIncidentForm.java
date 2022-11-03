@@ -326,7 +326,6 @@ public class UOFIncidentForm extends Application {
 
 		btnSubmit = new Button("Finish and Submit");
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
-			@SuppressWarnings({ "static-access" })
 			@Override
 			public void handle(ActionEvent event) {
 				FForce.window.setScene(FForce.homePageScene);

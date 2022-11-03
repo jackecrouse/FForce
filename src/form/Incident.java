@@ -11,6 +11,11 @@ public class Incident {
 	public Date incidentDate;
 	public String location;
 	public String type;
+	public boolean hasOfficerSignature;
+	public Date officerSignDate;
+	public boolean hasSupervisorSignature;
+	public Date supervisorSignatureDate;
+	public boolean forceIsJustified;
 	
 	public Incident() {
 		officer = new Officer();
@@ -19,14 +24,19 @@ public class Incident {
 		incidentDate = new Date();
 		location = "";
 		type = "";
+		hasOfficerSignature = false;
+		officerSignDate = new Date();
+		hasSupervisorSignature = false;
+		supervisorSignatureDate = new Date();
+		forceIsJustified = false;
 	}
 	
 	public static int boolToInt(boolean bool) {
 		if(bool) {
-			return 0;
+			return 1;
 		}
 		else {
-			return 1;
+			return 0;
 		}
 	}
 	
