@@ -1,5 +1,6 @@
 package form;
 
+import database.SQL;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -28,7 +29,7 @@ import javafx.scene.layout.Pane;
 
 public class UOFIncidentForm extends Application {
 
-	private Incident report;
+	private Incident incident;
 	private Pane pneReport;
 	private HBox hbxReport;
 	private VBox vbxOfficerFull;
@@ -100,7 +101,7 @@ public class UOFIncidentForm extends Application {
 	@Override
 	public void start(Stage form) {
 		
-		report = new Incident();
+		incident = new Incident();
 		
 		form.setTitle("Furman University Police Use of Force Report");
 		form.setResizable(false);
@@ -305,7 +306,7 @@ public class UOFIncidentForm extends Application {
             public void handle(ActionEvent event) {
             	int lastPos = cbxSubjectChoice.getItems().size();
             	cbxSubjectChoice.getItems().add("Subject " + (lastPos + 1));
-            	report.subjects.add(new Subject());
+            	incident.subjects.add(new Subject());
             }
         });
 		hbxSubjectInteract.getChildren().add(btnCreateSubject);
@@ -318,7 +319,7 @@ public class UOFIncidentForm extends Application {
             	int lastPos = cbxSubjectChoice.getItems().size();
             	if(lastPos >= 2 ) {
                 	int index = getCurrentBoxIndex();
-                	report.subjects.remove(report.subjects.get(index));
+                	incident.subjects.remove(incident.subjects.get(index));
                 	cbxSubjectChoice.getItems().remove(index);
                 	lastPos--;
                 	for(int i=index; i<lastPos; i++) {
@@ -337,7 +338,7 @@ public class UOFIncidentForm extends Application {
             public void handle(ActionEvent event) {
                 UOFSubjectForm currentSubjectForm = new UOFSubjectForm();
                 int index = getCurrentBoxIndex();
-                currentSubjectForm.run(report.subjects.get(index));
+                currentSubjectForm.run(incident.subjects.get(index));
             }	
         });
 		hbxSubjectInteract.getChildren().add(btnEditSubject);		
@@ -363,7 +364,11 @@ public class UOFIncidentForm extends Application {
 		btnSubmit.setText("Finish and Submit");
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-            public void handle(ActionEvent event) { }
+            public void handle(ActionEvent event) { 
+				SQL sqlSubmit = new SQL();
+				sqlSubmit.getSQL_InsertForm(incident);
+				
+			}
         });
 		spaSubmit.getChildren().add(btnSubmit);
 
