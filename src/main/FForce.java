@@ -51,13 +51,14 @@ public class FForce extends Application {
 			if(validateLogin(_username, _password))
 			{
 				System.out.println("Success");
+				window.setScene(homePageScene);
 			}
 			else
 			{
 				System.out.println("Failure");
 			}
 			
-			window.setScene(homePageScene);
+			
 		}); // need to have an event handler method that
 			// authenticates the user, for now just change
 			// scene
