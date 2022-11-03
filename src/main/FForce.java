@@ -1,8 +1,12 @@
 package main;
 
+<<<<<<< HEAD
 import java.sql.SQLException;
 
 import database.SQL;
+=======
+import form.UOFIncidentForm;
+>>>>>>> d4aaffd2b2612e1dfc05164b076ee97dbbfcdbbe
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,14 +18,17 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class FForce extends Application {
-	private Scene loginScene, homePageScene, formCreationScene, browseFormsScene;
-	private Stage window;
-	private Button submitButton, toLoginButton, createForm, browseForms;
-	private TextField _username;
-	private PasswordField _password;
+	private static Scene loginScene;
+	public static Scene homePageScene, formCreationScene, browseFormsScene;
+	public static Stage window;
+	private static Button submitButton;
+	private static Button toLoginButton;
+	private static Button createForm;
+	private static Button browseForms;
+	private static TextField _username;
+	private static PasswordField _password;
 
 	public FForce() {
-
 	}
 
 	@Override
@@ -41,18 +48,19 @@ public class FForce extends Application {
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
 		submitButton.setOnAction(e -> {
-			
-			boolean loginValid = validateLogin(_username, _password);
-			
-			if(loginValid) {System.out.println("user is valid"); }
-			else {System.out.println("user is invalid");}
-		
+			authUserID();
+			System.out.println("pressed");
 			window.setScene(homePageScene);
 		}); // need to have an event handler method that
-																		// authenticates the user, for now just change
-																		// scene
+			// authenticates the user, for now just change
+			// scene
 		toLoginButton.setOnAction(e -> window.setScene(loginScene));
-		createForm.setOnAction(e -> window.setScene(formCreationScene));
+		createForm.setOnAction(e -> {
+			window.setScene(formCreationScene);
+			UOFIncidentForm incidentStage = new UOFIncidentForm();
+			Stage form = incidentStage.create(primaryStage);
+			form.show();
+		});
 		browseForms.setOnAction(e -> window.setScene(browseFormsScene));
 
 		window.setScene(loginScene); // sets first scene shown
@@ -60,6 +68,7 @@ public class FForce extends Application {
 		window.show();
 	}
 
+<<<<<<< HEAD
 	private boolean validateLogin(TextField user, PasswordField pass) {
 		
 		try {
@@ -70,10 +79,13 @@ public class FForce extends Application {
 		{
 			return false;
 		}
+=======
+	private void authUserID() {
+
+>>>>>>> d4aaffd2b2612e1dfc05164b076ee97dbbfcdbbe
 	}
-	
-	
-	private GridPane createBrowsePage() {
+
+	public static GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
 		GridPane grid = new GridPane();
 
@@ -85,7 +97,7 @@ public class FForce extends Application {
 		return grid;
 	}
 
-	private GridPane createFormPage() {
+	public static GridPane createFormPage() {
 		Label creation = new Label("form creation page");
 		GridPane grid = new GridPane();
 
@@ -97,7 +109,7 @@ public class FForce extends Application {
 		return grid;
 	}
 
-	private StackPane createHomePage() {
+	public static StackPane createHomePage() {
 		StackPane homePage = new StackPane();
 		toLoginButton = new Button("go to login page");
 		createForm = new Button("go to form creation");
@@ -118,7 +130,7 @@ public class FForce extends Application {
 
 	}
 
-	private GridPane createLoginPage() {
+	public static GridPane createLoginPage() {
 		Label welcome = new Label("Welcome to the login page!");
 		submitButton = new Button("Log in");
 		Label user = new Label("Username:");
