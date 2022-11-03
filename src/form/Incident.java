@@ -18,4 +18,13 @@ public class Incident {
 		incidentDate = new Date();
 	}
 	
+	private static int boolToInt(boolean bool) {
+		if(bool) {
+			return 1;
+		}
+		else {
+			return 2;
+		}
+	}
+	
 }
