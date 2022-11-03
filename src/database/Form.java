@@ -1,4 +1,4 @@
-package main;
+package database;
 
 public class Form {
 	boolean hasSectionC2 = false;
