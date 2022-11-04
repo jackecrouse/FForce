@@ -143,7 +143,7 @@ public class UOFSubjectForm extends Application {
 		
 		lblDOB = new Label("Date of Birth");
 		grdSubjectInfo.add(lblDOB, 0, 5);
-		dtpDOB = new DatePicker(subject.dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		dtpDOB = new DatePicker(subject.dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()); // DatePickers need Date converted to LocalDate
 		grdSubjectInfo.add(dtpDOB, 1, 5);
 		// Subject's personal information end
 		
