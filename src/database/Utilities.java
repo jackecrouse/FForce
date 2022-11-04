@@ -10,7 +10,7 @@ import form.Subject;
 public class Utilities {
 
 	public static String convertDate(Date date) {
-		return String.format("%d-%d-%d", dateToYear(date), dateToMonth(date), dateToDayOfYear(date));
+		return String.format("%d-%d-%d", dateToYear(date), dateToMonth(date), dateToDayOfMonth(date));
 	}
 	
 	public static String convertTime(Date date) {
@@ -70,30 +70,16 @@ public class Utilities {
 		return hours.get(Calendar.HOUR_OF_DAY);
 	}
 	
-	public static int dateToDayOfYear(Date date) {
+	public static int dateToDayOfMonth(Date date) {
 		Calendar days = Calendar.getInstance();
 		days.setTime(date);
-		return days.get(Calendar.DAY_OF_YEAR);
+		return days.get(Calendar.DAY_OF_MONTH);
 	}
 	
-	public static String dateToMonth(Date date) {
+	public static int dateToMonth(Date date) {
 		Calendar month = Calendar.getInstance();
 		month.setTime(date);
-		switch(month.get(Calendar.MONTH)) {
-		case 0: return "January";
-		case 1: return "Febuary";
-		case 2:	return "March";
-		case 3: return "April";
-		case 4:	return "May";
-		case 5:	return "June";
-		case 6:	return "July";
-		case 7:	return "August";
-		case 8:	return "September";
-		case 9: return "October";
-		case 10: return "November";
-		case 11: return "December";
-		default: throw new IllegalArgumentException();
-		}
+		return month.get(Calendar.MONTH) + 1; // Calendar.JANUARY == 0
 	}
 	
 	public static int dateToYear(Date date) {
