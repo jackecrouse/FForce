@@ -4,6 +4,7 @@ import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
+import form.Incident;
 import form.Officer;
 import form.Subject;
 
@@ -27,6 +28,10 @@ public class Utilities {
 	
 	public static String getName(Officer officer) {
 		return String.format("%s, %s, %s", officer.lastName, officer.firstName, officer.middleName);
+	}
+	
+	public static String types(Incident incident) {
+		return incident.type.toString() + " " + incident.otherType;
 	}
 	
 	public static String influences(Subject subject) {

@@ -1,5 +1,9 @@
 package form;
 
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Vector;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.FForce;
@@ -19,7 +23,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -29,50 +32,34 @@ import javafx.scene.layout.Pane;
 
 public class UOFIncidentForm extends Application {
 
-	private Incident report;
+	private Incident incident;
 	private Pane pneReport;
 	private HBox hbxReport;
 	private VBox vbxOfficerFull;
 	private Text txtOfficerInfo;
 	private GridPane grdOfficerInfo;
-	private Label lblBadgeNumber;
 	private TextField txfBadgeNumber;
-	private Label lblFirstName;
 	private TextField txfFirstName;
-	private Label lblMiddleName;
 	private TextField txfMiddleName;
-	private Label lblLastName;
 	private TextField txfLastName;
-	private Label lblSex;
 	private TextField txfSex;
-	private Label lblRace;
 	private TextField txfRace;
-	private Label lblDOB;
 	private DatePicker dtpDOB;
-	private Label lblServiceStart;
 	private DatePicker dtpServiceStart;
-	private Label lblRank;
 	private TextField txfRank;
-	private Label lblDutyAssignment;
 	private TextField txfDutyAssignment;
 	private CheckBox cbxOfficerInjured;
 	private CheckBox cbxOfficerKilled;
 	private CheckBox cbxOfficerOnDuty;
 	private CheckBox cbxOfficerUniformed;
 	private CheckBox cbxOfficerTreatment;
-	private Label lblOfficerInjuriesDesc;
 	private TextArea txaOfficerInjuriesDesc;
-	private Separator sprOfficerIncident;
 	private VBox vbxIncidentFull;
 	private Text txtIncidentInfo;
 	private GridPane grdIncidentInfo;
-	private Label lblIncidentNumber;
 	private TextField txfIncidentNumber;
-	private Label lblIncidentDate;
 	private DatePicker dtpIncidentDate;
-	private Label lblIncidentLocation;
 	private TextField txfIncidentLocation;
-	private Label lblIncidentType;
 	private VBox vbxIncidentType;
 	private static ToggleGroup tgrType;
 	private RadioButton rdbInProgress;
@@ -82,22 +69,22 @@ public class UOFIncidentForm extends Application {
 	private RadioButton rdbArrest;
 	private RadioButton rdbOtherType;
 	private TextField txfOtherDesc;
-	private Separator sprIncidentSubject;
 	private Text txtSubjects;
 	private HBox hbxSubjectInteract;
 	private Button btnCreateSubject;
 	private Button btnDeleteSubject;
 	private Button btnEditSubject;
-	private Label lblSubjectChoice;
 	private ComboBox<String> cbxSubjectChoice;
-	private Separator sprSubjectSubmit;
 	private StackPane spaSubmit;
 	private Button btnSubmit;
+	
+	public static void run() {
+		launch();
+	}
 
 	public Stage create(Stage form) {
-		//FForce main = new FForce();
 
-		report = new Incident();
+		incident = new Incident();
 
 		form.setTitle("Furman University Police Use of Force Report");
 		form.setResizable(false);
@@ -108,67 +95,83 @@ public class UOFIncidentForm extends Application {
 		hbxReport = new HBox();
 		pneReport.getChildren().add(hbxReport);
 
+		createOfficerInfo();
+
+		hbxReport.getChildren().add(new Separator(Orientation.VERTICAL));
+
+		createIncidentInfo();
+
+		vbxIncidentFull.getChildren().add(new Separator());
+
+		createSubjectSelector();
+		
+		vbxIncidentFull.getChildren().add(new Separator());
+
+		createSubmitArea();
+
+		return form;
+	}
+
+	private void createOfficerInfo() {
 		vbxOfficerFull = new VBox();
 		hbxReport.getChildren().add(vbxOfficerFull);
-
+		
 		txtOfficerInfo = new Text("Officer Information");
 		txtOfficerInfo.setTextAlignment(TextAlignment.CENTER);
 		txtOfficerInfo.setWrappingWidth(322.0);
 		vbxOfficerFull.getChildren().add(txtOfficerInfo);
 
+		createOfficerPersonalInfo();
+		
+		createOfficerIncidentInfo();
+	}
+
+	private void createOfficerPersonalInfo() {
 		grdOfficerInfo = new GridPane();
 		vbxOfficerFull.getChildren().add(grdOfficerInfo);
-
-		lblBadgeNumber = new Label("Badge Number");
-		grdOfficerInfo.add(lblBadgeNumber, 0, 0);
+		
+		grdOfficerInfo.add(new Label("Badge Number"), 0, 0);
 		txfBadgeNumber = new TextField();
 		grdOfficerInfo.add(txfBadgeNumber, 1, 0);
-
-		lblFirstName = new Label("First Name");
-		grdOfficerInfo.add(lblFirstName, 0, 1);
+		
+		grdOfficerInfo.add(new Label("First Name"), 0, 1);
 		txfFirstName = new TextField();
 		grdOfficerInfo.add(txfFirstName, 1, 1);
-
-		lblMiddleName = new Label("Middle Name");
-		grdOfficerInfo.add(lblMiddleName, 0, 2);
+		
+		grdOfficerInfo.add(new Label("Middle Name"), 0, 2);
 		txfMiddleName = new TextField();
 		grdOfficerInfo.add(txfMiddleName, 1, 2);
-
-		lblLastName = new Label("Last Name");
-		grdOfficerInfo.add(lblLastName, 0, 3);
+		
+		grdOfficerInfo.add(new Label("Last Name"), 0, 3);
 		txfLastName = new TextField();
 		grdOfficerInfo.add(txfLastName, 1, 3);
-
-		lblSex = new Label("Sex");
-		grdOfficerInfo.add(lblSex, 0, 4);
+		
+		grdOfficerInfo.add(new Label("Sex"), 0, 4);
 		txfSex = new TextField();
 		grdOfficerInfo.add(txfSex, 1, 4);
-
-		lblRace = new Label("Race");
-		grdOfficerInfo.add(lblRace, 0, 5);
+		
+		grdOfficerInfo.add(new Label("Race"), 0, 5);
 		txfRace = new TextField();
 		grdOfficerInfo.add(txfRace, 1, 5);
-
-		lblDOB = new Label("Date Of Birth");
-		grdOfficerInfo.add(lblDOB, 0, 6);
+		
+		grdOfficerInfo.add(new Label("Date Of Birth"), 0, 6);
 		dtpDOB = new DatePicker();
 		grdOfficerInfo.add(dtpDOB, 1, 6);
-
-		lblServiceStart = new Label("Started Service");
-		grdOfficerInfo.add(lblServiceStart, 0, 7);
+		
+		grdOfficerInfo.add(new Label("Started Service"), 0, 7);
 		dtpServiceStart = new DatePicker();
 		grdOfficerInfo.add(dtpServiceStart, 1, 7);
-
-		lblRank = new Label("Rank");
-		grdOfficerInfo.add(lblRank, 0, 8);
+		
+		grdOfficerInfo.add(new Label("Rank"), 0, 8);
 		txfRank = new TextField();
 		grdOfficerInfo.add(txfRank, 1, 8);
-
-		lblDutyAssignment = new Label("Duty Assignment");
-		grdOfficerInfo.add(lblDutyAssignment, 0, 9);
+		
+		grdOfficerInfo.add(new Label("Duty Assignment"), 0, 9);
 		txfDutyAssignment = new TextField();
 		grdOfficerInfo.add(txfDutyAssignment, 1, 9);
-
+	}
+	
+	private void createOfficerIncidentInfo() {
 		cbxOfficerInjured = new CheckBox("Officer Was Injured");
 		vbxOfficerFull.getChildren().add(cbxOfficerInjured);
 
@@ -183,16 +186,14 @@ public class UOFIncidentForm extends Application {
 
 		cbxOfficerTreatment = new CheckBox("Officer Recieved Medical Treatment");
 		vbxOfficerFull.getChildren().add(cbxOfficerTreatment);
-
-		lblOfficerInjuriesDesc = new Label("Describe Injuries to Officer");
-		vbxOfficerFull.getChildren().add(lblOfficerInjuriesDesc);
+		
+		vbxOfficerFull.getChildren().add(new Label("Describe Injuries to Officer"));
 		txaOfficerInjuriesDesc = new TextArea();
 		txaOfficerInjuriesDesc.setPrefSize(200, 150);
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
-
-		sprOfficerIncident = new Separator(Orientation.VERTICAL);
-		hbxReport.getChildren().add(sprOfficerIncident);
-
+	}
+	
+	private void createIncidentInfo() {
 		vbxIncidentFull = new VBox();
 		vbxIncidentFull.setAlignment(Pos.TOP_CENTER);
 		hbxReport.getChildren().add(vbxIncidentFull);
@@ -201,29 +202,33 @@ public class UOFIncidentForm extends Application {
 		txtIncidentInfo.setTextAlignment(TextAlignment.CENTER);
 		vbxIncidentFull.getChildren().add(txtIncidentInfo);
 
+		createIncidentGeneralInfo();
+
+		createIncidentTypeInfo();
+	}
+
+	private void createIncidentGeneralInfo() {
 		grdIncidentInfo = new GridPane();
 		vbxIncidentFull.getChildren().add(grdIncidentInfo);
-
-		lblIncidentNumber = new Label("Incident Number");
-		grdIncidentInfo.add(lblIncidentNumber, 0, 0);
+		
+		grdIncidentInfo.add(new Label("Incident Number"), 0, 0);
 		txfIncidentNumber = new TextField();
 		grdIncidentInfo.add(txfIncidentNumber, 1, 0);
 
-		lblIncidentDate = new Label("Incident Date");
-		grdIncidentInfo.add(lblIncidentDate, 0, 1);
+		grdIncidentInfo.add(new Label("Incident Date"), 0, 1);
 		dtpIncidentDate = new DatePicker();
 		grdIncidentInfo.add(dtpIncidentDate, 1, 1);
-
-		lblIncidentLocation = new Label("Incident Location");
-		grdIncidentInfo.add(lblIncidentLocation, 0, 2);
+		
+		grdIncidentInfo.add(new Label("Incident Location"), 0, 2);
 		txfIncidentLocation = new TextField();
 		grdIncidentInfo.add(txfIncidentLocation, 1, 2);
-
-		lblIncidentType = new Label("Incident Type");
-		grdIncidentInfo.add(lblIncidentType, 0, 3);
+		
+		grdIncidentInfo.add(new Label("Incident Type"), 0, 3);
 		vbxIncidentType = new VBox();
 		grdIncidentInfo.add(vbxIncidentType, 1, 3);
+	}
 
+	private void createIncidentTypeInfo() {
 		tgrType = new ToggleGroup();
 
 		rdbInProgress = new RadioButton("Crime In Progress");
@@ -252,87 +257,163 @@ public class UOFIncidentForm extends Application {
 
 		txfOtherDesc = new TextField();
 		vbxIncidentType.getChildren().add(txfOtherDesc);
-
-		sprIncidentSubject = new Separator();
-		vbxIncidentFull.getChildren().add(sprIncidentSubject);
-
+	}
+	
+	private void createSubjectSelector() {
 		txtSubjects = new Text("Subjects");
 		txtSubjects.setTextAlignment(TextAlignment.CENTER);
 		vbxIncidentFull.getChildren().add(txtSubjects);
 
+		createSubjectInteractor();
+
+		createSubjectSelectBox();
+	}
+	
+	private void createSubjectInteractor() {
 		hbxSubjectInteract = new HBox();
 		hbxSubjectInteract.setAlignment(Pos.CENTER);
 		vbxIncidentFull.getChildren().add(hbxSubjectInteract);
 
 		btnCreateSubject = new Button("Create Subject");
-		btnCreateSubject.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				int lastPos = cbxSubjectChoice.getItems().size();
-				cbxSubjectChoice.getItems().add("Subject " + (lastPos + 1));
-				report.subjects.add(new Subject());
-			}
-		});
+		makeSubjectEvent();
 		hbxSubjectInteract.getChildren().add(btnCreateSubject);
 
 		btnDeleteSubject = new Button("Delete Subject");
+		deleteSelectedSubjectEvent();
+		hbxSubjectInteract.getChildren().add(btnDeleteSubject);
+
+		btnEditSubject = new Button("Edit Subject");
+		editSelectedSubjectEvent();
+		hbxSubjectInteract.getChildren().add(btnEditSubject);
+	}
+
+	private void makeSubjectEvent() {
+		btnCreateSubject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	int lastPos = cbxSubjectChoice.getItems().size();
+            	cbxSubjectChoice.getItems().add("Subject " + (lastPos + 1));
+            	incident.subjects.add(new Subject());
+            }
+        });
+	}
+
+	private void deleteSelectedSubjectEvent() {
 		btnDeleteSubject.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				int lastPos = cbxSubjectChoice.getItems().size();
 				if (lastPos >= 2) {
-					int index = getCurrentBoxIndex();
-					report.subjects.remove(report.subjects.get(index));
+					int index = getCurrentIndex();
+					incident.subjects.remove(incident.subjects.get(index));
 					cbxSubjectChoice.getItems().remove(index);
-					for (int i = index; i < lastPos--; i++) {
+					for (int i = index; i < lastPos-1; i++) {
 						cbxSubjectChoice.getItems().set(i, "Subject " + (i + 1));
 					}
 					cbxSubjectChoice.getSelectionModel().select(0);
 				}
 			}
 		});
-		hbxSubjectInteract.getChildren().add(btnDeleteSubject);
+	}
 
-		btnEditSubject = new Button("Edit Subject");
+	private void editSelectedSubjectEvent() {
 		btnEditSubject.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				UOFSubjectForm currentSubjectForm = new UOFSubjectForm();
-				int index = getCurrentBoxIndex();
-				currentSubjectForm.run(report.subjects.get(index));
+				new UOFSubjectForm().run(incident.subjects.get(getCurrentIndex()));
 			}
 		});
-		hbxSubjectInteract.getChildren().add(btnEditSubject);
-
-		lblSubjectChoice = new Label("Choose a Subject");
-		lblSubjectChoice.setContentDisplay(ContentDisplay.CENTER);
-		lblSubjectChoice.setAlignment(Pos.CENTER);
-		vbxIncidentFull.getChildren().add(lblSubjectChoice);
+	}
+	
+	private void createSubjectSelectBox() {
+		vbxIncidentFull.getChildren().add(new Label("Choose a Subject"));
 
 		cbxSubjectChoice = new ComboBox<String>();
 		cbxSubjectChoice.getItems().add("Subject 1");
 		cbxSubjectChoice.getSelectionModel().select(0);
 		vbxIncidentFull.getChildren().add(cbxSubjectChoice);
-
-		sprSubjectSubmit = new Separator();
-		vbxIncidentFull.getChildren().add(sprSubjectSubmit);
-
+	}
+	
+	private void createSubmitArea() {
 		spaSubmit = new StackPane();
 		vbxIncidentFull.getChildren().add(spaSubmit);
 
 		btnSubmit = new Button("Finish and Submit");
+		submitIncidentEvent();
+		spaSubmit.getChildren().add(btnSubmit);
+	}
+
+	private void submitIncidentEvent() {
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				FForce.window.setScene(FForce.homePageScene);
+				try {
+					fillIncidentFromForm();
+				}
+				catch(IllegalArgumentException e) {
+					return;
+				}
+				//FForce.window.setScene(FForce.homePageScene);
 			}
 		});
-		spaSubmit.getChildren().add(btnSubmit);
-
-		return form;
+	}
+	
+	private void fillIncidentFromForm() {
+		Officer officer = incident.officer;
+		
+		officer.firstName = cleanInput(txfBadgeNumber.getText());
+		officer.middleName = cleanInput(txfFirstName.getText());
+		officer.lastName = cleanInput(txfMiddleName.getText());
+		officer.sex = cleanInput(txfSex.getText());
+		officer.race = cleanInput(txfRace.getText());
+		officer.dateOfBirth = datePickerToDate(dtpDOB);
+		officer.serviceStart = datePickerToDate(dtpServiceStart);
+		officer.rank = cleanInput(txfRank.getText());
+		officer.duty = cleanInput(txfDutyAssignment.getText());
+		officer.wasInjured = cbxOfficerInjured.isSelected();
+		officer.wasKilled = cbxOfficerKilled.isSelected();
+		officer.wasOnDuty = cbxOfficerOnDuty.isSelected();
+		officer.wasUniformed = cbxOfficerUniformed.isSelected();
+		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
+		officer.injuries = cleanInput(txaOfficerInjuriesDesc.getText());
+		incident.incidentNumber = textFieldToInt(txfIncidentNumber);
+		incident.incidentDate = datePickerToDate(dtpIncidentDate);
+		incident.location = cleanInput(txfIncidentLocation.getText());
+		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();
+		incident.otherType = txfOtherDesc.getText();
 	}
 
-	private int getCurrentBoxIndex() {
+	private Date datePickerToDate(DatePicker dtp) {
+		Date date = new Date();
+		try {
+    		date = Date.from(dtp.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+    		return date;
+    	}
+    	catch(Exception e){
+    		dtp.setValue(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    		throw new IllegalArgumentException();
+    	}
+	}
+	private int textFieldToInt(TextField txf) {
+		int output;
+		try {
+			output = Integer.parseInt(cleanInput(txf.getText()));
+			return output;
+		}
+		catch(Exception e){
+			txf.clear();
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	private String cleanInput(String input) {
+		if(input == null) {
+			input = "";
+		}
+		return input;
+	}
+
+	private int getCurrentIndex() {
 		int index = 0;
 		for (int i = 0; i < cbxSubjectChoice.getItems().size(); i++) {
 			if (cbxSubjectChoice.getSelectionModel().isSelected(i)) {
@@ -344,6 +425,9 @@ public class UOFIncidentForm extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		UOFIncidentForm incidentStage = new UOFIncidentForm();
+		incidentStage.create(primaryStage);
+		primaryStage.show();
 	}
 
 }

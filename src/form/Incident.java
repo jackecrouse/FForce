@@ -7,9 +7,11 @@ public class Incident {
 	
 	public Officer officer;
 	public Vector<Subject> subjects;
+	public int incidentNumber; // TODO: remove if unnecessary
 	public Date incidentDate;
 	public String location;
 	public String type;
+	public String otherType;
 	public boolean hasOfficerSignature;
 	public Date officerSignDate;
 	public boolean hasSupervisorSignature;
@@ -19,10 +21,12 @@ public class Incident {
 	public Incident() {
 		officer = new Officer();
 		subjects = new Vector<Subject>();
+		incidentNumber = 0;
 		subjects.add(new Subject());
 		incidentDate = new Date();
 		location = "";
 		type = "";
+		otherType = "";
 		hasOfficerSignature = false;
 		officerSignDate = new Date();
 		hasSupervisorSignature = false;

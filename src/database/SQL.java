@@ -195,19 +195,25 @@ public class SQL {
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, 
 							//Section A
-							Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate), incident.location, incident.type, 
+							Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate),
+							Utilities.dateToDayOfWeek(incident.incidentDate), incident.location, incident.type, 
 							//Section B
-							Utilities.getName(officer), officer.badgeNumber, officer.rank, officer.duty, Utilities.yearDelta(officer.serviceStart), officer.sex, officer.race, Utilities.yearDelta(officer.dateOfBirth), 
+							Utilities.getName(officer), officer.badgeNumber, officer.rank, officer.duty,
+							Utilities.yearDelta(officer.serviceStart), officer.sex, officer.race,
+							Utilities.yearDelta(officer.dateOfBirth), 
 							Utilities.boolToInt(officer.wasInjured), Utilities.boolToInt(officer.wasKilled), 
 							Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed), 
 				  			//Section C
-				  			Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
+				  			Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth),
 				  			Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured), 
 				  			Utilities.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
 				  			subject.charges, Utilities.actions(subject), Utilities.UOF(subject), 
 				  			//Section D
-				  			officer.injuries, Utilities.boolToInt(officer.hadMedicalTreatment), subject.injuries, Utilities.boolToInt(subject.hadMedicalTreatment), 
-				  			Utilities.boolToInt(incident.hasOfficerSignature), Utilities.convertDate(incident.officerSignDate), Utilities.boolToInt(incident.hasSupervisorSignature), Utilities.convertDate(incident.supervisorSignatureDate), Incident.boolToInt(incident.forceIsJustified)
+				  			officer.injuries, Utilities.boolToInt(officer.hadMedicalTreatment), subject.injuries,
+				  			Utilities.boolToInt(subject.hadMedicalTreatment), 
+				  			Utilities.boolToInt(incident.hasOfficerSignature), Utilities.convertDate(incident.officerSignDate),
+				  			Utilities.boolToInt(incident.hasSupervisorSignature), Utilities.convertDate(incident.supervisorSignatureDate),
+				  			Utilities.boolToInt(incident.forceIsJustified)
 				  			);
 		return SQL_Command;
 	}
@@ -222,8 +228,8 @@ public class SQL {
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, 
 							Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
-							Incident.boolToInt(subject.wasWeaponed), Incident.boolToInt(subject.wasInjured), 
-							Incident.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
+							Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured), 
+							Utilities.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
 							subject.charges, Utilities.actions(subject), Utilities.UOF(subject)
 							);
 		return SQL_Command;
