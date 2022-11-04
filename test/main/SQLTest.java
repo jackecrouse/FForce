@@ -69,5 +69,48 @@ class SQLTest {
 	}
 	
 	
-
+/**
+ * date = "2022-11-02";
+		time = "13:00:00";
+		dayOfWeek = "Wednesday";
+		location = "RH-202";
+		typeOfIncident = "Excessive Force";
+		
+		officerName = "A cop";
+		officerBadgeNumber = 22;
+		officerRank = "Private";
+		dutyAssignment = "Patrol";
+		yearsOfService = 1;
+		officerSex = "Female";
+		officerRace = "White";
+		officerAge = 22;
+		officerInjured = 0;
+		officerKilled = 0;
+		officerOnDuty = 1;
+		officerHadUniform = 1;
+		
+		subject1Name = "A subject";
+		subject1HadWeapon = 0;
+		subject1Sex = "Female";
+		subject1Race = "White";
+		subject1Age = 22;
+		subject1Injured = 0;
+		subject1Killed = 0;
+		subject1UnderInfluence = "Mental Illness";
+		subject1Arrested = 0;
+		subject1Charges = "None";
+		subject1Actions = "None";
+		subject1Treatement = "None";
+		
+		officerInjuries = "None";
+		officerHospitalized = 0;
+		subjectInjuries = "None";
+		subjectHospitalized = 0;
+		
+		officerSignature = "Signed";
+		officerSignDate = "2022-11-02";
+		supervisorSignature = "Signed";
+		supervisorSignatureDate = "2022-11-02";
+		forceJustified = 1;
+ */
 }
