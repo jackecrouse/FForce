@@ -40,4 +40,24 @@ public class Officer {
 		injuries = "";
 	}
 	
+	//for testing
+	public Officer(String [] args) {
+		badgeNumber = Integer.parseInt(args[0]);
+		firstName = args[1];
+		middleName = args[2];
+		lastName = args[3];
+		sex = args[4];
+		race = args[5];
+		dateOfBirth = new Date(System.currentTimeMillis());
+		serviceStart = new Date(System.currentTimeMillis());
+		rank = args[8];
+		duty = args[9];
+		wasInjured = Boolean.getBoolean(args[10]);
+		wasKilled = Boolean.getBoolean(args[11]);
+		wasOnDuty = Boolean.getBoolean(args[12]);
+		wasUniformed = Boolean.getBoolean(args[13]);
+		hadMedicalTreatment = Boolean.getBoolean(args[14]);
+		injuries = args[15];
+	}
+	
 }

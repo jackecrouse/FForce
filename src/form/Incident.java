@@ -31,6 +31,21 @@ public class Incident {
 		forceIsJustified = false;
 	}
 	
+	//for testing
+	public Incident(String [] incidentArgs, String [] officerArgs, String [] subjectArgs) {
+		officer = new Officer(officerArgs);
+		subjects = new Vector<Subject>();
+		subjects.add(new Subject(subjectArgs));
+		incidentDate = new Date(System.currentTimeMillis());
+		location = incidentArgs[1];
+		type = incidentArgs[2];
+		hasOfficerSignature = Boolean.getBoolean(incidentArgs[3]);
+		officerSignDate = new Date(System.currentTimeMillis());
+		hasSupervisorSignature = Boolean.getBoolean(incidentArgs[5]);
+		supervisorSignatureDate = new Date(System.currentTimeMillis());
+		forceIsJustified = Boolean.getBoolean(incidentArgs[7]);
+	}
+	
 	public static int boolToInt(boolean bool) {
 		if(bool) {
 			return 1;

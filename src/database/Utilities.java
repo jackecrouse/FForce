@@ -10,7 +10,7 @@ import form.Subject;
 public class Utilities {
 
 	public static String convertDate(Date date) {
-		return String.format("%d-%d-%d", dateToYear(date), dateToMonth(date), dateToDayOfYear(date));
+		return String.format("%s-%s-%s", dateToYear(date), dateToMonth(date), dateToDayOfYear(date));
 	}
 	
 	public static String convertTime(Date date) {
@@ -70,28 +70,32 @@ public class Utilities {
 		return hours.get(Calendar.HOUR_OF_DAY);
 	}
 	
-	public static int dateToDayOfYear(Date date) {
+	public static String dateToDayOfYear(Date date) {
 		Calendar days = Calendar.getInstance();
 		days.setTime(date);
-		return days.get(Calendar.DAY_OF_YEAR);
+		int day = days.get(Calendar.DAY_OF_MONTH);
+		
+		if (day < 10)
+			return ("0" + String.valueOf(day));
+		return String.valueOf(day);
 	}
 	
 	public static String dateToMonth(Date date) {
 		Calendar month = Calendar.getInstance();
 		month.setTime(date);
 		switch(month.get(Calendar.MONTH)) {
-		case 0: return "January";
-		case 1: return "Febuary";
-		case 2:	return "March";
-		case 3: return "April";
-		case 4:	return "May";
-		case 5:	return "June";
-		case 6:	return "July";
-		case 7:	return "August";
-		case 8:	return "September";
-		case 9: return "October";
-		case 10: return "November";
-		case 11: return "December";
+		case 0: return "01";
+		case 1: return "02";
+		case 2:	return "03";
+		case 3: return "04";
+		case 4:	return "05";
+		case 5:	return "06";
+		case 6:	return "07";
+		case 7:	return "08";
+		case 8:	return "09";
+		case 9: return "10";
+		case 10: return "11";
+		case 11: return "12";
 		default: throw new IllegalArgumentException();
 		}
 	}
