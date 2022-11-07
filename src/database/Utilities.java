@@ -4,14 +4,13 @@ import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
-import form.Incident;
 import form.Officer;
 import form.Subject;
 
 public class Utilities {
 
 	public static String convertDate(Date date) {
-		return String.format("%d-%d-%d", dateToYear(date), dateToMonth(date), dateToDayOfMonth(date));
+		return String.format("%s-%s-%s", dateToYear(date), dateToMonth(date), dateToDayOfYear(date));
 	}
 	
 	public static String convertTime(Date date) {
@@ -28,10 +27,6 @@ public class Utilities {
 	
 	public static String getName(Officer officer) {
 		return String.format("%s, %s, %s", officer.lastName, officer.firstName, officer.middleName);
-	}
-	
-	public static String types(Incident incident) {
-		return incident.type.toString() + " " + incident.otherType;
 	}
 	
 	public static String influences(Subject subject) {
@@ -75,16 +70,34 @@ public class Utilities {
 		return hours.get(Calendar.HOUR_OF_DAY);
 	}
 	
-	public static int dateToDayOfMonth(Date date) {
+	public static String dateToDayOfYear(Date date) {
 		Calendar days = Calendar.getInstance();
 		days.setTime(date);
-		return days.get(Calendar.DAY_OF_MONTH);
+		int day = days.get(Calendar.DAY_OF_MONTH);
+		
+		if (day < 10)
+			return ("0" + String.valueOf(day));
+		return String.valueOf(day);
 	}
 	
-	public static int dateToMonth(Date date) {
+	public static String dateToMonth(Date date) {
 		Calendar month = Calendar.getInstance();
 		month.setTime(date);
-		return month.get(Calendar.MONTH) + 1; // Calendar.JANUARY == 0
+		switch(month.get(Calendar.MONTH)) {
+		case 0: return "01";
+		case 1: return "02";
+		case 2:	return "03";
+		case 3: return "04";
+		case 4:	return "05";
+		case 5:	return "06";
+		case 6:	return "07";
+		case 7:	return "08";
+		case 8:	return "09";
+		case 9: return "10";
+		case 10: return "11";
+		case 11: return "12";
+		default: throw new IllegalArgumentException();
+		}
 	}
 	
 	public static int dateToYear(Date date) {

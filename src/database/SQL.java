@@ -1,12 +1,9 @@
 package database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Year;
-import java.util.Date;
 
 import form.Incident;
 import form.Officer;
@@ -16,12 +13,11 @@ public class SQL {
 	
 		//connection information
 		protected static Connection _CON;
-		protected static String _DBurl = "jdbc:mysql://csserver2016.fu.campus/FuPoForce";
-		protected static String _DBuser = "lkvamme";
-		protected static String _DBpassword = "csc353";
 		
-		//
-		protected int _UserPrivlege = 0;
+		//user information
+		protected String _username;
+		protected String _password;
+		protected int _userPrivlege;
 		
 		//system roles
 		protected static int ADMIN = 0;
@@ -30,8 +26,7 @@ public class SQL {
 		
 	public SQL() throws SQLException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			_CON = DriverManager.getConnection(_DBurl, _DBuser, _DBpassword);
+			_CON = ConnectionInformation.establishConnection();
 		}
 		catch (Exception e) {
 			
@@ -40,21 +35,26 @@ public class SQL {
 	}
 	
 	
-	public SQL(String user, String password) throws SQLException {
+	public SQL(String username, String password) throws SQLException {
 		try {
-			_DBuser = user;
-			_DBpassword = password;
-			Class.forName("com.mysql.jdbc.Driver");
-			_CON = DriverManager.getConnection(_DBurl, _DBuser, _DBpassword);
+			_CON = ConnectionInformation.establishConnection();
+			
+			ResultSet rs = getInformation(username, password);
+			while (rs.next()) {
+				_username = rs.getString("username");
+				_password = rs.getString("password");
+				_userPrivlege = rs.getInt("systemRole");
+			}
+			
 		}
 		catch (Exception e)
 		{
-			throw new SQLException();
+			throw new SQLException("Invalid Login");
 		}
 	}
 
 	public boolean addOfficer(String username, String password, String fName, String lName, int badgeNumber, String email, int privlige) {
-		if (_UserPrivlege != ADMIN)
+		if (_userPrivlege != ADMIN)
 			return false;
 		
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%d')", username, password, fName, lName, badgeNumber, email, privlige);
@@ -77,19 +77,33 @@ public class SQL {
 		
 		try {
 			Statement insertIntoForms = _CON.createStatement();
+			System.out.println(SQL_Command);
 			insertIntoForms.execute(SQL_Command);
-			if (incident.subjects.size() > 1)
-				SQL_Command = getSQL_AddSubject(incident.subjects.get(1));
-				insertIntoForms.execute(SQL_Command);
-			return true;
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
+		
+		if (incident.subjects.size() <= 1) return true;
+			
+		SQL_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%'", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
+		
+		try {
+			Statement getCaseID = _CON.createStatement();
+			ResultSet rs = getCaseID.executeQuery(SQL_Command);
+			SQL_Command = getSQL_AddSubject(incident.subjects.get(1), rs.getInt("caseID"));	
+			Statement insertIntoForms = _CON.createStatement();
+			insertIntoForms.execute(SQL_Command);
+			return true;
+		}
+			catch (Exception e) {
+				return false;
+			}
 	}
 	
 	public boolean deleteUser(String username) {
-		if (_UserPrivlege != ADMIN)
+		if (_userPrivlege != ADMIN)
 			return false;
 		
 		String SQL_Command = String.format("DELETE FROM userInfo WHERE username = '%s'", username);
@@ -104,7 +118,7 @@ public class SQL {
 	}
 	
 	public boolean deleteForm(int caseID) {
-		if (_UserPrivlege != ADMIN)
+		if (_userPrivlege != ADMIN)
 			return false;
 		
 		String SQL_Command = String.format("DELETE FROM forms WHERE caseID = %d", caseID);
@@ -135,12 +149,12 @@ public class SQL {
 	}
 
 	public boolean isUser(String username, String password) {
-		
+		String SQL_Command = "SELECT * FROM userInfo WHERE username = '%s' AND password = '%s'";
+		SQL_Command = String.format(SQL_Command, username, password);
 		try {
-			ResultSet rs = getInformation(username, password);
-			if (rs.getFetchSize()!=0)
-				return true;
-			return false;
+			Statement isUser = _CON.createStatement();
+			if (isUser.execute(SQL_Command)) return true;
+			else return false;
 		}
 		catch (Exception e) {
 			return false;
@@ -148,18 +162,15 @@ public class SQL {
 		
 	}
 	
-	private ResultSet getInformation(String username, String password) {
-		String getInformationCommand = "SELECT * FROM persons WHERE username='%s' AND password='%s'";
-		String SQL_command = String.format(getInformationCommand, username, password);
-		
+	private ResultSet getInformation(String username, String password) throws SQLException {
+		String SQL_command = String.format("SELECT * FROM userInfo WHERE username ='%s' AND password ='%s'", username, password);
 		try {
 			Statement getInformation = _CON.createStatement();
 			ResultSet rs = getInformation.executeQuery(SQL_command);
 			return rs;
 		}
-		
 		catch (Exception e) {
-			return null;
+			throw new SQLException("Invalid username and password combination");
 		}
 	}
 
@@ -172,7 +183,7 @@ public class SQL {
 								//section C
 				 				+ " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',"
 				 				//section D
-				 				+ " '%s', %d, '%s', %d, '%d', '%s', '%d', '%s', %d)";
+				 				+ " '%s', %d, '%s', %d, %d, '%s', %d, '%s', %d)";
 		
 		String tableColumns = //Section A
 						   "(Date, Time, Day, Location, IncidentType, "
@@ -195,41 +206,35 @@ public class SQL {
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, 
 							//Section A
-							Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate),
-							Utilities.dateToDayOfWeek(incident.incidentDate), incident.location, incident.type, 
+							Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate), incident.location, incident.type, 
 							//Section B
-							Utilities.getName(officer), officer.badgeNumber, officer.rank, officer.duty,
-							Utilities.yearDelta(officer.serviceStart), officer.sex, officer.race,
-							Utilities.yearDelta(officer.dateOfBirth), 
+							Utilities.getName(officer), officer.badgeNumber, officer.rank, officer.duty, Utilities.yearDelta(officer.serviceStart), officer.sex, officer.race, Utilities.yearDelta(officer.dateOfBirth), 
 							Utilities.boolToInt(officer.wasInjured), Utilities.boolToInt(officer.wasKilled), 
 							Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed), 
 				  			//Section C
-				  			Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth),
+				  			Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
 				  			Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured), 
 				  			Utilities.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
 				  			subject.charges, Utilities.actions(subject), Utilities.UOF(subject), 
 				  			//Section D
-				  			officer.injuries, Utilities.boolToInt(officer.hadMedicalTreatment), subject.injuries,
-				  			Utilities.boolToInt(subject.hadMedicalTreatment), 
-				  			Utilities.boolToInt(incident.hasOfficerSignature), Utilities.convertDate(incident.officerSignDate),
-				  			Utilities.boolToInt(incident.hasSupervisorSignature), Utilities.convertDate(incident.supervisorSignatureDate),
-				  			Utilities.boolToInt(incident.forceIsJustified)
+				  			officer.injuries, Utilities.boolToInt(officer.hadMedicalTreatment), subject.injuries, Utilities.boolToInt(subject.hadMedicalTreatment), 
+				  			Utilities.boolToInt(incident.hasOfficerSignature), Utilities.convertDate(incident.officerSignDate), Utilities.boolToInt(incident.hasSupervisorSignature), Utilities.convertDate(incident.supervisorSignatureDate), Utilities.boolToInt(incident.forceIsJustified)
 				  			);
 		return SQL_Command;
 	}
 	
-	public String getSQL_AddSubject(Subject subject) {
+	public String getSQL_AddSubject(Subject subject, int caseID) {
 		
 		String tableValues = "'%s',%d,'%s','%s',%d,'%s','%s', %d, %d, %d, %d, %d,";
 		String tableColumns = "(Subject2Name, Subject2Sex, Subject2Race, Subject2Age, Subject2HadWeapon, Subject2Injured, Subject2Killed, "
 				 	  		+ "Subject2InfluencedBy, Subject2Charges, Subject2Actions, Subject2Treatment, InjuriesToOfficer)";
 		
-		String insertIntoFormsCommand = String.format("INSERT INTO forms %s VALUES %s", tableColumns, tableValues);
+		String insertIntoFormsCommand = String.format("INSERT INTO forms %s VALUES %s WHERE caseID = %d", tableColumns, tableValues, caseID);
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, 
 							Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
-							Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured), 
-							Utilities.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
+							Incident.boolToInt(subject.wasWeaponed), Incident.boolToInt(subject.wasInjured), 
+							Incident.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
 							subject.charges, Utilities.actions(subject), Utilities.UOF(subject)
 							);
 		return SQL_Command;

@@ -50,4 +50,29 @@ public class Subject {
 		this.numberOfShots = 0;
 	}
 	
+	//for testing
+	public Subject(String [] args) {
+		super();
+		this.firstName = args[0];
+		this.middleName = args[1];
+		this.lastName = args[2];
+		this.sex = args[3];
+		this.race = args[4];
+		this.dateOfBirth = new Date(System.currentTimeMillis());
+		this.wasInjured = Boolean.getBoolean(args[6]);
+		this.wasKilled = Boolean.getBoolean(args[7]);
+		this.wasWeaponed = Boolean.getBoolean(args[8]);
+		this.wasArrested = Boolean.getBoolean(args[9]);
+		this.hadMedicalTreatment = Boolean.getBoolean(args[10]);
+		this.injuries = args[11];
+		this.charges = args[12];
+		this.influence = new Vector<String>();
+		this.otherInfluence = args[13];
+		this.actions = new Vector<String>();
+		this.otherActions = args[14];
+		this.uofAgainst = new Vector<String>();
+		this.otherUOF = args[15];
+		this.numberOfShots = Integer.parseInt(args[16]);
+	}
+	
 }
