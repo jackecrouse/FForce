@@ -355,7 +355,6 @@ public class UOFIncidentForm extends Application {
 		officer.wasUniformed = cbxOfficerUniformed.isSelected();
 		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
 		officer.injuries = cleanInput(txaOfficerInjuriesDesc.getText());
-		incident.incidentNumber = textFieldToInt(txfIncidentNumber);  // TODO: remove if unnecessary
 		incident.incidentDate = datePickerToDate(dtpIncidentDate);
 		incident.location = cleanInput(txfIncidentLocation.getText());
 		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();
@@ -372,17 +371,6 @@ public class UOFIncidentForm extends Application {
     		dtp.setValue(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     		throw new IllegalArgumentException();
     	}
-	}
-	private int textFieldToInt(TextField txf) {
-		int output;
-		try {
-			output = Integer.parseInt(cleanInput(txf.getText()));
-			return output;
-		}
-		catch(Exception e){
-			txf.clear();
-			throw new IllegalArgumentException();
-		}
 	}
 	
 	private String cleanInput(String input) {
