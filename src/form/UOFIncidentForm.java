@@ -2,7 +2,6 @@ package form;
 
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Vector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -35,41 +34,21 @@ public class UOFIncidentForm extends Application {
 	private Incident incident;
 	private Pane pneReport;
 	private HBox hbxReport;
-	private VBox vbxOfficerFull;
-	private Text txtOfficerInfo;
-	private GridPane grdOfficerInfo;
-	private TextField txfBadgeNumber;
-	private TextField txfFirstName;
-	private TextField txfMiddleName;
-	private TextField txfLastName;
-	private TextField txfSex;
-	private TextField txfRace;
-	private DatePicker dtpDOB;
-	private DatePicker dtpServiceStart;
-	private TextField txfRank;
-	private TextField txfDutyAssignment;
-	private CheckBox cbxOfficerInjured;
-	private CheckBox cbxOfficerKilled;
-	private CheckBox cbxOfficerOnDuty;
-	private CheckBox cbxOfficerUniformed;
-	private CheckBox cbxOfficerTreatment;
+	private VBox vbxOfficerFull, vbxIncidentFull;
+	private Text txtOfficerInfo, txtIncidentInfo, txtSubjects;
+	private GridPane grdOfficerInfo, grdIncidentInfo;
+	private TextField txfBadgeNumber,txfFirstName, txfMiddleName, txfLastName, txfSex, txfRace, txfRank, txfDutyAssignment, txfIncidentNumber, txfIncidentLocation, txfOtherDesc;
+	private DatePicker dtpDOB, dtpServiceStart, dtpIncidentDate;
+	private CheckBox cbxOfficerInjured, cbxOfficerKilled, cbxOfficerOnDuty, cbxOfficerUniformed, cbxOfficerTreatment;
 	private TextArea txaOfficerInjuriesDesc;
-	private VBox vbxIncidentFull;
-	private Text txtIncidentInfo;
-	private GridPane grdIncidentInfo;
-	private TextField txfIncidentNumber;
-	private DatePicker dtpIncidentDate;
-	private TextField txfIncidentLocation;
 	private VBox vbxIncidentType;
-	private static ToggleGroup tgrType;
+	private ToggleGroup tgrType;
 	private RadioButton rdbInProgress;
 	private RadioButton rdbDomestic;
 	private RadioButton rdbSuspicious;
 	private RadioButton rdbTrafficStop;
 	private RadioButton rdbArrest;
 	private RadioButton rdbOtherType;
-	private TextField txfOtherDesc;
-	private Text txtSubjects;
 	private HBox hbxSubjectInteract;
 	private Button btnCreateSubject;
 	private Button btnDeleteSubject;
@@ -353,7 +332,7 @@ public class UOFIncidentForm extends Application {
 				catch(IllegalArgumentException e) {
 					return;
 				}
-				//FForce.window.setScene(FForce.homePageScene);
+				FForce.window.setScene(FForce.homePageScene);
 			}
 		});
 	}
@@ -376,7 +355,7 @@ public class UOFIncidentForm extends Application {
 		officer.wasUniformed = cbxOfficerUniformed.isSelected();
 		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
 		officer.injuries = cleanInput(txaOfficerInjuriesDesc.getText());
-		incident.incidentNumber = textFieldToInt(txfIncidentNumber);
+		incident.incidentNumber = textFieldToInt(txfIncidentNumber);  // TODO: remove if unnecessary
 		incident.incidentDate = datePickerToDate(dtpIncidentDate);
 		incident.location = cleanInput(txfIncidentLocation.getText());
 		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();

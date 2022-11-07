@@ -21,7 +21,7 @@ public class Incident {
 	public Incident() {
 		officer = new Officer();
 		subjects = new Vector<Subject>();
-		incidentNumber = 0;
+		incidentNumber = 0; // TODO: remove if unnecessary
 		subjects.add(new Subject());
 		incidentDate = new Date();
 		location = "";
