@@ -1,8 +1,6 @@
 package form;
 
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Vector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -312,53 +310,41 @@ public class UOFSubjectForm extends Application {
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	subject.firstName = cleanInput(txfFirstName.getText());
-            	subject.middleName = cleanInput(txfMiddleName.getText());
-            	subject.lastName = cleanInput(txfLastName.getText());
-            	subject.sex = cleanInput(txfSex.getText());
-            	subject.race = cleanInput(txfRace.getText());
-            	try {
-            		subject.dateOfBirth = Date.from(dtpDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            	}
-            	catch(Exception e){
-            		dtpDOB.setValue(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            		return;
-            	}
+            	subject.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
+            	subject.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
+            	subject.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
+            	subject.sex = UOFFormUtil.cleanInput(txfSex.getText());
+            	subject.race = UOFFormUtil.cleanInput(txfRace.getText());
+            	subject.dateOfBirth = UOFFormUtil.datePickerToDate(dtpDOB);
             	subject.wasInjured = cbxSubjectInjured.isSelected();
             	subject.wasKilled = cbxSubjectKilled.isSelected();
             	subject.wasWeaponed = cbxSubjectWeaponed.isSelected();
             	subject.wasArrested = cbxSubjectArrested.isSelected();
-            	subject.injuries = cleanInput(txaInjuries.getText());
-            	booleanToItem(cbxDrugs, subject.influence);
-            	booleanToItem(cbxAlcohol, subject.influence);
-            	booleanToItem(cbxMentalIllness, subject.influence);
-            	booleanToItem(cbxOtherCondition, subject.influence);
-            	subject.otherInfluence = cleanInput(txfOtherCondition.getText());
-            	subject.charges = cleanInput(txaCharges.getText());
-            	booleanToItem(cbxResisted, subject.actions);
-            	booleanToItem(cbxThreatOrAttack, subject.actions);
-            	booleanToItem(cbxKnife, subject.actions);
-            	booleanToItem(cbxMotorVehicle, subject.actions);
-            	booleanToItem(cbxFirearm, subject.actions);
-            	booleanToItem(cbxShotFirearm, subject.actions);
-            	booleanToItem(cbxOtherAction, subject.actions);
-            	subject.otherActions = cleanInput(txfOtherAction.getText());
-            	booleanToItem(cbxComplianceHold, subject.uofAgainst);
-            	booleanToItem(cbxHandsFistFeet, subject.uofAgainst);
-            	booleanToItem(cbxElectric, subject.uofAgainst);
-            	booleanToItem(cbxChemical, subject.uofAgainst);
-            	booleanToItem(cbxBaton, subject.uofAgainst);
-            	booleanToItem(cbxOtherUOF, subject.uofAgainst);
-            	subject.otherUOF = cleanInput(txfOtherUOF.getText());
-            	booleanToItem(cbxFirearmAimed, subject.uofAgainst);
-            	booleanToItem(cbxFirearmDischarged, subject.uofAgainst);
-            	try {
-            		subject.numberOfShots = Integer.parseInt(cleanInput(txfNumberOfShots.getText()));
-            	}
-            	catch(Exception e){
-            		txfNumberOfShots.clear();
-            		return;
-            	}
+            	subject.injuries = UOFFormUtil.cleanInput(txaInjuries.getText());
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxDrugs, subject.influence);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxAlcohol, subject.influence);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxMentalIllness, subject.influence);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherCondition, subject.influence);
+            	subject.otherInfluence = UOFFormUtil.cleanInput(txfOtherCondition.getText());
+            	subject.charges = UOFFormUtil.cleanInput(txaCharges.getText());
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxResisted, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxThreatOrAttack, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxKnife, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxMotorVehicle, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearm, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxShotFirearm, subject.actions);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherAction, subject.actions);
+            	subject.otherActions = UOFFormUtil.cleanInput(txfOtherAction.getText());
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxComplianceHold, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxHandsFistFeet, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxElectric, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxChemical, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxBaton, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherUOF, subject.uofAgainst);
+            	subject.otherUOF = UOFFormUtil.cleanInput(txfOtherUOF.getText());
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmAimed, subject.uofAgainst);
+            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmDischarged, subject.uofAgainst);
+            	subject.numberOfShots = UOFFormUtil.textFieldToInteger(txfNumberOfShots);
             	form.close();
             }
 
@@ -368,22 +354,6 @@ public class UOFSubjectForm extends Application {
 		// Submit end
 		
 		form.show();
-	}
-	
-	private String cleanInput(String input) {
-		if(input == null) {
-			input = "";
-		}
-		return input;
-	}
-	
-	private void booleanToItem(CheckBox cbxSubjectInput, Vector<String> subjectData) {
-		if(cbxSubjectInput.isSelected() && !subjectData.contains(cbxSubjectInput.getText())) {
-    		subjectData.add(cbxSubjectInput.getText());
-    	}
-    	else if(!cbxSubjectInput.isSelected() && subjectData.contains(cbxSubjectInput.getText())) {
-    		subjectData.remove(cbxSubjectInput.getText());
-    	}
 	}
 	
 }

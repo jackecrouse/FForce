@@ -87,7 +87,7 @@ public class SQL {
 		
 		if (incident.subjects.size() <= 1) return true;
 			
-		SQL_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%'", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
+		SQL_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%s", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
 		
 		try {
 			Statement getCaseID = _CON.createStatement();
