@@ -163,12 +163,14 @@ public class UOFSubjectForm extends Application {
 		cbxSubjectArrested.setSelected(subject.wasArrested);
 		vbxSubjectInfo.getChildren().add(cbxSubjectArrested);
 		
+		int injuriesLabelIndex = 6;
 		lblInjuries = new Label("Describe Injuries to Subject");
 		vbxSubjectInfo.getChildren().add(lblInjuries);
-		vbxSubjectInfo.getChildren().get(6).setVisible(false);
+		vbxSubjectInfo.getChildren().get(injuriesLabelIndex).setVisible(false);
 		txaInjuries = new TextArea(subject.injuries);
 		txaInjuries.setPrefSize(100.0, 80.0);
-		UOFFormUtil.toggleTextAreaWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(6));
+		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(injuriesLabelIndex));
+		txaInjuries.setVisible(false);
 		vbxSubjectInfo.getChildren().add(txaInjuries);
 		
 		// Subject's conditions start
@@ -192,13 +194,19 @@ public class UOFSubjectForm extends Application {
 		vbxSubjectInfo.getChildren().add(cbxOtherCondition);
 		
 		txfOtherCondition = new TextField(subject.otherInfluence);
+		UOFFormUtil.toggleTextInputEvent(cbxOtherCondition, txfOtherCondition);
+		txfOtherCondition.setVisible(false);
 		vbxSubjectInfo.getChildren().add(txfOtherCondition);
 		// Subject's conditions start
 		
+		int chargesLabelIndex = 14;
 		lblCharges = new Label("Charges");
 		vbxSubjectInfo.getChildren().add(lblCharges);
+		vbxSubjectInfo.getChildren().get(chargesLabelIndex).setVisible(false);
 		txaCharges = new TextArea(subject.charges);
 		txaCharges.setPrefSize(100.0,80.0);
+		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectArrested, txaCharges, vbxSubjectInfo.getChildren().get(chargesLabelIndex));
+		txaCharges.setVisible(false);
 		vbxSubjectInfo.getChildren().add(txaCharges);
 		// Subject's incident information start
 		// everything on the left half of the screen end
@@ -243,6 +251,8 @@ public class UOFSubjectForm extends Application {
 		vbxActions.getChildren().add(cbxOtherAction);
 		
 		txfOtherAction = new TextField(subject.otherActions);
+		UOFFormUtil.toggleTextInputEvent(cbxOtherAction, txfOtherAction);
+		txfOtherAction.setVisible(false);
 		vbxActions.getChildren().add(txfOtherAction);
 		// Subject's actions end
 		
@@ -278,6 +288,8 @@ public class UOFSubjectForm extends Application {
 		vbxActions.getChildren().add(cbxOtherUOF);
 		
 		txfOtherUOF = new TextField(subject.otherUOF);
+		UOFFormUtil.toggleTextInputEvent(cbxOtherUOF, txfOtherUOF);
+		txfOtherUOF.setVisible(false);
 		vbxActions.getChildren().add(txfOtherUOF);
 		
 		lblFirearm = new Label("Firearm:");

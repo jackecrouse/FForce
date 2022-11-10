@@ -91,7 +91,7 @@ public class UOFFormUtil {
 		return index;
 	}
 
-	public static void toggleTextAreaWithLabelEvent(CheckBox toggle, TextArea text, Node label) {
+	public static void toggleTextInputWithLabelEvent(CheckBox toggle, TextInputControl text, Node label) {
 		toggle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -107,13 +107,11 @@ public class UOFFormUtil {
 		});
 	}
 	
-	public static void toggleTextFieldFromRadioButtonEvent(Toggle toggle, int correctIndex, TextInputControl text) {
-		((ButtonBase) toggle).setOnAction(new EventHandler<ActionEvent>() {
+	public static void toggleTextInputEvent(CheckBox toggle, TextInputControl text) {
+		toggle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				ToggleGroup group = toggle.getToggleGroup();
-				System.out.println(group.getToggles().get(correctIndex).isSelected());
-				if(group.getToggles().get(correctIndex).isSelected()) {
+				if(toggle.isSelected()) {
 					text.setVisible(true);
 				}
 				else {
@@ -121,6 +119,23 @@ public class UOFFormUtil {
 				}
 			}
 		});
+	}
+	
+	public static void toggleTextFieldFromRadioButtonEvent(ToggleGroup toggles, int correctIndex, TextInputControl text) {
+		
+		for(int i=0; i<toggles.getToggles().size(); i++) {
+			((ButtonBase) toggles.getToggles().get(i)).setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					if(toggles.getToggles().get(correctIndex).isSelected()) {
+						text.setVisible(true);
+					}
+					else {
+						text.setVisible(false);
+					}
+				}
+			});
+		}
 	}
 	
 }

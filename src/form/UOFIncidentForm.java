@@ -169,8 +169,8 @@ public class UOFIncidentForm extends Application {
 		txaOfficerInjuriesDesc = new TextArea();
 		txaOfficerInjuriesDesc.setPrefSize(200, 150);
 		txaOfficerInjuriesDesc.setVisible(false);
-		UOFFormUtil.toggleTextAreaWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
-				 								 vbxOfficerFull.getChildren().get(injuresLabelIndex));
+		UOFFormUtil.toggleTextInputWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
+				 								  vbxOfficerFull.getChildren().get(injuresLabelIndex));
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
 	}
 	
@@ -253,6 +253,8 @@ public class UOFIncidentForm extends Application {
 	}
 
 	private void createIncidentTypeInfo() {
+		int otherIndex = 5;
+		
 		tgrType = new ToggleGroup();
 
 		rdbInProgress = new RadioButton("Crime In Progress");
@@ -281,10 +283,7 @@ public class UOFIncidentForm extends Application {
 
 		txfOtherDesc = new TextField();
 		txfOtherDesc.setVisible(false);
-		for(int i=0; i<tgrType.getToggles().size(); i++) {
-			UOFFormUtil.toggleTextFieldFromRadioButtonEvent(tgrType.getToggles().get(i), 5, txfOtherDesc);
-		}
-		
+		UOFFormUtil.toggleTextFieldFromRadioButtonEvent(tgrType, otherIndex, txfOtherDesc);
 		vbxIncidentType.getChildren().add(txfOtherDesc);
 	}
 	
