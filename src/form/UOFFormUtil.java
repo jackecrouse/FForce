@@ -1,15 +1,34 @@
 package form;
 
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 
 public class UOFFormUtil {
+	
+	public static Date addMinorTimeFromText(Date date, String hour, String minute, String second, String amPM) {
+		try {
+		Calendar calDate = Calendar.getInstance();
+		calDate.setTime(date);
+		if(amPM.equals("AM")) {
+			calDate.add(Calendar.HOUR_OF_DAY,textToInteger(hour));
+		}
+		else {
+			calDate.add(Calendar.HOUR_OF_DAY,textToInteger(hour) + 12);
+		}
+		calDate.add(Calendar.MINUTE,textToInteger(minute));
+		calDate.add(Calendar.SECOND,textToInteger(second));
+		return calDate.getTime();
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException();
+		}
+	}
 	
 	public static Date datePickerToDate(DatePicker dtp) {
 		try {
@@ -21,12 +40,11 @@ public class UOFFormUtil {
     	}
 	}
 	
-	public static int textFieldToInteger(TextField txf) {
+	public static int textToInteger(String input) {
 		try {
-    		return Integer.parseInt(cleanInput(txf.getText()));
+    		return Integer.parseInt(cleanInput(input));
     	}
     	catch(Exception e){
-    		txf.setText("0");
     		throw new IllegalArgumentException();
     	}
 	}
@@ -39,12 +57,17 @@ public class UOFFormUtil {
 	}
 	
 	public static void removeOrAddFromCheckBox(CheckBox cbx, Vector<String> data) {
-		if(cbx.isSelected() && !data.contains(cbx.getText())) {
-    		data.add(cbx.getText());
-    	}
-    	else if(!cbx.isSelected() && data.contains(cbx.getText())) {
-    		data.remove(cbx.getText());
-    	}
+		try {
+			if(cbx.isSelected() && !data.contains(cbx.getText())) {
+				data.add(cbx.getText());
+			}
+			else if(!cbx.isSelected() && data.contains(cbx.getText())) {
+				data.remove(cbx.getText());
+			}
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	public static <T> int getCurrentIndex(ComboBox<T> cob) {

@@ -344,7 +344,7 @@ public class UOFSubjectForm extends Application {
             	subject.otherUOF = UOFFormUtil.cleanInput(txfOtherUOF.getText());
             	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmAimed, subject.uofAgainst);
             	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmDischarged, subject.uofAgainst);
-            	subject.numberOfShots = UOFFormUtil.textFieldToInteger(txfNumberOfShots);
+            	subject.numberOfShots = UOFFormUtil.textToInteger(txfNumberOfShots.getText());
             	form.close();
             }
 

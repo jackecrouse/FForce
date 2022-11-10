@@ -34,7 +34,7 @@ public class UOFIncidentForm extends Application {
 	private Incident incident;
 	
 	private Pane pneReport;
-	private HBox hbxReport, hbxSubjectInteract;
+	private HBox hbxReport, hbxTime, hbxSubjectInteract;
 	private VBox vbxOfficerFull, vbxIncidentFull, vbxIncidentType;
 	private Text txtOfficerInfo, txtIncidentInfo, txtSubjects;
 	private GridPane grdOfficerInfo, grdIncidentInfo;
@@ -49,7 +49,7 @@ public class UOFIncidentForm extends Application {
 	private RadioButton rdbInProgress, rdbDomestic, rdbSuspicious, rdbTrafficStop,
 						rdbArrest, rdbOtherType;
 	private Button btnCreateSubject, btnDeleteSubject, btnEditSubject, btnSubmit;
-	private ComboBox<String> cobSubjectChoice;
+	private ComboBox<String> cobAmPm, cobHour, cobMinutes, cobSeconds, cobSubjectChoice;
 	private StackPane spaSubmit;
 	
 	public static void run() {
@@ -64,7 +64,7 @@ public class UOFIncidentForm extends Application {
 		form.setResizable(false);
 
 		pneReport = new Pane();
-		form.setScene(new Scene(pneReport, 680, 610));
+		form.setScene(new Scene(pneReport, 770, 610));
 
 		hbxReport = new HBox();
 		pneReport.getChildren().add(hbxReport);
@@ -193,13 +193,56 @@ public class UOFIncidentForm extends Application {
 		dtpIncidentDate = new DatePicker();
 		grdIncidentInfo.add(dtpIncidentDate, 1, 1);
 		
-		grdIncidentInfo.add(new Label("Incident Location"), 0, 2);
-		txfIncidentLocation = new TextField();
-		grdIncidentInfo.add(txfIncidentLocation, 1, 2);
+		grdIncidentInfo.add(new Label("Incident Time"), 0, 2);
+		hbxTime = new HBox();
+		grdIncidentInfo.add(hbxTime, 1, 2);
 		
-		grdIncidentInfo.add(new Label("Incident Type"), 0, 3);
+		createTimeSelect();
+		
+		grdIncidentInfo.add(new Label("Incident Location"), 0, 3);
+		txfIncidentLocation = new TextField();
+		grdIncidentInfo.add(txfIncidentLocation, 1, 3);
+		
+		grdIncidentInfo.add(new Label("Incident Type"), 0, 4);
 		vbxIncidentType = new VBox();
-		grdIncidentInfo.add(vbxIncidentType, 1, 3);
+		grdIncidentInfo.add(vbxIncidentType, 1, 4);
+	}
+
+	private void createTimeSelect() {
+		cobHour = new ComboBox<String>();
+		for(int i=1; i<=12; i++) {
+			cobHour.getItems().add("" + i);
+		}
+		hbxTime.getChildren().add(cobHour);
+		
+		hbxTime.getChildren().add(new Label(" : "));
+		cobMinutes = new ComboBox<String>();
+		for(int i=0; i<=59; i++) {
+			if(i < 10) {
+				cobMinutes.getItems().add("0" + i);
+			}
+			else {
+				cobMinutes.getItems().add("" + i);
+			}
+		}
+		hbxTime.getChildren().add(cobMinutes);
+		
+		hbxTime.getChildren().add(new Label(" : "));
+		cobSeconds = new ComboBox<String>();
+		for(int i=0; i<=59; i++) {
+			if(i < 10) {
+				cobSeconds.getItems().add("0" + i);
+			}
+			else {
+				cobSeconds.getItems().add("" + i);
+			}
+		}
+		hbxTime.getChildren().add(cobSeconds);
+		
+		hbxTime.getChildren().add(new Label(" "));
+		cobAmPm = new ComboBox<String>();
+		cobAmPm.getItems().addAll("AM","PM");
+		hbxTime.getChildren().add(cobAmPm);
 	}
 
 	private void createIncidentTypeInfo() {
@@ -329,7 +372,8 @@ public class UOFIncidentForm extends Application {
 				}
 				try {
 					new SQL().insertNewForm(incident);
-				} catch (SQLException e) {
+				}
+				catch (SQLException e) {
 					e.printStackTrace();
 				}
 				FForce.window.setScene(FForce.homePageScene);
@@ -339,7 +383,7 @@ public class UOFIncidentForm extends Application {
 	
 	private void fillIncidentFromForm() {
 		Officer officer = incident.officer;
-		officer.badgeNumber = UOFFormUtil.textFieldToInteger(txfBadgeNumber);
+		officer.badgeNumber = UOFFormUtil.textToInteger(txfBadgeNumber.getText());
 		officer.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
 		officer.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
 		officer.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
@@ -356,6 +400,9 @@ public class UOFIncidentForm extends Application {
 		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
 		officer.injuries = UOFFormUtil.cleanInput(txaOfficerInjuriesDesc.getText());
 		incident.incidentDate = UOFFormUtil.datePickerToDate(dtpIncidentDate);
+		incident.incidentDate = UOFFormUtil.addMinorTimeFromText(incident.incidentDate, cobHour.getValue(), cobMinutes.getValue(),
+																cobSeconds.getValue(), cobAmPm.getValue());
+		System.out.println(incident.incidentDate);
 		incident.location = UOFFormUtil.cleanInput(txfIncidentLocation.getText());
 		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();
 		incident.otherType = txfOtherDesc.getText();
