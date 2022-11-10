@@ -280,6 +280,7 @@ public class UOFIncidentForm extends Application {
 		vbxIncidentType.getChildren().add(rdbOtherType);
 
 		txfOtherDesc = new TextField();
+		txfOtherDesc.setVisible(false);
 		for(int i=0; i<tgrType.getToggles().size(); i++) {
 			UOFFormUtil.toggleTextFieldFromRadioButtonEvent(tgrType.getToggles().get(i), 5, txfOtherDesc);
 		}
@@ -381,13 +382,13 @@ public class UOFIncidentForm extends Application {
 				catch(IllegalArgumentException e) {
 					return;
 				}
-//				try {
-//					new SQL().insertNewForm(incident);
-//				}
-//				catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//				FForce.window.setScene(FForce.homePageScene);
+				try {
+					new SQL().insertNewForm(incident);
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+				}
+				FForce.window.setScene(FForce.homePageScene);
 			}
 		});
 	}
