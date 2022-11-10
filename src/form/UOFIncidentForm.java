@@ -170,7 +170,7 @@ public class UOFIncidentForm extends Application {
 		txaOfficerInjuriesDesc.setPrefSize(200, 150);
 		txaOfficerInjuriesDesc.setVisible(false);
 		UOFFormUtil.toggleTextAreaWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
-				 vbxOfficerFull.getChildren().get(injuresLabelIndex));
+				 								 vbxOfficerFull.getChildren().get(injuresLabelIndex));
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
 	}
 	

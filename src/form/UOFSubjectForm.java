@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -164,8 +165,10 @@ public class UOFSubjectForm extends Application {
 		
 		lblInjuries = new Label("Describe Injuries to Subject");
 		vbxSubjectInfo.getChildren().add(lblInjuries);
+		vbxSubjectInfo.getChildren().get(6).setVisible(false);
 		txaInjuries = new TextArea(subject.injuries);
 		txaInjuries.setPrefSize(100.0, 80.0);
+		UOFFormUtil.toggleTextAreaWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(6));
 		vbxSubjectInfo.getChildren().add(txaInjuries);
 		
 		// Subject's conditions start
