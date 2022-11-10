@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -146,6 +147,8 @@ public class UOFIncidentForm extends Application {
 	}
 	
 	private void createOfficerIncidentInfo() {
+		int injuresLabelIndex = 7;
+		
 		cbxOfficerInjured = new CheckBox("Officer Was Injured");
 		vbxOfficerFull.getChildren().add(cbxOfficerInjured);
 
@@ -162,8 +165,12 @@ public class UOFIncidentForm extends Application {
 		vbxOfficerFull.getChildren().add(cbxOfficerTreatment);
 		
 		vbxOfficerFull.getChildren().add(new Label("Describe Injuries to Officer"));
+		vbxOfficerFull.getChildren().get(injuresLabelIndex).setVisible(false);
 		txaOfficerInjuriesDesc = new TextArea();
 		txaOfficerInjuriesDesc.setPrefSize(200, 150);
+		txaOfficerInjuriesDesc.setVisible(false);
+		UOFFormUtil.toggleTextAreaWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
+				 vbxOfficerFull.getChildren().get(injuresLabelIndex));
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
 	}
 	
@@ -273,6 +280,10 @@ public class UOFIncidentForm extends Application {
 		vbxIncidentType.getChildren().add(rdbOtherType);
 
 		txfOtherDesc = new TextField();
+		for(int i=0; i<tgrType.getToggles().size(); i++) {
+			UOFFormUtil.toggleTextFieldFromRadioButtonEvent(tgrType.getToggles().get(i), 5, txfOtherDesc);
+		}
+		
 		vbxIncidentType.getChildren().add(txfOtherDesc);
 	}
 	
@@ -370,13 +381,13 @@ public class UOFIncidentForm extends Application {
 				catch(IllegalArgumentException e) {
 					return;
 				}
-				try {
-					new SQL().insertNewForm(incident);
-				}
-				catch (SQLException e) {
-					e.printStackTrace();
-				}
-				FForce.window.setScene(FForce.homePageScene);
+//				try {
+//					new SQL().insertNewForm(incident);
+//				}
+//				catch (SQLException e) {
+//					e.printStackTrace();
+//				}
+//				FForce.window.setScene(FForce.homePageScene);
 			}
 		});
 	}

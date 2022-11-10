@@ -5,9 +5,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 
 public class UOFFormUtil {
 	
@@ -80,4 +91,36 @@ public class UOFFormUtil {
 		return index;
 	}
 
+	public static void toggleTextAreaWithLabelEvent(CheckBox toggle, TextArea text, Node label) {
+		toggle.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if(toggle.isSelected()) {
+					label.setVisible(true);
+					text.setVisible(true);
+				}
+				else {
+					label.setVisible(false);
+					text.setVisible(false);
+				}
+			}
+		});
+	}
+	
+	public static void toggleTextFieldFromRadioButtonEvent(Toggle toggle, int correctIndex, TextInputControl text) {
+		((ButtonBase) toggle).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				ToggleGroup group = toggle.getToggleGroup();
+				System.out.println(group.getToggles().get(correctIndex).isSelected());
+				if(group.getToggles().get(correctIndex).isSelected()) {
+					text.setVisible(true);
+				}
+				else {
+					text.setVisible(false);
+				}
+			}
+		});
+	}
+	
 }
