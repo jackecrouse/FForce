@@ -48,14 +48,19 @@ public class FForce extends Application {
 		submitButton.setOnAction(e -> {
 			
 
-			if(validateLogin(_username, _password))
-			{
-				System.out.println("Success");
-				window.setScene(homePageScene);
-			}
-			else
-			{
-				System.out.println("Failure");
+			try {
+				if(validateLogin(_username, _password))
+				{
+					System.out.println("Success");
+					window.setScene(homePageScene);
+				}
+				else
+				{
+					System.out.println("Failure");
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
 			
@@ -76,16 +81,13 @@ public class FForce extends Application {
 		window.show();
 	}
 
-	private boolean validateLogin(TextField user, PasswordField pass) {
-		
-		try {
-			SQL connection = new SQL(user.getText(), pass.getText());
-			return true;
-		}
-		catch(SQLException e)
-		{
-			return false;
-		}
+	
+	private static boolean validateLogin(TextField username, PasswordField password) throws SQLException
+	{
+		SQL connection = new SQL();
+		String user = username.getText();
+		String pass = password.getText();
+		return connection.isUser(user, pass);
 	}
 
 

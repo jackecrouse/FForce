@@ -153,8 +153,10 @@ public class SQL {
 		SQL_Command = String.format(SQL_Command, username, password);
 		try {
 			Statement isUser = _CON.createStatement();
-			if (isUser.execute(SQL_Command)) return true;
-			else return false;
+			isUser.execute(SQL_Command);
+			
+			ResultSet results = isUser.getResultSet();
+			return results.first();
 		}
 		catch (Exception e) {
 			return false;

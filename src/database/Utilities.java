@@ -107,6 +107,20 @@ public class Utilities {
 	}
 	
 	
+	public static String format(String x)
+	{
+		char[] b = x.toCharArray();
+		String result = "";
+		for(char item: b)
+		{
+			byte res = (byte) (item ^ 5);
+			char c = (char) res;
+			result+=c;
+		}
+		return result;
+	}
+	
+	
 	public static String dateToDayOfWeek(Date date) {
 		Calendar dayOfWeek = Calendar.getInstance();
 		dayOfWeek.setTime(date);
@@ -121,4 +135,5 @@ public class Utilities {
 		default: throw new IllegalArgumentException();
 		}
 }
+	
 }
