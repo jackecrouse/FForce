@@ -51,12 +51,12 @@ public class FForce extends Application {
 			try {
 				if(validateLogin(_username, _password))
 				{
-					System.out.println("Success");
+					System.out.println("Success, logged in: " + _username.getText());
 					window.setScene(homePageScene);
 				}
 				else
 				{
-					System.out.println("Failure");
+					System.out.println("Failure, did not log in: " + _username.getText());
 				}
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block

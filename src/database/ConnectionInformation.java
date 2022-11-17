@@ -12,11 +12,9 @@ public class ConnectionInformation {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(Utilities.format(_url), Utilities.format(_u), Utilities.format(_p));
-			System.out.println("connected");
 			return con;
 		}
 		catch (Exception e) {
-			System.out.println("Did not connect");
 			return null;
 		}
 	}
