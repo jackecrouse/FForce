@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class ConnectionInformation {
-	private static String _url = "oagf?h|vti?**fvv`ws`w7543+cp+fdhupv*CpUjCjwf`";
-	private static String _u = "oa`r`|";
-	private static String _p = "fvf606";
+	private static String _url = "൅ಅ౅౥݅ඥ༥๥ลඅ݅ץץ౥๥๥ಥๅ໅ಥๅم؅إۅׅ೅ລׅ౥థඥฅລ๥ץࣅລਅ෥ࣅ෥ๅ౥ಥ";
+	private static String _u = "൅ಅಥ໥ಥ༥";
+	private static String _p = "౥๥౥٥ڥ٥";
 	
 	public static Connection establishConnection() {
 		try {
