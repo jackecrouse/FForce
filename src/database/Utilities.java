@@ -108,14 +108,13 @@ public class Utilities {
 	
 	
 	public static String format(String x)
-	{
-		char[] b = x.toCharArray();
+	{		
+		char[] charArr = (x.toCharArray());
 		String result = "";
-		for(char item: b)
+		for(char item: charArr)
 		{
-			byte res = (byte) (item ^ 5);
-			char c = (char) res;
-			result+=c;
+			item = (char) ((item ^ 5) >> 5);
+			result+=item;
 		}
 		return result;
 	}
