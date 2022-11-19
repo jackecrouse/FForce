@@ -29,9 +29,9 @@ class SQLTest {
 	@Test
 	void testInsertNewForm() {
 		//NO ' IN INPUT
-		String [] officerArgs  = {"21", "Johnathan", "Tyler", "Dewey", "Male", "White", "", "", "Private", "Patrol", "false", "false", "false", "false", "false", "None"};
-		String [] subjectArgs  = {"Joe","Damn","Mama", "Other", "White", "", "false", "false", "false", "false", "false", "None", "None", "None","None","None","0"};
-		String [] incidentArgs = {"", "Your Moms House", "Excessive Force", "false", "", "false", "", "false"};
+		String [] officerArgs  = {"21", "Johnathan", "Tyler", "Dewey", "Male", "White", "", "", "Private", "Patrol", "false", "false", "false", "false", "false", "A", "false", ""};
+		String [] subjectArgs  = {"Joe","Damn","Mama", "Other", "White", "1", "false", "false", "false", "false", "false", "B", "C", "", "D", "", "E", "", "F", "0"};
+		String [] incidentArgs = {"", "Your Moms House", "Excessive Force", "false", "", "G"};
 		Incident incident = new Incident(incidentArgs,officerArgs,subjectArgs);
 		
 		try {
@@ -42,6 +42,7 @@ class SQLTest {
 			e.printStackTrace();
 		}
 	}
+	
 	@Test
 	void testAddOfficer() {
 		try {

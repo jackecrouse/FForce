@@ -2,7 +2,9 @@ package form;
 
 import java.sql.SQLException;
 
+import database.ConnectionInformation;
 import database.SQL;
+import database.Utilities;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.FForce;
@@ -10,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -194,6 +195,7 @@ public class UOFIncidentForm extends Application {
 		
 		grdIncidentInfo.add(new Label("Incident Number"), 0, 0);
 		txfIncidentNumber = new TextField();
+		txfIncidentNumber.setEditable(false);
 		grdIncidentInfo.add(txfIncidentNumber, 1, 0);
 
 		grdIncidentInfo.add(new Label("Incident Date"), 0, 1);
@@ -382,7 +384,8 @@ public class UOFIncidentForm extends Application {
 					return;
 				}
 				try {
-					new SQL().insertNewForm(incident);
+					SQL sql = new SQL(Utilities.format(ConnectionInformation.get_u()), Utilities.format(ConnectionInformation.get_p()));
+					sql.insertNewForm(incident);
 				}
 				catch (SQLException e) {
 					e.printStackTrace();

@@ -20,6 +20,8 @@ public class Officer {
 	public boolean wasUniformed;
 	public boolean hadMedicalTreatment;
 	public String injuries;
+	public boolean hasSigniture;
+	public Date signDate;
 	
 	public Officer() {
 		badgeNumber = 0;
@@ -38,6 +40,8 @@ public class Officer {
 		wasUniformed = false;
 		hadMedicalTreatment = false;
 		injuries = "";
+		hasSigniture = false;
+		signDate = new Date();
 	}
 	
 	//for testing
@@ -58,6 +62,8 @@ public class Officer {
 		wasUniformed = Boolean.getBoolean(args[13]);
 		hadMedicalTreatment = Boolean.getBoolean(args[14]);
 		injuries = args[15];
+		hasSigniture = Boolean.parseBoolean(args[16]);
+		signDate = new Date(System.currentTimeMillis());
 	}
 	
 }

@@ -1,17 +1,14 @@
 package form;
 
-import java.time.ZoneId;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
@@ -41,8 +38,8 @@ public class UOFSubjectForm extends Application {
 	private TextField txfSex;
 	private Label lblRace;
 	private TextField txfRace;
-	private Label lblDOB;
-	private DatePicker dtpDOB;
+	private Label lblAge;
+	private TextField txfDOB;
 	private CheckBox cbxSubjectInjured;
 	private CheckBox cbxSubjectKilled;
 	private CheckBox cbxSubjectWeaponed;
@@ -86,6 +83,7 @@ public class UOFSubjectForm extends Application {
 	private Separator sprUOFSubmit;
 	private StackPane spnSubmit;
 	private Button btnSubmit;
+	private CheckBox cbxSubjectHadTreatment;
 	
 	public void run(Subject newSubject) {
         subject = newSubject;
@@ -140,10 +138,10 @@ public class UOFSubjectForm extends Application {
 		txfRace = new TextField(subject.race);
 		grdSubjectInfo.add(txfRace, 1, 4);
 		
-		lblDOB = new Label("Date of Birth");
-		grdSubjectInfo.add(lblDOB, 0, 5);
-		dtpDOB = new DatePicker(subject.dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()); // DatePickers need Date converted to LocalDate
-		grdSubjectInfo.add(dtpDOB, 1, 5);
+		lblAge = new Label("Age");
+		grdSubjectInfo.add(lblAge, 0, 5);
+		txfDOB = new TextField(Integer.toString(subject.age));
+		grdSubjectInfo.add(txfDOB, 1, 5);
 		// Subject's personal information end
 		
 		// Subject's incident information start
@@ -163,14 +161,20 @@ public class UOFSubjectForm extends Application {
 		cbxSubjectArrested.setSelected(subject.wasArrested);
 		vbxSubjectInfo.getChildren().add(cbxSubjectArrested);
 		
-		int injuriesLabelIndex = 6;
+		cbxSubjectHadTreatment = new CheckBox("Subject Recieved Medical Treatment");
+		cbxSubjectHadTreatment.setSelected(subject.hadMedicalTreatment);
+		vbxSubjectInfo.getChildren().add(cbxSubjectHadTreatment);
+		
+		int injuriesLabelIndex = 7;
 		lblInjuries = new Label("Describe Injuries to Subject");
 		vbxSubjectInfo.getChildren().add(lblInjuries);
-		vbxSubjectInfo.getChildren().get(injuriesLabelIndex).setVisible(false);
 		txaInjuries = new TextArea(subject.injuries);
 		txaInjuries.setPrefSize(100.0, 80.0);
 		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(injuriesLabelIndex));
-		txaInjuries.setVisible(false);
+		if(!cbxSubjectInjured.isSelected()) {
+			vbxSubjectInfo.getChildren().get(injuriesLabelIndex).setVisible(false);
+			txaInjuries.setVisible(false);
+		}
 		vbxSubjectInfo.getChildren().add(txaInjuries);
 		
 		// Subject's conditions start
@@ -195,18 +199,22 @@ public class UOFSubjectForm extends Application {
 		
 		txfOtherCondition = new TextField(subject.otherInfluence);
 		UOFFormUtil.toggleTextInputEvent(cbxOtherCondition, txfOtherCondition);
-		txfOtherCondition.setVisible(false);
+		if(!cbxOtherCondition.isSelected()) {
+			txfOtherCondition.setVisible(false);
+		}
 		vbxSubjectInfo.getChildren().add(txfOtherCondition);
 		// Subject's conditions start
 		
-		int chargesLabelIndex = 14;
+		int chargesLabelIndex = 15;
 		lblCharges = new Label("Charges");
 		vbxSubjectInfo.getChildren().add(lblCharges);
-		vbxSubjectInfo.getChildren().get(chargesLabelIndex).setVisible(false);
 		txaCharges = new TextArea(subject.charges);
 		txaCharges.setPrefSize(100.0,80.0);
 		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectArrested, txaCharges, vbxSubjectInfo.getChildren().get(chargesLabelIndex));
-		txaCharges.setVisible(false);
+		if(!cbxSubjectArrested.isSelected()) {
+			vbxSubjectInfo.getChildren().get(chargesLabelIndex).setVisible(false);
+			txaCharges.setVisible(false);
+		}
 		vbxSubjectInfo.getChildren().add(txaCharges);
 		// Subject's incident information start
 		// everything on the left half of the screen end
@@ -252,7 +260,9 @@ public class UOFSubjectForm extends Application {
 		
 		txfOtherAction = new TextField(subject.otherActions);
 		UOFFormUtil.toggleTextInputEvent(cbxOtherAction, txfOtherAction);
-		txfOtherAction.setVisible(false);
+		if(!cbxOtherAction.isSelected()) {
+			txfOtherAction.setVisible(false);
+		}
 		vbxActions.getChildren().add(txfOtherAction);
 		// Subject's actions end
 		
@@ -289,7 +299,9 @@ public class UOFSubjectForm extends Application {
 		
 		txfOtherUOF = new TextField(subject.otherUOF);
 		UOFFormUtil.toggleTextInputEvent(cbxOtherUOF, txfOtherUOF);
-		txfOtherUOF.setVisible(false);
+		if(!cbxOtherUOF.isSelected()) {
+			txfOtherUOF.setVisible(false);
+		}
 		vbxActions.getChildren().add(txfOtherUOF);
 		
 		lblFirearm = new Label("Firearm:");
@@ -330,11 +342,12 @@ public class UOFSubjectForm extends Application {
             	subject.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
             	subject.sex = UOFFormUtil.cleanInput(txfSex.getText());
             	subject.race = UOFFormUtil.cleanInput(txfRace.getText());
-            	subject.dateOfBirth = UOFFormUtil.datePickerToDate(dtpDOB);
+            	subject.age = UOFFormUtil.textToInteger(txfDOB.getText());
             	subject.wasInjured = cbxSubjectInjured.isSelected();
             	subject.wasKilled = cbxSubjectKilled.isSelected();
             	subject.wasWeaponed = cbxSubjectWeaponed.isSelected();
             	subject.wasArrested = cbxSubjectArrested.isSelected();
+            	subject.hadMedicalTreatment = cbxSubjectHadTreatment.isSelected();
             	subject.injuries = UOFFormUtil.cleanInput(txaInjuries.getText());
             	UOFFormUtil.removeOrAddFromCheckBox(cbxDrugs, subject.influence);
             	UOFFormUtil.removeOrAddFromCheckBox(cbxAlcohol, subject.influence);

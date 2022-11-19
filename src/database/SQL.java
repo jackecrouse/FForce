@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import form.Incident;
 import form.Officer;
@@ -73,35 +74,42 @@ public class SQL {
 	//As of now, can have two subjects max
 	public boolean insertNewForm(Incident incident) {
 		
-		String SQL_Command = getSQL_InsertForm(incident);
+		String SQL_Forms_Command = getSQL_InsertForm(incident);
+		int caseID = -1;
 		
 		try {
 			Statement insertIntoForms = _CON.createStatement();
-			System.out.println(SQL_Command);
-			insertIntoForms.execute(SQL_Command);
+			System.out.println(SQL_Forms_Command);
+			insertIntoForms.execute(SQL_Forms_Command);
+			
+			Statement getCaseID = _CON.createStatement();
+			String SQL_GetCaseID_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%s'", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
+			ResultSet rs = getCaseID.executeQuery(SQL_GetCaseID_Command);
+			rs.first();
+			caseID = rs.getInt("caseID");
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 		
-		if (incident.subjects.size() <= 1) return true;
-			
-		SQL_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%s", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
-		
+		String[] SQL_Subjects_Commands = getSQL_InsertSubjects(incident.subjects, caseID);
 		try {
-			Statement getCaseID = _CON.createStatement();
-			ResultSet rs = getCaseID.executeQuery(SQL_Command);
-			SQL_Command = getSQL_AddSubject(incident.subjects.get(1), rs.getInt("caseID"));	
 			Statement insertIntoForms = _CON.createStatement();
-			insertIntoForms.execute(SQL_Command);
+			for(int i=0; i<SQL_Subjects_Commands.length;i++) {
+				System.out.println(SQL_Subjects_Commands[i]);
+				insertIntoForms.execute(SQL_Subjects_Commands[i]);
+			}
 			return true;
 		}
-			catch (Exception e) {
-				return false;
-			}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
+
 	public boolean deleteUser(String username) {
 		if (_userPrivlege != ADMIN)
 			return false;
@@ -121,15 +129,16 @@ public class SQL {
 		if (_userPrivlege != ADMIN)
 			return false;
 		
-		String SQL_Command = String.format("DELETE FROM forms WHERE caseID = %d", caseID);
+		String SQL_Forms_Command = String.format("DELETE FROM forms WHERE caseID = %d", caseID);
+		String SQL_Subjects_Command = String.format("DELETE FROM subjectInfo WHERE caseID = %d", caseID);
 		try {
 			Statement deleteForm = _CON.createStatement();
-			deleteForm.execute(SQL_Command);
+			deleteForm.execute(SQL_Forms_Command);
+			deleteForm.execute(SQL_Subjects_Command);
 			return true;
 		}
 		catch (Exception e){
 			return false;
-			
 		}
 	}
 	
@@ -177,68 +186,59 @@ public class SQL {
 	}
 
 	private String getSQL_InsertForm(Incident incident) { 
-								
-		String tableValues =    //section A
-								"('%s','%s','%s','%s','%s',"
-								//section B
-								+ "'%s',%d,'%s','%s',%d,'%s','%s', %d, %d, %d, %d, %d,"
-								//section C
-				 				+ " '%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s',"
-				 				//section D
-				 				+ " '%s', %d, '%s', %d, %d, '%s', %d, '%s', %d)";
 		
-		String tableColumns = //Section A
-						   "(Date, Time, Day, Location, IncidentType, "
-							//Section B
-						 + "OfficerName, BadgeNumber, Rank, DutyAssignment, YearsOfService, OfficerSex, OfficerRace, OfficerAge, "
-						 + "OfficerInjured, OfficerKilled, OfficerOnDuty, OfficerHadUniform, "
-						 	//Section C
-						 + "Subject1Name, Subject1Sex, Subject1Race, Subject1Age, Subject1HadWeapon, Subject1Injured, Subject1Killed, "
-						 + "Subject1InfluencedBy, Subject1Charges, Subject1Actions, Subject1Treatment, InjuriesToOfficer, "
-						 	//Section D
-						 + "HospitalizedOfficer, InjuriesToSubject, HospitalizedSubject, OfficerSign, OfficerSignDate, SupervisorSign, "
-						 + "SupervisorSignDate, ForceJustified)";
+		Officer officer = incident.officer;
+		
+		String tableValues = "('%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%d', '%d', '%d', '%d', '%s', '%d', '%s', "
+						   + "'%s')";
+		
+		String tableColumns = "(Date, Day, Time, Location, IncidentType, BadgeNumber, OfficerFnameSave, OfficerMnameSave, OfficerLnameSave, OfficerSexSave, "
+							+ "OfficerRankSave, OfficerDutySave, OfficerInjured, OfficerInjuries, OfficerKilled, OfficerOnDuty, OfficerHadUniform, OfficerHadTreatment, "
+							+ "OfficerSign, OfficerSignDate, SupervisorSign, SupervisorSignDate, supervisorFinding)";
 			
 		
 		String insertIntoFormsCommand = String.format("INSERT INTO forms %s VALUES %s", tableColumns, tableValues);
 		
-		Officer officer = incident.officer;
-		Subject subject = incident.subjects.get(0);
 		
+		String SQL_Command = String.format(insertIntoFormsCommand, Utilities.convertDate(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate),
+																   Utilities.convertTime(incident.incidentDate), incident.location, incident.type, officer.badgeNumber,
+																   officer.firstName, officer.middleName, officer.lastName, officer.sex, officer.rank, officer.duty,
+																   Utilities.boolToInt(officer.wasInjured), officer.injuries, Utilities.boolToInt(officer.wasKilled),
+																   Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed),
+																   Utilities.boolToInt(officer.hadMedicalTreatment), Utilities.boolToInt(officer.hasSigniture),
+																   Utilities.convertDate(officer.signDate), Utilities.boolToInt(incident.hasSupervisorSignature),
+																   Utilities.convertDate(incident.supervisorSignDate), incident.supervisorFinding);
 		
-		String SQL_Command = String.format(insertIntoFormsCommand, 
-							//Section A
-							Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate), incident.location, incident.type, 
-							//Section B
-							Utilities.getName(officer), officer.badgeNumber, officer.rank, officer.duty, Utilities.yearDelta(officer.serviceStart), officer.sex, officer.race, Utilities.yearDelta(officer.dateOfBirth), 
-							Utilities.boolToInt(officer.wasInjured), Utilities.boolToInt(officer.wasKilled), 
-							Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed), 
-				  			//Section C
-				  			Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
-				  			Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured), 
-				  			Utilities.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
-				  			subject.charges, Utilities.actions(subject), Utilities.UOF(subject), 
-				  			//Section D
-				  			officer.injuries, Utilities.boolToInt(officer.hadMedicalTreatment), subject.injuries, Utilities.boolToInt(subject.hadMedicalTreatment), 
-				  			Utilities.boolToInt(incident.hasOfficerSignature), Utilities.convertDate(incident.officerSignDate), Utilities.boolToInt(incident.hasSupervisorSignature), Utilities.convertDate(incident.supervisorSignatureDate), Utilities.boolToInt(incident.forceIsJustified)
-				  			);
 		return SQL_Command;
+	}
+	
+	private String[] getSQL_InsertSubjects(ArrayList<Subject> subjects, int caseID) { 
+		
+		String SQL_Commands [] = new String[subjects.size()];
+		
+		for(int i=0;i<subjects.size(); i++) {
+			SQL_Commands[i] = getSQL_AddSubject(subjects.get(i), caseID);
+		}
+		
+		return SQL_Commands;
 	}
 	
 	public String getSQL_AddSubject(Subject subject, int caseID) {
 		
-		String tableValues = "'%s',%d,'%s','%s',%d,'%s','%s', %d, %d, %d, %d, %d,";
-		String tableColumns = "(Subject2Name, Subject2Sex, Subject2Race, Subject2Age, Subject2HadWeapon, Subject2Injured, Subject2Killed, "
-				 	  		+ "Subject2InfluencedBy, Subject2Charges, Subject2Actions, Subject2Treatment, InjuriesToOfficer)";
+		String tableValues = "('%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%s', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%d')";
 		
-		String insertIntoFormsCommand = String.format("INSERT INTO forms %s VALUES %s WHERE caseID = %d", tableColumns, tableValues, caseID);
+		String tableColumns = "(CaseID, SubjectFirstName, SubjectMiddleName, SubjectLastName, SubjectSex, SubjectRace, SubjectAge, SubjectHadWeapon, "
+				     		+ "SubjectInjured, SubjectInjuries, SubjectKilled, SubjectWasArrested, SubjectHadTreatment, SubjectInfluencedBy, "
+				     		+ "SubjectCharges, SubjectActions, UOFAgainstSubject, ShotsFired)";
 		
-		String SQL_Command = String.format(insertIntoFormsCommand, 
-							Utilities.getName(subject), subject.sex, subject.race, Utilities.yearDelta(subject.dateOfBirth), 
-							Incident.boolToInt(subject.wasWeaponed), Incident.boolToInt(subject.wasInjured), 
-							Incident.boolToInt(subject.wasKilled),  Utilities.influences(subject), 
-							subject.charges, Utilities.actions(subject), Utilities.UOF(subject)
-							);
+		String insertIntoFormsCommand = String.format("INSERT INTO subjectInfo %s VALUES %s", tableColumns, tableValues);
+		
+		String SQL_Command = String.format(insertIntoFormsCommand, caseID, subject.firstName, subject.middleName, subject.lastName, subject.sex, subject.race, 
+																   subject.age, Utilities.boolToInt(subject.wasWeaponed), Utilities.boolToInt(subject.wasInjured),
+																   subject.injuries, Utilities.boolToInt(subject.wasKilled), Utilities.boolToInt(subject.wasArrested),
+																   Utilities.boolToInt(subject.hadMedicalTreatment), Utilities.influences(subject), subject.charges,
+																   Utilities.actions(subject), Utilities.UOF(subject), subject.numberOfShots);
+		
 		return SQL_Command;
 	}
 	

@@ -1,11 +1,11 @@
 package form;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
 
-import javafx.collections.ObservableList;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -13,11 +13,7 @@ import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 
 public class UOFFormUtil {
@@ -67,7 +63,7 @@ public class UOFFormUtil {
 		return input;
 	}
 	
-	public static void removeOrAddFromCheckBox(CheckBox cbx, Vector<String> data) {
+	public static void removeOrAddFromCheckBox(CheckBox cbx, ArrayList<String> data) {
 		try {
 			if(cbx.isSelected() && !data.contains(cbx.getText())) {
 				data.add(cbx.getText());

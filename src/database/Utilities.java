@@ -1,44 +1,30 @@
 package database;
 
-import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
-import form.Officer;
 import form.Subject;
 
 public class Utilities {
-
+	
 	public static String convertDate(Date date) {
 		return String.format("%s-%s-%s", dateToYear(date), dateToMonth(date), dateToDayOfYear(date));
 	}
 	
 	public static String convertTime(Date date) {
-		return String.format("%d:%d:%d", dateToHours(date), dateToMinutes(date), dateToSeconds(date));
-	}
-	
-	public static int yearDelta(Date date) {
-		return Year.now().getValue() - dateToYear(date);
-	}
-	
-	public static String getName(Subject subject) {
-		return String.format("%s, %s, %s", subject.lastName, subject.firstName, subject.middleName);
-	}
-	
-	public static String getName(Officer officer) {
-		return String.format("%s, %s, %s", officer.lastName, officer.firstName, officer.middleName);
+		return String.format("%s:%s:%s", String.format("%1$2s",dateToHours(date)).replace(" ", "0"), String.format("%1$2s",dateToMinutes(date)).replace(" ", "0"),  String.format("%1$2s",dateToSeconds(date)).replace(" ", "0"));
 	}
 	
 	public static String influences(Subject subject) {
-		return subject.influence.toString() + " " + subject.otherInfluence;
+		return subject.influence.toString().substring(1, subject.influence.toString().length()-1) + ", " + subject.otherInfluence;
 	}
 	
 	public static String actions(Subject subject) {
-		return subject.actions.toString() + " " + subject.otherActions;
+		return subject.actions.toString().substring(1, subject.actions.toString().length()-1) + ", " + subject.otherActions;
 	}
 	
 	public static String UOF(Subject subject) {
-		return subject.uofAgainst.toString() + " " + subject.otherUOF;
+		return subject.uofAgainst.toString().substring(1, subject.uofAgainst.toString().length()-1) + ", " + subject.otherUOF;
 	}
 	
 	public static int boolToInt(boolean bool) {
@@ -49,7 +35,6 @@ public class Utilities {
 			return 0;
 		}
 	}
-	
 	
 	//Calendar
 	public static int dateToSeconds(Date date) {

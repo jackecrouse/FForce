@@ -1,7 +1,6 @@
 package form;
 
-import java.util.Date;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Subject {
 	
@@ -10,7 +9,7 @@ public class Subject {
 	public String lastName;
 	public String sex;
 	public String race;
-	public Date dateOfBirth;
+	public int age;
 	public boolean wasInjured;
 	public boolean wasKilled;
 	public boolean wasWeaponed;
@@ -18,11 +17,11 @@ public class Subject {
 	public boolean hadMedicalTreatment;
 	public String injuries;
 	public String charges;
-	public Vector<String> influence;
+	public ArrayList<String> influence;
 	public String otherInfluence;
-	public Vector<String> actions;
+	public ArrayList<String> actions;
 	public String otherActions;
-	public Vector<String> uofAgainst;
+	public ArrayList<String> uofAgainst;
 	public String otherUOF;
 	public int numberOfShots;
 	
@@ -33,7 +32,7 @@ public class Subject {
 		this.lastName = "";
 		this.sex = "";
 		this.race = "";
-		this.dateOfBirth = new Date();
+		this.age = 0;
 		this.wasInjured = false;
 		this.wasKilled = false;
 		this.wasWeaponed = false;
@@ -41,11 +40,11 @@ public class Subject {
 		this.hadMedicalTreatment = false;
 		this.injuries = "";
 		this.charges = "";
-		this.influence = new Vector<String>();
+		this.influence = new ArrayList<String>();
 		this.otherInfluence = "";
-		this.actions = new Vector<String>();
+		this.actions = new ArrayList<String>();
 		this.otherActions = "";
-		this.uofAgainst = new Vector<String>();
+		this.uofAgainst = new ArrayList<String>();
 		this.otherUOF = "";
 		this.numberOfShots = 0;
 	}
@@ -58,7 +57,7 @@ public class Subject {
 		this.lastName = args[2];
 		this.sex = args[3];
 		this.race = args[4];
-		this.dateOfBirth = new Date(System.currentTimeMillis());
+		this.age = Integer.parseInt(args[5]);
 		this.wasInjured = Boolean.getBoolean(args[6]);
 		this.wasKilled = Boolean.getBoolean(args[7]);
 		this.wasWeaponed = Boolean.getBoolean(args[8]);
@@ -66,13 +65,13 @@ public class Subject {
 		this.hadMedicalTreatment = Boolean.getBoolean(args[10]);
 		this.injuries = args[11];
 		this.charges = args[12];
-		this.influence = new Vector<String>();
-		this.otherInfluence = args[13];
-		this.actions = new Vector<String>();
-		this.otherActions = args[14];
-		this.uofAgainst = new Vector<String>();
-		this.otherUOF = args[15];
-		this.numberOfShots = Integer.parseInt(args[16]);
+		this.influence = new ArrayList<String>();
+		this.otherInfluence = args[14];
+		this.actions = new ArrayList<String>();
+		this.otherActions = args[16];
+		this.uofAgainst = new ArrayList<String>();
+		this.otherUOF = args[18];
+		this.numberOfShots = Integer.parseInt(args[19]);
 	}
 	
 }
