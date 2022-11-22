@@ -2,9 +2,7 @@ package form;
 
 import java.sql.SQLException;
 
-import database.ConnectionInformation;
 import database.SQL;
-import database.Utilities;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.FForce;
@@ -28,16 +26,19 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
 
 public class UOFIncidentForm extends Application {
 
 	private Incident incident;
+	private SQL sql;
+	
+	private String username;
+	private String password;
 	
 	private Pane pneReport;
 	private HBox hbxReport, hbxTime, hbxSubjectInteract;
-	private VBox vbxOfficerFull, vbxIncidentFull, vbxIncidentType;
+	private VBox vbxOfficerFull, vbxIncidentFull, vbxIncidentType, vbxSubmit;
 	private Text txtOfficerInfo, txtIncidentInfo, txtSubjects;
 	private GridPane grdOfficerInfo, grdIncidentInfo;
 	private TextField txfBadgeNumber,txfFirstName, txfMiddleName, txfLastName,
@@ -50,15 +51,21 @@ public class UOFIncidentForm extends Application {
 	private ToggleGroup tgrType;
 	private RadioButton rdbInProgress, rdbDomestic, rdbSuspicious, rdbTrafficStop,
 						rdbArrest, rdbOtherType;
-	private Button btnCreateSubject, btnDeleteSubject, btnEditSubject, btnSubmit;
+	private Button btnCreateSubject, btnDeleteSubject, btnEditSubject, btnSubmit, btnQuit;;
 	private ComboBox<String> cobAmPm, cobHour, cobMinutes, cobSeconds, cobSubjectChoice;
-	private StackPane spaSubmit;
 	
 	public static void run() {
 		launch();
 	}
 
 	public Stage create(Stage form) {
+		
+		try {
+			sql = new SQL(FForce.getUsername(), FForce.getPassword());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		incident = new Incident();
 
@@ -103,47 +110,60 @@ public class UOFIncidentForm extends Application {
 	}
 
 	private void createOfficerPersonalInfo() {
+		
+		incident.officer.info = sql.getOfficer(sql.get_username(), sql.get_password());
+		
 		grdOfficerInfo = new GridPane();
 		vbxOfficerFull.getChildren().add(grdOfficerInfo);
 		
 		grdOfficerInfo.add(new Label("Badge Number"), 0, 0);
-		txfBadgeNumber = new TextField();
+		txfBadgeNumber = new TextField(""+incident.officer.info.badgeNumber);
+		if(sql.get_userPrivlege() == SQL.USER) txfBadgeNumber.setDisable(true);
 		grdOfficerInfo.add(txfBadgeNumber, 1, 0);
 		
 		grdOfficerInfo.add(new Label("First Name"), 0, 1);
-		txfFirstName = new TextField();
+		txfFirstName = new TextField(incident.officer.info.firstName);
+		if(sql.get_userPrivlege() == SQL.USER) txfFirstName.setDisable(true);
 		grdOfficerInfo.add(txfFirstName, 1, 1);
 		
 		grdOfficerInfo.add(new Label("Middle Name"), 0, 2);
-		txfMiddleName = new TextField();
+		txfMiddleName = new TextField(incident.officer.info.middleName);
+		if(sql.get_userPrivlege() == SQL.USER) txfMiddleName.setDisable(true);
 		grdOfficerInfo.add(txfMiddleName, 1, 2);
 		
 		grdOfficerInfo.add(new Label("Last Name"), 0, 3);
-		txfLastName = new TextField();
+		txfLastName = new TextField(incident.officer.info.lastName);
+		if(sql.get_userPrivlege() == SQL.USER) txfLastName.setDisable(true);
 		grdOfficerInfo.add(txfLastName, 1, 3);
 		
 		grdOfficerInfo.add(new Label("Sex"), 0, 4);
-		txfSex = new TextField();
+		txfSex = new TextField(incident.officer.info.sex);
+		if(sql.get_userPrivlege() == SQL.USER) txfSex.setDisable(true);
 		grdOfficerInfo.add(txfSex, 1, 4);
 		
 		grdOfficerInfo.add(new Label("Race"), 0, 5);
-		txfRace = new TextField();
+		txfRace = new TextField(incident.officer.info.race);
+		if(sql.get_userPrivlege() == SQL.USER) txfRace.setDisable(true);
 		grdOfficerInfo.add(txfRace, 1, 5);
 		
 		grdOfficerInfo.add(new Label("Date Of Birth"), 0, 6);
-		dtpDOB = new DatePicker();
+		dtpDOB = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.dateOfBirth));
+		if(sql.get_userPrivlege() == SQL.USER) dtpDOB.setDisable(true);
 		grdOfficerInfo.add(dtpDOB, 1, 6);
 		
 		grdOfficerInfo.add(new Label("Started Service"), 0, 7);
-		dtpServiceStart = new DatePicker();
+		dtpServiceStart = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.serviceStart));
+		if(sql.get_userPrivlege() == SQL.USER) dtpServiceStart.setDisable(true);
 		grdOfficerInfo.add(dtpServiceStart, 1, 7);
 		
 		grdOfficerInfo.add(new Label("Rank"), 0, 8);
-		txfRank = new TextField();
+		txfRank = new TextField(incident.officer.info.rank);
+		if(sql.get_userPrivlege() == SQL.USER) txfRank.setDisable(true);
 		grdOfficerInfo.add(txfRank, 1, 8);
 		
 		grdOfficerInfo.add(new Label("Duty Assignment"), 0, 9);
-		txfDutyAssignment = new TextField();
+		txfDutyAssignment = new TextField(incident.officer.info.duty);
+		if(sql.get_userPrivlege() == SQL.USER) txfDutyAssignment.setDisable(true);
 		grdOfficerInfo.add(txfDutyAssignment, 1, 9);
 	}
 	
@@ -195,7 +215,7 @@ public class UOFIncidentForm extends Application {
 		
 		grdIncidentInfo.add(new Label("Incident Number"), 0, 0);
 		txfIncidentNumber = new TextField();
-		txfIncidentNumber.setEditable(false);
+		txfIncidentNumber.setDisable(true);
 		grdIncidentInfo.add(txfIncidentNumber, 1, 0);
 
 		grdIncidentInfo.add(new Label("Incident Date"), 0, 1);
@@ -365,12 +385,17 @@ public class UOFIncidentForm extends Application {
 	}
 	
 	private void createSubmitArea() {
-		spaSubmit = new StackPane();
-		vbxIncidentFull.getChildren().add(spaSubmit);
+		vbxSubmit = new VBox();
+		vbxSubmit.setAlignment(Pos.CENTER);
+		vbxIncidentFull.getChildren().add(vbxSubmit);
 
 		btnSubmit = new Button("Finish and Submit");
 		submitIncidentEvent();
-		spaSubmit.getChildren().add(btnSubmit);
+		vbxSubmit.getChildren().add(btnSubmit);
+		
+		btnQuit = new Button("Quit");
+		quitIncidentEvent();
+		vbxSubmit.getChildren().add(btnQuit);
 	}
 
 	private void submitIncidentEvent() {
@@ -383,13 +408,16 @@ public class UOFIncidentForm extends Application {
 				catch(IllegalArgumentException e) {
 					return;
 				}
-				try {
-					SQL sql = new SQL(Utilities.format(ConnectionInformation.get_u()), Utilities.format(ConnectionInformation.get_p()));
-					sql.insertNewForm(incident);
-				}
-				catch (SQLException e) {
-					e.printStackTrace();
-				}
+				sql.insertNewForm(incident);
+				FForce.window.setScene(FForce.homePageScene);
+			}
+		});
+	}
+	
+	private void quitIncidentEvent() {
+		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
 				FForce.window.setScene(FForce.homePageScene);
 			}
 		});
@@ -397,16 +425,16 @@ public class UOFIncidentForm extends Application {
 	
 	private void fillIncidentFromForm() {
 		Officer officer = incident.officer;
-		officer.badgeNumber = UOFFormUtil.textToInteger(txfBadgeNumber.getText());
-		officer.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
-		officer.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
-		officer.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
-		officer.sex = UOFFormUtil.cleanInput(txfSex.getText());
-		officer.race = UOFFormUtil.cleanInput(txfRace.getText());
-		officer.dateOfBirth = UOFFormUtil.datePickerToDate(dtpDOB);
-		officer.serviceStart = UOFFormUtil.datePickerToDate(dtpServiceStart);
-		officer.rank = UOFFormUtil.cleanInput(txfRank.getText());
-		officer.duty = UOFFormUtil.cleanInput(txfDutyAssignment.getText());
+		officer.info.badgeNumber = UOFFormUtil.textToInteger(txfBadgeNumber.getText());
+		officer.info.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
+		officer.info.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
+		officer.info.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
+		officer.info.sex = UOFFormUtil.cleanInput(txfSex.getText());
+		officer.info.race = UOFFormUtil.cleanInput(txfRace.getText());
+		officer.info.dateOfBirth = UOFFormUtil.datePickerToDate(dtpDOB);
+		officer.info.serviceStart = UOFFormUtil.datePickerToDate(dtpServiceStart);
+		officer.info.rank = UOFFormUtil.cleanInput(txfRank.getText());
+		officer.info.duty = UOFFormUtil.cleanInput(txfDutyAssignment.getText());
 		officer.wasInjured = cbxOfficerInjured.isSelected();
 		officer.wasKilled = cbxOfficerKilled.isSelected();
 		officer.wasOnDuty = cbxOfficerOnDuty.isSelected();
@@ -416,7 +444,6 @@ public class UOFIncidentForm extends Application {
 		incident.incidentDate = UOFFormUtil.datePickerToDate(dtpIncidentDate);
 		incident.incidentDate = UOFFormUtil.addMinorTimeFromText(incident.incidentDate, cobHour.getValue(), cobMinutes.getValue(),
 																cobSeconds.getValue(), cobAmPm.getValue());
-		System.out.println(incident.incidentDate);
 		incident.location = UOFFormUtil.cleanInput(txfIncidentLocation.getText());
 		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();
 		incident.otherType = txfOtherDesc.getText();

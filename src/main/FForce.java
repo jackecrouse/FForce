@@ -28,7 +28,15 @@ public class FForce extends Application {
 
 	public FForce() {
 	}
-
+	
+	public static String getUsername() {
+		return _username.getText();
+	}
+	
+	public static String getPassword() {
+		return _password.getText();
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		window = primaryStage;
@@ -59,7 +67,6 @@ public class FForce extends Application {
 					System.out.println("Failure, did not log in: " + _username.getText());
 				}
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			

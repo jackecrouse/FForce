@@ -1,5 +1,6 @@
 package form;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,6 +133,12 @@ public class UOFFormUtil {
 				}
 			});
 		}
+	}
+	
+	public static LocalDate dateToLocalDate(Date input) {
+		LocalDate output;
+		output = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		return output;
 	}
 	
 }

@@ -47,7 +47,7 @@ class SQLTest {
 	void testAddOfficer() {
 		try {
 			SQL testWithAdmin = new SQL("jdewey", "csc353");
-			assertTrue(testWithAdmin.addOfficer("test", "test", "test", "test", 1, "test@furman.edu", 1));
+			assertTrue(testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
 			testWithAdmin.deleteUser("test");
 		}
 		catch(Exception e) {
@@ -56,7 +56,7 @@ class SQLTest {
 		
 		try {
 			SQL testWithPlainJane = new SQL("jsmith", "jsmith123");
-			assertFalse(testWithPlainJane.addOfficer("test", "test", "test", "test", 1, "test@furman.edu", 1));
+			assertFalse(testWithPlainJane.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -68,7 +68,7 @@ class SQLTest {
 	void testDeleteUser() {
 		try {
 			SQL testWithAdmin = new SQL("jdewey", "csc353");
-			testWithAdmin.addOfficer("test", "test", "test", "test", 1, "test@furman.edu", 1);
+			testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1);
 			assertTrue(testWithAdmin.deleteUser("test"));
 		} catch (SQLException e) {
 			e.printStackTrace();

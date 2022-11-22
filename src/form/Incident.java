@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Incident {
 	
+	public int id;
 	public Officer officer;
 	public ArrayList<Subject> subjects;
 	public Date incidentDate;
@@ -16,6 +17,7 @@ public class Incident {
 	public String supervisorFinding;
 	
 	public Incident() {
+		id = -1;
 		officer = new Officer();
 		subjects = new ArrayList<Subject>();
 		subjects.add(new Subject());
@@ -30,6 +32,7 @@ public class Incident {
 	
 	//for testing
 	public Incident(String [] incidentArgs, String [] officerArgs, String [] subjectArgs) {
+		id = -1;
 		officer = new Officer(officerArgs);
 		subjects = new ArrayList<Subject>();
 		subjects.add(new Subject(subjectArgs));

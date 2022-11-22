@@ -8,29 +8,44 @@ import java.util.ArrayList;
 
 import form.Incident;
 import form.Officer;
+import form.OfficerInfo;
 import form.Subject;
 
 public class SQL {
 	
-		//connection information
-		protected static Connection _CON;
+	//connection information
+	private static Connection _CON;
 		
-		//user information
-		protected String _username;
-		protected String _password;
-		protected int _userPrivlege;
+	//user information
+	private String _username;
+	private String _password;
+	private int _userPrivlege;
 		
-		//system roles
-		protected static int ADMIN = 0;
-		protected static int USER = 1;
+	//system roles
+	public static int ADMIN = 0;
+	public static int USER = 1;
+		
+	public static Connection get_CON() {
+		return _CON;
+	}
 
-		
+	public String get_username() {
+		return _username;
+	}
+
+	public String get_password() {
+		return _password;
+	}
+
+	public int get_userPrivlege() {
+		return _userPrivlege;
+	}
+
 	public SQL() throws SQLException {
 		try {
 			_CON = ConnectionInformation.establishConnection();
 		}
 		catch (Exception e) {
-			
 			throw new SQLException();
 		}
 	}
@@ -40,12 +55,13 @@ public class SQL {
 		try {
 			_CON = ConnectionInformation.establishConnection();
 			
-			ResultSet rs = getInformation(username, password);
-			while (rs.next()) {
-				_username = rs.getString("username");
-				_password = rs.getString("password");
-				_userPrivlege = rs.getInt("systemRole");
-			}
+			Statement getUserInfo = _CON.createStatement();
+			String SQL_Command = String.format("SELECT * FROM userInfo WHERE username = '%s' AND password = '%s'", username, password);
+			ResultSet rs = getUserInfo.executeQuery(SQL_Command);
+			rs.first();
+			_username = rs.getString("username");
+			_password = rs.getString("password");
+			_userPrivlege = rs.getInt("systemRole");
 			
 		}
 		catch (Exception e)
@@ -54,9 +70,10 @@ public class SQL {
 		}
 	}
 
-	public boolean addOfficer(String username, String password, String fName, String lName, int badgeNumber, String email, int privlige) {
-		if (_userPrivlege != ADMIN)
+	public boolean addUser(String username, String password, String fName, String lName, Integer badgeNumber, String email, int privlige) {
+		if (_userPrivlege != ADMIN) {
 			return false;
+		}
 		
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%d')", username, password, fName, lName, badgeNumber, email, privlige);
 		
@@ -66,9 +83,41 @@ public class SQL {
 			return true;
 		}
 		catch (Exception e){
-			
+			return false;
 		}
-		return false;
+	}
+	
+	public boolean addOfficer(OfficerInfo info) {
+		return true;
+	}
+	
+	public OfficerInfo getOfficer(String username, String password) {
+		try {
+			OfficerInfo info = new OfficerInfo();
+			Statement getUser = _CON.createStatement();
+			String SQL_Command = String.format("SELECT badgeNumber FROM userInfo WHERE username = '%s' AND password = '%s'", username, password);
+			ResultSet rs = getUser.executeQuery(SQL_Command);
+			rs.first();
+			int badgeNumber = rs.getInt("BadgeNumber");
+			SQL_Command = String.format("SELECT * FROM Officers WHERE BadgeNumber = '%s'", badgeNumber);
+			rs = getUser.executeQuery(SQL_Command);
+			rs.first();
+			info.badgeNumber = rs.getInt("BadgeNumber");
+			info.firstName = rs.getString("FirstName");
+			info.middleName = rs.getString("MiddleName");
+			info.lastName = rs.getString("LastName");
+			info.sex = rs.getString("Sex");
+			info.race = rs.getString("Race");
+			info.dateOfBirth = Utilities.stringToDate(rs.getString("DateOfBirth"));
+			info.serviceStart = Utilities.stringToDate(rs.getString("StartedService"));
+			info.rank = rs.getString("Rank");
+			info.duty = rs.getString("DutyAssignment");
+			return info;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new OfficerInfo();
+		}
 	}
 	
 	//As of now, can have two subjects max
@@ -83,7 +132,9 @@ public class SQL {
 			insertIntoForms.execute(SQL_Forms_Command);
 			
 			Statement getCaseID = _CON.createStatement();
-			String SQL_GetCaseID_Command = String.format("SELECT caseID FROM forms WHERE badgeNumber = '%s' AND date = '%s' AND time = '%s'", incident.officer.badgeNumber, Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
+			String SQL_GetCaseID_Command = String.format("SELECT caseID FROM forms WHERE badgeNumber = '%s' AND date = '%s' AND time = '%s'", 
+														 incident.officer.info.badgeNumber, Utilities.convertDate(incident.incidentDate),
+														 Utilities.convertTime(incident.incidentDate));
 			ResultSet rs = getCaseID.executeQuery(SQL_GetCaseID_Command);
 			rs.first();
 			caseID = rs.getInt("caseID");
@@ -172,18 +223,6 @@ public class SQL {
 		}
 		
 	}
-	
-	private ResultSet getInformation(String username, String password) throws SQLException {
-		String SQL_command = String.format("SELECT * FROM userInfo WHERE username ='%s' AND password ='%s'", username, password);
-		try {
-			Statement getInformation = _CON.createStatement();
-			ResultSet rs = getInformation.executeQuery(SQL_command);
-			return rs;
-		}
-		catch (Exception e) {
-			throw new SQLException("Invalid username and password combination");
-		}
-	}
 
 	private String getSQL_InsertForm(Incident incident) { 
 		
@@ -201,8 +240,8 @@ public class SQL {
 		
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, Utilities.convertDate(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate),
-																   Utilities.convertTime(incident.incidentDate), incident.location, incident.type, officer.badgeNumber,
-																   officer.firstName, officer.middleName, officer.lastName, officer.sex, officer.rank, officer.duty,
+																   Utilities.convertTime(incident.incidentDate), incident.location, incident.type, officer.info.badgeNumber,
+																   officer.info.firstName, officer.info.middleName, officer.info.lastName, officer.info.sex, officer.info.rank, officer.info.duty,
 																   Utilities.boolToInt(officer.wasInjured), officer.injuries, Utilities.boolToInt(officer.wasKilled),
 																   Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed),
 																   Utilities.boolToInt(officer.hadMedicalTreatment), Utilities.boolToInt(officer.hasSigniture),

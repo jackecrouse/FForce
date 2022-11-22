@@ -1,5 +1,7 @@
 package database;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,15 +18,30 @@ public class Utilities {
 	}
 	
 	public static String influences(Subject subject) {
-		return subject.influence.toString().substring(1, subject.influence.toString().length()-1) + ", " + subject.otherInfluence;
+		StringBuilder influences = new StringBuilder();
+		influences.append(subject.influence.toString().substring(1, subject.influence.toString().length()-1));
+		if(influences.toString().contains("Other")) {
+			influences.append(", " + subject.otherInfluence);
+		}
+		return influences.toString();
 	}
 	
 	public static String actions(Subject subject) {
-		return subject.actions.toString().substring(1, subject.actions.toString().length()-1) + ", " + subject.otherActions;
+		StringBuilder actions = new StringBuilder();
+		actions.append(subject.actions.toString().substring(1, subject.actions.toString().length()-1));
+		if(actions.toString().contains("Other")) {
+			actions.append(", " + subject.otherActions);
+		}
+		return actions.toString();
 	}
 	
 	public static String UOF(Subject subject) {
-		return subject.uofAgainst.toString().substring(1, subject.uofAgainst.toString().length()-1) + ", " + subject.otherUOF;
+		StringBuilder useOfForce = new StringBuilder();
+		useOfForce.append(subject.uofAgainst.toString().substring(1, subject.uofAgainst.toString().length()-1));
+		if(useOfForce.toString().contains("Other")) {
+			useOfForce.append(", " + subject.otherUOF);
+		}
+		return useOfForce.toString();
 	}
 	
 	public static int boolToInt(boolean bool) {
@@ -118,6 +135,14 @@ public class Utilities {
 		case 6:	return "Saturday";
 		default: throw new IllegalArgumentException();
 		}
-}
+	}
+	
+	public static Date stringToDate(String input) {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd").parse(input);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException();
+		}
+	}
 	
 }
