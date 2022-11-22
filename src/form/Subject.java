@@ -26,7 +26,6 @@ public class Subject {
 	public int numberOfShots;
 	
 	public Subject() {
-		super();
 		this.firstName = "";
 		this.middleName = "";
 		this.lastName = "";
@@ -51,7 +50,6 @@ public class Subject {
 	
 	//for testing
 	public Subject(String [] args) {
-		super();
 		this.firstName = args[0];
 		this.middleName = args[1];
 		this.lastName = args[2];

@@ -115,52 +115,82 @@ public class UOFIncidentForm extends Application {
 		
 		grdOfficerInfo.add(new Label("Badge Number"), 0, 0);
 		txfBadgeNumber = new TextField(""+incident.officer.info.badgeNumber);
-		if(sql.get_userPrivlege() == SQL.USER) txfBadgeNumber.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfBadgeNumber.setDisable(true);
+			txfBadgeNumber.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfBadgeNumber, 1, 0);
 		
 		grdOfficerInfo.add(new Label("First Name"), 0, 1);
 		txfFirstName = new TextField(incident.officer.info.firstName);
-		if(sql.get_userPrivlege() == SQL.USER) txfFirstName.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfFirstName.setDisable(true);
+			txfFirstName.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfFirstName, 1, 1);
 		
 		grdOfficerInfo.add(new Label("Middle Name"), 0, 2);
 		txfMiddleName = new TextField(incident.officer.info.middleName);
-		if(sql.get_userPrivlege() == SQL.USER) txfMiddleName.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfMiddleName.setDisable(true);
+			txfMiddleName.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfMiddleName, 1, 2);
 		
 		grdOfficerInfo.add(new Label("Last Name"), 0, 3);
 		txfLastName = new TextField(incident.officer.info.lastName);
-		if(sql.get_userPrivlege() == SQL.USER) txfLastName.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfLastName.setDisable(true);
+			txfLastName.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfLastName, 1, 3);
 		
 		grdOfficerInfo.add(new Label("Sex"), 0, 4);
 		txfSex = new TextField(incident.officer.info.sex);
-		if(sql.get_userPrivlege() == SQL.USER) txfSex.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfSex.setDisable(true);
+			txfSex.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfSex, 1, 4);
 		
 		grdOfficerInfo.add(new Label("Race"), 0, 5);
 		txfRace = new TextField(incident.officer.info.race);
-		if(sql.get_userPrivlege() == SQL.USER) txfRace.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfRace.setDisable(true);
+			txfRace.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfRace, 1, 5);
 		
 		grdOfficerInfo.add(new Label("Date Of Birth"), 0, 6);
 		dtpDOB = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.dateOfBirth));
-		if(sql.get_userPrivlege() == SQL.USER) dtpDOB.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			dtpDOB.setDisable(true);
+			dtpDOB.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(dtpDOB, 1, 6);
 		
 		grdOfficerInfo.add(new Label("Started Service"), 0, 7);
 		dtpServiceStart = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.serviceStart));
-		if(sql.get_userPrivlege() == SQL.USER) dtpServiceStart.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			dtpServiceStart.setDisable(true);
+			dtpServiceStart.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(dtpServiceStart, 1, 7);
 		
 		grdOfficerInfo.add(new Label("Rank"), 0, 8);
 		txfRank = new TextField(incident.officer.info.rank);
-		if(sql.get_userPrivlege() == SQL.USER) txfRank.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfRank.setDisable(true);
+			txfRank.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfRank, 1, 8);
 		
 		grdOfficerInfo.add(new Label("Duty Assignment"), 0, 9);
 		txfDutyAssignment = new TextField(incident.officer.info.duty);
-		if(sql.get_userPrivlege() == SQL.USER) txfDutyAssignment.setDisable(true);
+		if(sql.get_userPrivlege() == SQL.USER) {
+			txfDutyAssignment.setDisable(true);
+			txfDutyAssignment.setOpacity(0.7);
+		}
 		grdOfficerInfo.add(txfDutyAssignment, 1, 9);
 	}
 	
@@ -211,8 +241,9 @@ public class UOFIncidentForm extends Application {
 		vbxIncidentFull.getChildren().add(grdIncidentInfo);
 		
 		grdIncidentInfo.add(new Label("Incident Number"), 0, 0);
-		txfIncidentNumber = new TextField();
+		txfIncidentNumber = new TextField(""+(sql.getLastCaseID()+1));
 		txfIncidentNumber.setDisable(true);
+		txfIncidentNumber.setOpacity(0.7);
 		grdIncidentInfo.add(txfIncidentNumber, 1, 0);
 
 		grdIncidentInfo.add(new Label("Incident Date"), 0, 1);
@@ -438,6 +469,7 @@ public class UOFIncidentForm extends Application {
 		officer.wasUniformed = cbxOfficerUniformed.isSelected();
 		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
 		officer.injuries = UOFFormUtil.cleanInput(txaOfficerInjuriesDesc.getText());
+		incident.id = UOFFormUtil.textToInteger(txfIncidentNumber.getText());
 		incident.incidentDate = UOFFormUtil.datePickerToDate(dtpIncidentDate);
 		incident.incidentDate = UOFFormUtil.addMinorTimeFromText(incident.incidentDate, cobHour.getValue(), cobMinutes.getValue(),
 																cobSeconds.getValue(), cobAmPm.getValue());

@@ -97,7 +97,7 @@ public class UOFSubjectForm extends Application {
 		form.setResizable(false);
 		
 		pneSubject = new Pane();
-		form.setScene(new Scene(pneSubject, 755, 635));
+		form.setScene(new Scene(pneSubject, 755, 650));
 		
 		hbxSubject = new HBox();
 		pneSubject.getChildren().add(hbxSubject);

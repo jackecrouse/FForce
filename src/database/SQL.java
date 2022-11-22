@@ -87,8 +87,20 @@ public class SQL {
 		}
 	}
 	
-	public boolean addOfficer(OfficerInfo info) {
-		return true;
+	public int getLastCaseID() {
+		Statement getUser;
+		try {
+			getUser = _CON.createStatement();
+			String SQL_Command = String.format("SELECT caseID FROM forms ORDER BY caseID DESC LIMIT 1");
+			ResultSet rs = getUser.executeQuery(SQL_Command);
+			rs.first();
+			return rs.getInt("caseID");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException();
+		}
+		
 	}
 	
 	public OfficerInfo getOfficer(String username, String password) {
@@ -158,8 +170,7 @@ public class SQL {
 			return false;
 		}
 	}
-
-
+	
 	public boolean deleteUser(String username) {
 		if (_userPrivlege != ADMIN)
 			return false;
@@ -180,11 +191,9 @@ public class SQL {
 			return false;
 		
 		String SQL_Forms_Command = String.format("DELETE FROM forms WHERE caseID = %d", caseID);
-		String SQL_Subjects_Command = String.format("DELETE FROM subjectInfo WHERE caseID = %d", caseID);
 		try {
 			Statement deleteForm = _CON.createStatement();
 			deleteForm.execute(SQL_Forms_Command);
-			deleteForm.execute(SQL_Subjects_Command);
 			return true;
 		}
 		catch (Exception e){
