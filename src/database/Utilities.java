@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import form.Incident;
 import form.Subject;
 
 public class Utilities {
@@ -15,6 +16,15 @@ public class Utilities {
 	
 	public static String convertTime(Date date) {
 		return String.format("%s:%s:%s", String.format("%1$2s",dateToHours(date)).replace(" ", "0"), String.format("%1$2s",dateToMinutes(date)).replace(" ", "0"),  String.format("%1$2s",dateToSeconds(date)).replace(" ", "0"));
+	}
+	
+	public static String type(Incident incident) {
+		StringBuilder influences = new StringBuilder();
+		influences.append(incident.type);
+		if(influences.toString().contains("Other")) {
+			influences.append(", " + incident.otherType);
+		}
+		return influences.toString();
 	}
 	
 	public static String influences(Subject subject) {

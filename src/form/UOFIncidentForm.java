@@ -33,9 +33,6 @@ public class UOFIncidentForm extends Application {
 	private Incident incident;
 	private SQL sql;
 	
-	private String username;
-	private String password;
-	
 	private Pane pneReport;
 	private HBox hbxReport, hbxTime, hbxSubjectInteract;
 	private VBox vbxOfficerFull, vbxIncidentFull, vbxIncidentType, vbxSubmit;

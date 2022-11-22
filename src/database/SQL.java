@@ -124,7 +124,6 @@ public class SQL {
 	public boolean insertNewForm(Incident incident) {
 		
 		String SQL_Forms_Command = getSQL_InsertForm(incident);
-		int caseID = -1;
 		
 		try {
 			Statement insertIntoForms = _CON.createStatement();
@@ -137,7 +136,7 @@ public class SQL {
 														 Utilities.convertTime(incident.incidentDate));
 			ResultSet rs = getCaseID.executeQuery(SQL_GetCaseID_Command);
 			rs.first();
-			caseID = rs.getInt("caseID");
+			incident.id = rs.getInt("caseID");
 			
 		}
 		catch (Exception e) {
@@ -145,7 +144,7 @@ public class SQL {
 			return false;
 		}
 		
-		String[] SQL_Subjects_Commands = getSQL_InsertSubjects(incident.subjects, caseID);
+		String[] SQL_Subjects_Commands = getSQL_InsertSubjects(incident.subjects, incident.id);
 		try {
 			Statement insertIntoForms = _CON.createStatement();
 			for(int i=0; i<SQL_Subjects_Commands.length;i++) {
@@ -240,7 +239,7 @@ public class SQL {
 		
 		
 		String SQL_Command = String.format(insertIntoFormsCommand, Utilities.convertDate(incident.incidentDate), Utilities.dateToDayOfWeek(incident.incidentDate),
-																   Utilities.convertTime(incident.incidentDate), incident.location, incident.type, officer.info.badgeNumber,
+																   Utilities.convertTime(incident.incidentDate), incident.location, Utilities.type(incident), officer.info.badgeNumber,
 																   officer.info.firstName, officer.info.middleName, officer.info.lastName, officer.info.sex, officer.info.rank, officer.info.duty,
 																   Utilities.boolToInt(officer.wasInjured), officer.injuries, Utilities.boolToInt(officer.wasKilled),
 																   Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed),
