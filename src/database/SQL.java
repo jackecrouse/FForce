@@ -83,7 +83,7 @@ public class SQL {
 			insertIntoForms.execute(SQL_Forms_Command);
 			
 			Statement getCaseID = _CON.createStatement();
-			String SQL_GetCaseID_Command = String.format("SELECT caseID FROM forms WHERE date = '%s' AND time = '%s'", Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
+			String SQL_GetCaseID_Command = String.format("SELECT caseID FROM forms WHERE badgeNumber = '%s' AND date = '%s' AND time = '%s'", incident.officer.badgeNumber, Utilities.convertDate(incident.incidentDate), Utilities.convertTime(incident.incidentDate));
 			ResultSet rs = getCaseID.executeQuery(SQL_GetCaseID_Command);
 			rs.first();
 			caseID = rs.getInt("caseID");
