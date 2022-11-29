@@ -63,7 +63,6 @@ public class UOFFormUtil {
 		}
 		input = input.trim();
 		input = input.replaceAll("[^ a-zA-Z0-9]", "");
-		
 		return input;
 	}
 	
