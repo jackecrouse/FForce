@@ -61,6 +61,9 @@ public class UOFFormUtil {
 		if(input == null) {
 			input = "";
 		}
+		input = input.trim();
+		input = input.replaceAll("[^ a-zA-Z0-9]", "");
+		
 		return input;
 	}
 	
