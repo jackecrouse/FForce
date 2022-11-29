@@ -69,6 +69,13 @@ public class SQL {
 			throw new SQLException("Invalid Login");
 		}
 	}
+	
+	public ResultSet getForm(int caseID, int badgeNumber) throws SQLException {
+		String SQL_Command = String.format("SELECT * FROM forms WHERE	CaseID = %d AND BadgeNumber = %d", caseID, badgeNumber);
+		Statement getForm = _CON.createStatement();
+		ResultSet rs = getForm.executeQuery(SQL_Command);
+		return rs;
+	}
 
 	public boolean addUser(String username, String password, String fName, String lName, Integer badgeNumber, String email, int privlige) {
 		if (_userPrivlege != ADMIN) {
