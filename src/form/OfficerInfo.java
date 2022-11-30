@@ -28,16 +28,17 @@ public class OfficerInfo {
 	}
 	
 	// for testing
-	public OfficerInfo(String[] args) {
-		badgeNumber = Integer.parseInt(args[0]);
-		firstName = args[1];
-		middleName = args[2];
-		lastName = args[3];
-		sex = args[4];
-		race = args[5];
-		dateOfBirth = new Date(System.currentTimeMillis());
-		serviceStart = new Date(System.currentTimeMillis());
-		rank = args[8];
-		duty = args[9];
+	public OfficerInfo(int badgeNumber, String firstName, String middleName, String lastName, String sex, String race, Date dateOfBirth, Date serviceStart,
+					   String rank, String duty) {
+		this.badgeNumber = badgeNumber;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.sex = sex;
+		this.race = race;
+		this.dateOfBirth = dateOfBirth;
+		this.serviceStart = serviceStart;
+		this.rank = rank;
+		this.duty = duty;
 	}
 }

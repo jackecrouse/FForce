@@ -9,14 +9,17 @@ import java.util.Date;
 import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
 
 public class FormUtil {
 	
@@ -152,4 +155,18 @@ public class FormUtil {
 		});
 	}
 	
+	public static Label newPaddedLabel(String text) {
+		Label label = new Label(text);
+		label.setPadding(new Insets(3));
+		return label;
+	}
+	
+	public static String booleanToYesNo(boolean isTrue) {
+		if(isTrue) {
+			return "Yes";
+		}
+		else {
+			return "No";
+		}
+	}
 }

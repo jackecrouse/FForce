@@ -3,11 +3,17 @@ package main;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
 import database.SQL;
 import form.Incident;
+import form.Officer;
+import form.OfficerInfo;
+import form.Subject;
 
 class SQLTest {
 	
@@ -29,10 +35,22 @@ class SQLTest {
 	@Test
 	void testInsertNewForm() {
 		//NO ' IN INPUT
-		String [] officerArgs  = {"21", "Johnathan", "Tyler", "Dewey", "Male", "White", "", "", "Private", "Patrol", "false", "false", "false", "false", "false", "A", "false", ""};
-		String [] subjectArgs  = {"Joe","Damn","Mama", "Other", "White", "1", "false", "false", "false", "false", "false", "B", "C", "", "D", "", "E", "", "F", "0"};
-		String [] incidentArgs = {"", "Your Moms House", "Excessive Force", "false", "", "G"};
-		Incident incident = new Incident(incidentArgs,officerArgs,subjectArgs);
+		
+		OfficerInfo info = new OfficerInfo(21, "Johnathan", "Tyler", "Dewey", "Male", "White", new Date(), new Date(), "Private", "Patrol");
+		
+		Officer officer = new Officer(info, false, false, false, false, false, "A", false, new Date());
+		
+		ArrayList<String> influence = new ArrayList<String>();
+		influence.addAll(0, Arrays.asList(""));
+		ArrayList<String> actions = new ArrayList<String>();
+		actions.addAll(0, Arrays.asList(""));
+		ArrayList<String> uofAgainst = new ArrayList<String>();
+		uofAgainst.addAll(0, Arrays.asList(""));
+		Subject subject = new Subject("Joe", "Damn", "Mama", "Other", "White", 1, false, false, false, false, false, "B", "C", influence, "D", actions, "E", uofAgainst, "F", 0);
+		
+		ArrayList<Subject> subjects = new ArrayList<Subject>();
+		subjects.add(subject);
+		Incident incident = new Incident(officer, subjects, new Date(), "Your Moms House", "Excessive Force", "", false, new Date(), "G");
 		
 		try {
 			SQL test = new SQL("jdewey", "csc353");

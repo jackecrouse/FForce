@@ -31,17 +31,17 @@ public class Incident {
 	}
 	
 	//for testing
-	public Incident(String [] incidentArgs, String [] officerArgs, String [] subjectArgs) {
+	public Incident(Officer officer, ArrayList<Subject> subjects, Date incidentDate, String location, String type, String otherType,
+					boolean hasSupervisorSignature, Date supervisorSignDate, String supervisorFinding) {
 		id = -1;
-		officer = new Officer(officerArgs);
-		subjects = new ArrayList<Subject>();
-		subjects.add(new Subject(subjectArgs));
-		incidentDate = new Date(System.currentTimeMillis());
-		location = incidentArgs[1];
-		type = incidentArgs[2];
-		hasSupervisorSignature = Boolean.getBoolean(incidentArgs[3]);
-		supervisorSignDate = new Date(System.currentTimeMillis());
-		supervisorFinding = incidentArgs[5];
+		this.officer = officer;
+		this.subjects = subjects;
+		this.incidentDate = incidentDate;
+		this.location = location;
+		this.type = type;
+		this.hasSupervisorSignature = hasSupervisorSignature;
+		this.supervisorSignDate = supervisorSignDate;
+		this.supervisorFinding = supervisorFinding;
 	}
 	
 }
