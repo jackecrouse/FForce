@@ -9,8 +9,10 @@ import database.SQL;
 import database.Utilities;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -25,23 +27,24 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.FForce;
 
 public class SearchForm extends Application{
 	
-	private Incident incident;
+	private ArrayList<Incident> incidents;
 	//private SQL sql;
 	
 	private final int SMALL_INSET = 3;
 	private final int MEDIUM_INSET = 5;
 	private final int LARGE_INSET = 10;
+	
+	private VBox screen;
 
 	public static void main(String [] args) {
 		launch();
@@ -49,7 +52,9 @@ public class SearchForm extends Application{
 	
 	@Override
 	public void start(Stage root) throws Exception {
-		incident = createSampleIncident();
+		incidents = new ArrayList<Incident>();
+		incidents.add(createSampleIncident());
+		incidents.add(createSampleIncident());
 //		try {
 //			sql = new SQL(FForce.getUsername(), FForce.getPassword());
 //			incident = //TODO: retrieve SQL data
@@ -58,7 +63,7 @@ public class SearchForm extends Application{
 //			e.printStackTrace();
 //		}
 		
-		VBox screen = new VBox();
+		screen = new VBox();
 		screen.setPadding(new Insets(MEDIUM_INSET));
 		root.setScene(new Scene(screen, 600, 600));
 		
@@ -71,7 +76,6 @@ public class SearchForm extends Application{
 		screen.heightProperty().addListener((InvalidationListener) observable -> {
 			results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-19);
 		});
-		results.setFitToWidth(true);
 		results.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		results.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		screen.getChildren().add(results);
@@ -85,7 +89,7 @@ public class SearchForm extends Application{
 		results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-19);
 	}
 	
-	private Pane createSearchPane() {
+	private GridPane createSearchPane() {
 		GridPane search = new GridPane();
 		search.setPadding(new Insets(MEDIUM_INSET));
 		
@@ -101,65 +105,50 @@ public class SearchForm extends Application{
 		search.add(value, 1, 1);
 		
 		Button processSearch = new Button("Search");
+		processSearch.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				incidents.add(createSampleIncident()); //TODO: retrieve sql data
+				((ScrollPane) screen.getChildren().get(1)).setContent(createResultsPane());
+			}
+		});
 		search.add(processSearch, 2, 1);
 		
 		return search;
 	}
 
 	private VBox createResultsPane() {
-		VBox aligner = new VBox();
 		
 		VBox results = new VBox();
-		aligner.setPadding(new Insets(MEDIUM_INSET));
-		aligner.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-		results.widthProperty().addListener((InvalidationListener) observable -> {
-			setAppropriateWidth(results);
-		});
-		//results.setMaxWidth(500);
-		aligner.setAlignment(Pos.CENTER);
-		aligner.getChildren().add(results);
 		
-		for(int i=0; i<1; i++) {
-			results.getChildren().add(createResultPane());
+		for(int i=0; i<incidents.size(); i++) {
+			results.getChildren().add(createResultPane(i));
 			results.getChildren().add(new Separator());
 			((Region) results.getChildren().get(1)).setPadding(new Insets(LARGE_INSET));
 		}
 		
-		return aligner;
-	}
-
-	private void setAppropriateWidth(VBox results) {
-		double maxWidth = 0;
-		final int BUFFER = 20;
-		if(results.getChildren() != null) {
-			for(int i=0; i<results.getChildren().size(); i++) {
-				System.out.print(((Region) results.getChildren().get(i)).getWidth()+" ");
-				if(((Region) results.getChildren().get(i)).getWidth() > maxWidth) {
-					maxWidth = (double) ((Region) results.getChildren().get(i)).getWidth();
-				}
-			}
-		}
-		System.out.println(maxWidth);
-		results.setMaxWidth(maxWidth);
+		return results;
 	}
 	
-	private VBox createResultPane() {
+	private VBox createResultPane(int incidentNumber) {
+		Incident incident = incidents.get(incidentNumber);
 		
 		VBox result = new VBox();
 		result.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		
-		result.getChildren().add(addIncidentInformation());
-		result.getChildren().add(addOfficerInformation());
+		result.getChildren().add(addIncidentInformation(incidentNumber));
+		result.getChildren().add(addOfficerInformation(incidentNumber));
 		for(int i=0; i < incident.subjects.size(); i++) {
-			result.getChildren().add(addSubjectInformation(i));
+			result.getChildren().add(addSubjectInformation(incidentNumber, i));
 		}
-		result.getChildren().add(addInjuryInformation());
-		result.getChildren().add(addSignatureInformation());
+		result.getChildren().add(addInjuryInformation(incidentNumber));
 		
 		return result;
 	}
 
-	private VBox addIncidentInformation() {
+	private VBox addIncidentInformation(int incidentNumber) {
+		Incident incident = incidents.get(incidentNumber);
+		
 		VBox result = new VBox();
 		
 		result.getChildren().add(FormUtil.newPaddedLabel("A. Incident Information"));
@@ -191,7 +180,6 @@ public class SearchForm extends Application{
 		
 		VBox incidentType = new VBox();
 		
-		//incidentType.setMaxWidth(dateTimeInfo.getWidth());
 		incidentInfo.getChildren().add(incidentType);
 		
 		incidentType.getChildren().add(FormUtil.newPaddedLabel("Type of Incident"));
@@ -204,8 +192,8 @@ public class SearchForm extends Application{
 		return result;
 	}
 	
-	private VBox addOfficerInformation() {
-		Officer officer = incident.officer;
+	private VBox addOfficerInformation(int incidentNumber) {
+		Officer officer = incidents.get(incidentNumber).officer;
 		OfficerInfo info = officer.info;
 		
 		VBox result = new VBox();
@@ -269,22 +257,22 @@ public class SearchForm extends Application{
 		return result;
 	}
 		
-	private VBox addSubjectInformation(int i) {
-		Subject subject = incident.subjects.get(i);
+	private VBox addSubjectInformation(int incidentNumber, int subjectNumber) {
+		Subject subject = incidents.get(incidentNumber).subjects.get(subjectNumber);
 		
 		VBox result = new VBox();
 
-		result.getChildren().add(FormUtil.newPaddedLabel("C" + (i+1) + ". Subject Informaton"));
+		result.getChildren().add(FormUtil.newPaddedLabel("C" + (subjectNumber+1) + ". Subject Informaton"));
 		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
 		
-		VBox officerInfo = new VBox();
-		officerInfo.setPadding(new Insets(MEDIUM_INSET));
-		result.getChildren().add(officerInfo);
+		VBox subjectInfo = new VBox();
+		subjectInfo.setPadding(new Insets(MEDIUM_INSET));
+		result.getChildren().add(subjectInfo);
 		
 		GridPane personalInfo = new GridPane();
 		personalInfo.setPadding(new Insets(SMALL_INSET));
 		personalInfo.setGridLinesVisible(true);
-		officerInfo.getChildren().add(personalInfo);
+		subjectInfo.getChildren().add(personalInfo);
 		
 		personalInfo.add(FormUtil.newPaddedLabel("Name (Last, First Middle)"), 0, 0);
 		personalInfo.add(FormUtil.newPaddedLabel(subject.lastName + ", " + subject.firstName + ", " + subject.middleName), 0, 1);
@@ -307,22 +295,108 @@ public class SearchForm extends Application{
 		personalInfo.add(FormUtil.newPaddedLabel("Killed"), 6, 0);
 		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasKilled)), 6, 1);
 		
+		GridPane effectInfo = new GridPane();
+		effectInfo.setPadding(new Insets(SMALL_INSET));
+		effectInfo.setGridLinesVisible(true);
+		subjectInfo.getChildren().add(effectInfo);
+		
+		effectInfo.add(FormUtil.newPaddedLabel("Under the Influence of:"), 0, 0);
+		effectInfo.add(FormUtil.newPaddedLabel(Utilities.influences(subject)), 0, 1);
+		
+		effectInfo.add(FormUtil.newPaddedLabel("Arrested"), 1, 0);
+		effectInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasArrested)), 1, 1);
+		
+		effectInfo.add(FormUtil.newPaddedLabel("Charges"), 2, 0);
+		effectInfo.add(FormUtil.newPaddedLabel(subject.charges), 2, 1);
+		
+		GridPane actionsInfo = new GridPane();
+		actionsInfo.setPadding(new Insets(SMALL_INSET));
+		actionsInfo.setGridLinesVisible(true);
+		subjectInfo.getChildren().add(actionsInfo);
+		
+		actionsInfo.add(FormUtil.newPaddedLabel("Subject's Actions:"), 0, 0);
+		actionsInfo.add(FormUtil.newPaddedLabel(Utilities.actions(subject)), 0, 1);
+		
+		actionsInfo.add(FormUtil.newPaddedLabel("Officer's Use of Force Toward Subject"), 1, 0);
+		actionsInfo.add(FormUtil.newPaddedLabel(Utilities.UOF(subject)), 1, 1);
+		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
 		
 		return result;
 	}
 	
-	private VBox addInjuryInformation() {
+	private VBox addInjuryInformation(int incidentNumber) {
+		Incident incident = incidents.get(incidentNumber);
+		Officer officer = incident.officer;
+		ArrayList<Subject> subjects = incident.subjects;
+		
 		VBox result = new VBox();
+		
+		result.getChildren().add(FormUtil.newPaddedLabel("D. Injuries and Medical Treatment"));
+		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
+		
+		VBox medicalInfo = new VBox();
+		medicalInfo.setPadding(new Insets(MEDIUM_INSET));
+		result.getChildren().add(medicalInfo);
+		
+		GridPane injuryInfo = new GridPane();
+		injuryInfo.setPadding(new Insets(SMALL_INSET));
+		injuryInfo.setGridLinesVisible(true);
+		medicalInfo.getChildren().add(injuryInfo);
+		
+		injuryInfo.add(FormUtil.newPaddedLabel("Describe Injuries to Officer:"), 0, 0);
+		injuryInfo.add(FormUtil.newPaddedLabel(officer.injuries), 0, 1);
+		
+		injuryInfo.add(FormUtil.newPaddedLabel("Medical Treatment:"), 1, 0);
+		injuryInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.hadMedicalTreatment)), 1, 1);
+		
+		int position = 2;
+		for(int i=0; i<subjects.size(); i++) {
+			injuryInfo.add(FormUtil.newPaddedLabel("Describe Injuries to " + FormUtil.numberNotation(i+1) + " Subject:"), 0, position);
+			injuryInfo.add(FormUtil.newPaddedLabel(subjects.get(i).injuries), 0, position+1);
+		
+			injuryInfo.add(FormUtil.newPaddedLabel("Medical Treatment to " + FormUtil.numberNotation(i+1) + " Subject:"), 1, position);
+			injuryInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subjects.get(i).hadMedicalTreatment)), 1, position+1);
+			
+			position+=2;
+		}
+		
+		GridPane signatureInfo = new GridPane();
+		signatureInfo.setPadding(new Insets(SMALL_INSET));
+		signatureInfo.setGridLinesVisible(true);
+		medicalInfo.getChildren().add(signatureInfo);
+		
+		signatureInfo.add(FormUtil.newPaddedLabel("Officer Signed:"), 0, 0);
+		signatureInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
+		
+		if(officer.hasSigniture) {
+			signatureInfo.add(FormUtil.newPaddedLabel("Date:"), 1, 0);
+			signatureInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
+		}
+		
+		signatureInfo.add(FormUtil.newPaddedLabel("Supervisor Signed:"), 0, 2);
+		signatureInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(incident.hasSupervisorSignature)), 0, 3);
+		
+		if(incident.hasSupervisorSignature) {
+			signatureInfo.add(FormUtil.newPaddedLabel("Date:"), 1, 2);
+			signatureInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(incident.supervisorSignDate)), 1, 3);
+		}
+		
+		GridPane findingInfo = new GridPane();
+		findingInfo.setPadding(new Insets(SMALL_INSET));
+		findingInfo.setGridLinesVisible(true);
+		medicalInfo.getChildren().add(findingInfo);
+		
+		findingInfo.add(FormUtil.newPaddedLabel("Reviewing Supervisor Finding:"), 0, 0);
+		findingInfo.add(FormUtil.newPaddedLabel(incident.supervisorFinding), 0, 1);
+		
+		result.getChildren().add(new Separator());
+		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
+		
 		return result;
 	}
-	
-	private VBox addSignatureInformation() {
-		VBox result = new VBox();
-		return result;
-	}
-	
+
 	private Incident createSampleIncident() {
 			
 		OfficerInfo info = new OfficerInfo(21, "Johnathan", "Tyler", "Dewey", "Male", "White", new Date(), new Date(), "Private", "Patrol");
@@ -341,17 +415,17 @@ public class SearchForm extends Application{
 		subjects.add(subject);
 		
 		influence = new ArrayList<String>();
-		influence.addAll(0, Arrays.asList("Eether"));
+		influence.addAll(0, Arrays.asList("Eether", "Doge"));
 		actions = new ArrayList<String>();
-		actions.addAll(0, Arrays.asList("Cool Aid"));
+		actions.addAll(0, Arrays.asList("Cool Aid", "Hope", "Truth"));
 		uofAgainst = new ArrayList<String>();
-		uofAgainst.addAll(0, Arrays.asList("Bomb"));
+		uofAgainst.addAll(0, Arrays.asList("Bomb", "Threat", "Other"));
 		subject = new Subject("Tom", "Darn", "Papa", "Beyond", "Green", 3, false, true, false, false, true, "B2", "C2", influence, "D2", actions, "E2", uofAgainst, "F2", 9999);
 		subjects.add(subject);
 		
 		subjects.add(subject);
 		
-		return new Incident(officer, subjects, new Date(), "Your Moms House", "Excessive Force", "", false, new Date(), "G");
+		return new Incident(officer, subjects, new Date(), "Your Moms House", "Excessive Force", "", true, new Date(), "G");
 	}
 	
 	

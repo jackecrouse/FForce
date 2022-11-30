@@ -169,4 +169,20 @@ public class FormUtil {
 			return "No";
 		}
 	}
+	
+	//1st 2nd 3rd 4th ... 10th 11th 12th 13th ... 20th 21st 22nd 23rd 24th ... 30th 31st 32nd 33rd 34th ...
+	public static String numberNotation(int i) {
+		if(i%2==0 && (i>11||i<19)) {
+			return i + "st";
+		}
+		else if(i%2==0 && (i>11||i<19)) {
+			return i + "nd";
+		}
+		else if(i%2==0 && (i>11||i<19)) {
+			return i + "rd";
+		}
+		else {
+			return i + "nd";
+		}
+	}
 }
