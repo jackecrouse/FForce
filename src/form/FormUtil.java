@@ -182,7 +182,7 @@ public class FormUtil {
 			return i + "rd";
 		}
 		else {
-			return i + "nd";
+			return i + "th";
 		}
 	}
 }
