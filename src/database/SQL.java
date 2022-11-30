@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import form.Incident;
 import form.Officer;
@@ -71,7 +72,21 @@ public class SQL {
 	}
 	
 	public ResultSet getForm(int caseID, int badgeNumber) throws SQLException {
-		String SQL_Command = String.format("SELECT * FROM forms WHERE	CaseID = %d AND BadgeNumber = %d", caseID, badgeNumber);
+		String SQL_Command = String.format("SELECT * FROM forms WHERE CaseID = %d AND BadgeNumber = %d", caseID, badgeNumber);
+		Statement getForm = _CON.createStatement();
+		ResultSet rs = getForm.executeQuery(SQL_Command);
+		return rs;
+	}
+	
+	public ResultSet getSubject(int caseID) throws SQLException {
+		String SQL_Command = String.format("SELECT * FROM subjectInfo WHERE CaseID = %d", caseID);
+		Statement getForm = _CON.createStatement();
+		ResultSet rs = getForm.executeQuery(SQL_Command);
+		return rs;
+	}
+	
+	public ResultSet getOfficer(int caseID) throws SQLException {
+		String SQL_Command = String.format("SELECT * FROM officer WHERE CaseID = %d", caseID);
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
 		return rs;
@@ -112,7 +127,6 @@ public class SQL {
 			e.printStackTrace();
 			throw new IllegalArgumentException();
 		}
-		
 	}
 	
 	public OfficerInfo getOfficer(String username, String password) {
@@ -331,4 +345,94 @@ public class SQL {
 		return SQL_Command;
 	}
 	
+	public ArrayList<Subject> getSubjectArrayFromResultSet(ResultSet set)
+	{
+		ArrayList<Subject> result = new ArrayList<Subject>();
+		try
+		{
+			while(set.next())
+			{
+				ArrayList<String> sbj = new ArrayList<String>();
+				
+				sbj.add(set.getString("SubjectFirstName"));
+				sbj.add(set.getString("SubjectMiddleName"));
+				sbj.add(set.getString("SubjectLastName"));
+				sbj.add(set.getString("SubjectSex"));
+				sbj.add(set.getString("SubjectRace"));
+				sbj.add(set.getString("SubjectAge"));
+				sbj.add(set.getString("SubjectHadWeapon"));
+				sbj.add(set.getString("SubjectInjured"));
+				sbj.add(set.getString("SubjectInjuries"));
+				sbj.add(set.getString("SubjectKilled"));
+				sbj.add(set.getString("SubjectWasArrested"));
+				sbj.add(set.getString("SubjectHadTreatment"));
+				sbj.add(set.getString("SubjectInfluencedBy"));
+				sbj.add(set.getString("SubjectCharges")); 
+				sbj.add(set.getString("SubjectActions"));
+				sbj.add(set.getString("UOFAgainstSubject"));
+				sbj.add(set.getString("ShotsFired"));
+				
+				String[] sbjArray = new String[sbj.size()];
+				sbjArray = sbj.toArray(sbjArray);
+				
+				Subject sub = new Subject(sbjArray);
+				result.add(sub);
+			}
+			return result;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public OfficerInfo getOfficerInfoFromResultSet(ResultSet rs)
+	{		
+		try
+		{
+				OfficerInfo info = new OfficerInfo(); 
+				info.badgeNumber = rs.getInt("BadgeNumber");
+				info.firstName = rs.getString("FirstName");
+				info.middleName = rs.getString("MiddleName");
+				info.lastName = rs.getString("LastName");
+				info.sex = rs.getString("Sex");
+				info.race = rs.getString("Race");
+				info.dateOfBirth = Utilities.stringToDate(rs.getString("DateOfBirth"));
+				info.serviceStart = Utilities.stringToDate(rs.getString("StartedService"));
+				info.rank = rs.getString("Rank");
+				info.duty = rs.getString("DutyAssignment");
+				return info;
+
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Incident getIncidentFromResultSet(ResultSet rs, Officer officerData, ArrayList<String> subjectData)
+	{
+		try
+		{
+			Incident inc = new Incident(); 
+			Date date = rs.getDate("Date");
+			
+			inc.officer = officerData;
+			inc.id = rs.getInt("CaseID");
+			inc.incidentDate = date;
+			inc.location = rs.getString("Location");
+			inc.type = rs.getString("IncidentType");
+			
+			
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
