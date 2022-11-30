@@ -1,5 +1,6 @@
 package form;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -38,8 +39,9 @@ import main.FForce;
 public class SearchForm extends Application{
 	
 	private ArrayList<Incident> incidents;
-	//private SQL sql;
+	private SQL sql;
 	
+	private final int SCROLL_OFFSET = 19;
 	private final int SMALL_INSET = 3;
 	private final int MEDIUM_INSET = 5;
 	private final int LARGE_INSET = 10;
@@ -53,15 +55,15 @@ public class SearchForm extends Application{
 	@Override
 	public void start(Stage root) throws Exception {
 		incidents = new ArrayList<Incident>();
-		incidents.add(createSampleIncident());
-		incidents.add(createSampleIncident());
-//		try {
-//			sql = new SQL(FForce.getUsername(), FForce.getPassword());
-//			incident = //TODO: retrieve SQL data
-//		}
-//		catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		
+		try {
+			sql = new SQL(/*FForce.getUsername(), FForce.getPassword()*/);
+			incidents.add(createSampleIncident());
+			incidents.add(createSampleIncident()); //TODO: retrieve SQL data
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		screen = new VBox();
 		screen.setPadding(new Insets(MEDIUM_INSET));
@@ -74,7 +76,7 @@ public class SearchForm extends Application{
 		
 		ScrollPane results = new ScrollPane();
 		screen.heightProperty().addListener((InvalidationListener) observable -> {
-			results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-19);
+			results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-SCROLL_OFFSET);
 		});
 		results.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		results.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -86,7 +88,7 @@ public class SearchForm extends Application{
 		
 		root.show();
 		
-		results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-19);
+		results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-SCROLL_OFFSET);
 	}
 	
 	private GridPane createSearchPane() {
@@ -108,6 +110,7 @@ public class SearchForm extends Application{
 		processSearch.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				incidents.clear();
 				incidents.add(createSampleIncident()); //TODO: retrieve sql data
 				((ScrollPane) screen.getChildren().get(1)).setContent(createResultsPane());
 			}
