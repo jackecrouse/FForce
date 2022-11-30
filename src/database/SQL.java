@@ -82,6 +82,11 @@ public class SQL {
 			return false;
 		}
 		
+		if(!sanitizeInput(username)||!sanitizeInput(password)||!sanitizeInput(fName)||!sanitizeInput(lName)||!sanitizeInput(email)) {
+			System.out.println("Bad input");
+			return false;
+		}
+		
 		String SQL_Command = String.format("INSERT INTO userInfo VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%d')", username, password, fName, lName, badgeNumber, email, privlige);
 		
 		try {
@@ -111,6 +116,11 @@ public class SQL {
 	}
 	
 	public OfficerInfo getOfficer(String username, String password) {
+		if(!sanitizeInput(username)||!sanitizeInput(password)) {
+			System.out.println("Bad input");
+			return null;
+		}
+		
 		try {
 			OfficerInfo info = new OfficerInfo();
 			Statement getUser = _CON.createStatement();
@@ -182,6 +192,11 @@ public class SQL {
 		if (_userPrivlege != ADMIN)
 			return false;
 		
+		if(!sanitizeInput(username)) {
+			System.out.println("Bad input");
+			return false;
+		}
+		
 		String SQL_Command = String.format("DELETE FROM userInfo WHERE username = '%s'", username);
 		try {
 			Statement deleteUser = _CON.createStatement();
@@ -210,6 +225,11 @@ public class SQL {
 	
 	public boolean changePassword(String username, String oldPassword, String newPassword) {
 		
+		if(!sanitizeInput(username)||!sanitizeInput(oldPassword)||!sanitizeInput(newPassword)) {
+			System.out.println("Bad input");
+			return false;
+		}
+		
 		String updatePasswordCommand = "UPDATE persons SET pass = '%s' WHERE username = '%s' AND pass = '%s'";
 		String SQL_command = String.format(updatePasswordCommand, newPassword, username, oldPassword);
 		
@@ -224,6 +244,12 @@ public class SQL {
 	}
 
 	public boolean isUser(String username, String password) {
+		
+		if(!sanitizeInput(username)||!sanitizeInput(password)) {
+			System.out.println("Bad input");
+			return false;
+		}
+		
 		String SQL_Command = "SELECT * FROM userInfo WHERE username = '%s' AND password = '%s'";
 		SQL_Command = String.format(SQL_Command, username, password);
 		try {
@@ -237,6 +263,15 @@ public class SQL {
 			return false;
 		}
 		
+	}
+	
+	private boolean sanitizeInput(String str)
+	{
+		String a[] = {"\"","'","=","*",";",":","{","}","[","]","(",")"};
+		for (String s : a) {
+			if (str.contains(s)) return false;
+		}
+		return true;
 	}
 
 	private String getSQL_InsertForm(Incident incident) { 
