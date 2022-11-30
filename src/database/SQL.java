@@ -267,7 +267,7 @@ public class SQL {
 	
 	private boolean sanitizeInput(String str)
 	{
-		String a[] = {"\"","'","=","*",";",":","{","}","[","]","(",")"};
+		String a[] = {"\"","'","=","*",";",":","{","}","[","]","(",")","\\"};
 		for (String s : a) {
 			if (str.contains(s)) return false;
 		}
