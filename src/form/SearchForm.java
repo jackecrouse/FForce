@@ -6,14 +6,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 import database.SQL;
-//import database.SQL;
 import database.Utilities;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -58,8 +56,6 @@ public class SearchForm extends Application{
 		
 		try {
 			sql = new SQL(/*FForce.getUsername(), FForce.getPassword()*/);
-			incidents.add(createSampleIncident());
-			incidents.add(createSampleIncident()); //TODO: retrieve SQL data
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -95,13 +91,13 @@ public class SearchForm extends Application{
 		GridPane search = new GridPane();
 		search.setPadding(new Insets(MEDIUM_INSET));
 		
-		search.add(FormUtil.newPaddedLabel("Search By:"), 0, 0);
+		search.add(FormUtil.makePaddedLabel("Search By:"), 0, 0);
 		ChoiceBox<String> criteria = new ChoiceBox<String>();
 		criteria.getItems().addAll("Incident Number", "Badge Number");
 		criteria.getSelectionModel().select(0);
 		search.add(criteria, 0, 1);
 		
-		search.add(FormUtil.newPaddedLabel("Search For:"), 1, 0);
+		search.add(FormUtil.makePaddedLabel("Search For:"), 1, 0);
 		TextField value = new TextField();
 		FormUtil.makeTextFieldNumeric(value);
 		search.add(value, 1, 1);
@@ -154,7 +150,7 @@ public class SearchForm extends Application{
 		
 		VBox result = new VBox();
 		
-		result.getChildren().add(FormUtil.newPaddedLabel("A. Incident Information"));
+		result.getChildren().add(FormUtil.makePaddedLabel("A. Incident Information"));
 		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
 		
 		VBox incidentInfo = new VBox();
@@ -166,28 +162,29 @@ public class SearchForm extends Application{
 		dateTimeInfo.setPadding(new Insets(SMALL_INSET));
 		incidentInfo.getChildren().add(dateTimeInfo);
 		
-		dateTimeInfo.add(FormUtil.newPaddedLabel("Date"), 0, 0);
-		dateTimeInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(incident.incidentDate)), 0, 1);
+		dateTimeInfo.add(FormUtil.makePaddedLabel("Date"), 0, 0);
+		dateTimeInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(incident.incidentDate)), 0, 1);
 		
-		dateTimeInfo.add(FormUtil.newPaddedLabel("Time"), 1, 0);
-		dateTimeInfo.add(FormUtil.newPaddedLabel(Utilities.convertTime(incident.incidentDate)), 1, 1);
+		dateTimeInfo.add(FormUtil.makePaddedLabel("Time"), 1, 0);
+		dateTimeInfo.add(FormUtil.makePaddedLabel(Utilities.convertTime(incident.incidentDate)), 1, 1);
 		
-		dateTimeInfo.add(FormUtil.newPaddedLabel("Day of Week"), 2, 0);
-		dateTimeInfo.add(FormUtil.newPaddedLabel(Utilities.dateToDayOfWeek(incident.incidentDate)), 2, 1);
+		dateTimeInfo.add(FormUtil.makePaddedLabel("Day of Week"), 2, 0);
+		dateTimeInfo.add(FormUtil.makePaddedLabel(Utilities.dateToDayOfWeek(incident.incidentDate)), 2, 1);
 		
-		dateTimeInfo.add(FormUtil.newPaddedLabel("Location"), 3, 0);
-		dateTimeInfo.add(FormUtil.newPaddedLabel(incident.location), 3, 1);
+		dateTimeInfo.add(FormUtil.makePaddedLabel("Location"), 3, 0);
+		dateTimeInfo.add(FormUtil.makePaddedLabel(incident.location), 3, 1);
 		
-		dateTimeInfo.add(FormUtil.newPaddedLabel("FUPD Case #"), 4, 0);
-		dateTimeInfo.add(FormUtil.newPaddedLabel(""+incident.id), 4, 1);
+		dateTimeInfo.add(FormUtil.makePaddedLabel("FUPD Case #"), 4, 0);
+		dateTimeInfo.add(FormUtil.makePaddedLabel(""+incident.id), 4, 1);
 		
-		VBox incidentType = new VBox();
-		
+		GridPane incidentType = new GridPane();
+		incidentType.setGridLinesVisible(true);
+		incidentType.setPadding(new Insets(SMALL_INSET));
 		incidentInfo.getChildren().add(incidentType);
 		
-		incidentType.getChildren().add(FormUtil.newPaddedLabel("Type of Incident"));
-		((Labeled) incidentType.getChildren().get(0)).setUnderline(true);
-		incidentType.getChildren().add(FormUtil.newPaddedLabel(incident.type));
+		incidentType.add(FormUtil.makePaddedLabel("Type of Incident"), 0, 0);
+		
+		incidentType.add(FormUtil.makePaddedLabel(incident.type), 0, 1);
 		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
@@ -201,7 +198,7 @@ public class SearchForm extends Application{
 		
 		VBox result = new VBox();
 		
-		result.getChildren().add(FormUtil.newPaddedLabel("B. Officer Information"));
+		result.getChildren().add(FormUtil.makePaddedLabel("B. Officer Information"));
 		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
 		
 		VBox officerInfo = new VBox();
@@ -213,46 +210,46 @@ public class SearchForm extends Application{
 		personalInfo.setPadding(new Insets(SMALL_INSET));
 		officerInfo.getChildren().add(personalInfo);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Name (Last, First Middle)"), 0, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(info.lastName + ", " + info.firstName + ", " + info.middleName), 0, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Name (Last, First Middle)"), 0, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(info.lastName + ", " + info.firstName + ", " + info.middleName), 0, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Badge #"), 1, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(""+info.badgeNumber), 1, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Badge #"), 1, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(""+info.badgeNumber), 1, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Sex"), 2, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(info.sex), 2, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Sex"), 2, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(info.sex), 2, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Race"), 3, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(info.race), 3, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Race"), 3, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(info.race), 3, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Date of Birth"), 4, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(info.dateOfBirth)), 4, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Date of Birth"), 4, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(info.dateOfBirth)), 4, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Injuried"), 5, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.wasInjured)), 5, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Injuried"), 5, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.wasInjured)), 5, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Killed"), 6, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.wasKilled)), 6, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Killed"), 6, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.wasKilled)), 6, 1);
 		
 		GridPane temporalInfo = new GridPane();
 		temporalInfo.setGridLinesVisible(true);
 		temporalInfo.setPadding(new Insets(SMALL_INSET));
 		officerInfo.getChildren().add(temporalInfo);
 		
-		temporalInfo.add(FormUtil.newPaddedLabel("Rank"), 0, 0);
-		temporalInfo.add(FormUtil.newPaddedLabel(info.rank), 0, 1);
+		temporalInfo.add(FormUtil.makePaddedLabel("Rank"), 0, 0);
+		temporalInfo.add(FormUtil.makePaddedLabel(info.rank), 0, 1);
 		
-		temporalInfo.add(FormUtil.newPaddedLabel("Duty Assignment"), 1, 0);
-		temporalInfo.add(FormUtil.newPaddedLabel(info.duty), 1, 1);
+		temporalInfo.add(FormUtil.makePaddedLabel("Duty Assignment"), 1, 0);
+		temporalInfo.add(FormUtil.makePaddedLabel(info.duty), 1, 1);
 		
-		temporalInfo.add(FormUtil.newPaddedLabel("Service Start Date"), 2, 0);
-		temporalInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(info.serviceStart)), 2, 1);
+		temporalInfo.add(FormUtil.makePaddedLabel("Service Start Date"), 2, 0);
+		temporalInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(info.serviceStart)), 2, 1);
 		
-		temporalInfo.add(FormUtil.newPaddedLabel("On-Duty"), 3, 0);
-		temporalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.wasOnDuty)), 3, 1);
+		temporalInfo.add(FormUtil.makePaddedLabel("On-Duty"), 3, 0);
+		temporalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.wasOnDuty)), 3, 1);
 		
-		temporalInfo.add(FormUtil.newPaddedLabel("Uniform"), 4, 0);
-		temporalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.wasUniformed)), 4, 1);
+		temporalInfo.add(FormUtil.makePaddedLabel("Uniform"), 4, 0);
+		temporalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.wasUniformed)), 4, 1);
 		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
@@ -265,7 +262,7 @@ public class SearchForm extends Application{
 		
 		VBox result = new VBox();
 
-		result.getChildren().add(FormUtil.newPaddedLabel("C" + (subjectNumber+1) + ". Subject Informaton"));
+		result.getChildren().add(FormUtil.makePaddedLabel("C" + (subjectNumber+1) + ". Subject Informaton"));
 		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
 		
 		VBox subjectInfo = new VBox();
@@ -277,51 +274,51 @@ public class SearchForm extends Application{
 		personalInfo.setGridLinesVisible(true);
 		subjectInfo.getChildren().add(personalInfo);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Name (Last, First Middle)"), 0, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(subject.lastName + ", " + subject.firstName + ", " + subject.middleName), 0, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Name (Last, First Middle)"), 0, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(subject.lastName + ", " + subject.firstName + ", " + subject.middleName), 0, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Weapon"), 1, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasWeaponed)), 1, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Weapon"), 1, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(subject.wasWeaponed)), 1, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Sex"), 2, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(subject.sex), 2, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Sex"), 2, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(subject.sex), 2, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Race"), 3, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(subject.race), 3, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Race"), 3, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(subject.race), 3, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Age"), 4, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(""+subject.age), 4, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Age"), 4, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(""+subject.age), 4, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Injuried"), 5, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasInjured)), 5, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Injuried"), 5, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(subject.wasInjured)), 5, 1);
 		
-		personalInfo.add(FormUtil.newPaddedLabel("Killed"), 6, 0);
-		personalInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasKilled)), 6, 1);
+		personalInfo.add(FormUtil.makePaddedLabel("Killed"), 6, 0);
+		personalInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(subject.wasKilled)), 6, 1);
 		
 		GridPane effectInfo = new GridPane();
 		effectInfo.setPadding(new Insets(SMALL_INSET));
 		effectInfo.setGridLinesVisible(true);
 		subjectInfo.getChildren().add(effectInfo);
 		
-		effectInfo.add(FormUtil.newPaddedLabel("Under the Influence of:"), 0, 0);
-		effectInfo.add(FormUtil.newPaddedLabel(Utilities.influences(subject)), 0, 1);
+		effectInfo.add(FormUtil.makePaddedLabel("Under the Influence of:"), 0, 0);
+		effectInfo.add(FormUtil.makePaddedLabel(Utilities.influences(subject)), 0, 1);
 		
-		effectInfo.add(FormUtil.newPaddedLabel("Arrested"), 1, 0);
-		effectInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subject.wasArrested)), 1, 1);
+		effectInfo.add(FormUtil.makePaddedLabel("Arrested"), 1, 0);
+		effectInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(subject.wasArrested)), 1, 1);
 		
-		effectInfo.add(FormUtil.newPaddedLabel("Charges"), 2, 0);
-		effectInfo.add(FormUtil.newPaddedLabel(subject.charges), 2, 1);
+		effectInfo.add(FormUtil.makePaddedLabel("Charges"), 2, 0);
+		effectInfo.add(FormUtil.makePaddedLabel(subject.charges), 2, 1);
 		
 		GridPane actionsInfo = new GridPane();
 		actionsInfo.setPadding(new Insets(SMALL_INSET));
 		actionsInfo.setGridLinesVisible(true);
 		subjectInfo.getChildren().add(actionsInfo);
 		
-		actionsInfo.add(FormUtil.newPaddedLabel("Subject's Actions:"), 0, 0);
-		actionsInfo.add(FormUtil.newPaddedLabel(Utilities.actions(subject)), 0, 1);
+		actionsInfo.add(FormUtil.makePaddedLabel("Subject's Actions:"), 0, 0);
+		actionsInfo.add(FormUtil.makePaddedLabel(Utilities.actions(subject)), 0, 1);
 		
-		actionsInfo.add(FormUtil.newPaddedLabel("Officer's Use of Force Toward Subject"), 1, 0);
-		actionsInfo.add(FormUtil.newPaddedLabel(Utilities.UOF(subject)), 1, 1);
+		actionsInfo.add(FormUtil.makePaddedLabel("Officer's Use of Force Toward Subject"), 1, 0);
+		actionsInfo.add(FormUtil.makePaddedLabel(Utilities.UOF(subject)), 1, 1);
 		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
@@ -336,7 +333,7 @@ public class SearchForm extends Application{
 		
 		VBox result = new VBox();
 		
-		result.getChildren().add(FormUtil.newPaddedLabel("D. Injuries and Medical Treatment"));
+		result.getChildren().add(FormUtil.makePaddedLabel("D. Injuries and Medical Treatment"));
 		((Labeled) result.getChildren().get(0)).setFont(Font.font("", FontWeight.BOLD, 14));
 		
 		VBox medicalInfo = new VBox();
@@ -348,19 +345,19 @@ public class SearchForm extends Application{
 		injuryInfo.setGridLinesVisible(true);
 		medicalInfo.getChildren().add(injuryInfo);
 		
-		injuryInfo.add(FormUtil.newPaddedLabel("Describe Injuries to Officer:"), 0, 0);
-		injuryInfo.add(FormUtil.newPaddedLabel(officer.injuries), 0, 1);
+		injuryInfo.add(FormUtil.makePaddedLabel("Describe Injuries to Officer:"), 0, 0);
+		injuryInfo.add(FormUtil.makePaddedLabel(officer.injuries), 0, 1);
 		
-		injuryInfo.add(FormUtil.newPaddedLabel("Medical Treatment:"), 1, 0);
-		injuryInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.hadMedicalTreatment)), 1, 1);
+		injuryInfo.add(FormUtil.makePaddedLabel("Medical Treatment:"), 1, 0);
+		injuryInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hadMedicalTreatment)), 1, 1);
 		
 		int position = 2;
 		for(int i=0; i<subjects.size(); i++) {
-			injuryInfo.add(FormUtil.newPaddedLabel("Describe Injuries to " + FormUtil.numberNotation(i+1) + " Subject:"), 0, position);
-			injuryInfo.add(FormUtil.newPaddedLabel(subjects.get(i).injuries), 0, position+1);
+			injuryInfo.add(FormUtil.makePaddedLabel("Describe Injuries to " + FormUtil.numberNotation(i+1) + " Subject:"), 0, position);
+			injuryInfo.add(FormUtil.makePaddedLabel(subjects.get(i).injuries), 0, position+1);
 		
-			injuryInfo.add(FormUtil.newPaddedLabel("Medical Treatment to " + FormUtil.numberNotation(i+1) + " Subject:"), 1, position);
-			injuryInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(subjects.get(i).hadMedicalTreatment)), 1, position+1);
+			injuryInfo.add(FormUtil.makePaddedLabel("Medical Treatment to " + FormUtil.numberNotation(i+1) + " Subject:"), 1, position);
+			injuryInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(subjects.get(i).hadMedicalTreatment)), 1, position+1);
 			
 			position+=2;
 		}
@@ -370,20 +367,20 @@ public class SearchForm extends Application{
 		signatureInfo.setGridLinesVisible(true);
 		medicalInfo.getChildren().add(signatureInfo);
 		
-		signatureInfo.add(FormUtil.newPaddedLabel("Officer Signed:"), 0, 0);
-		signatureInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
+		signatureInfo.add(FormUtil.makePaddedLabel("Officer Signed:"), 0, 0);
+		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
 		
 		if(officer.hasSigniture) {
-			signatureInfo.add(FormUtil.newPaddedLabel("Date:"), 1, 0);
-			signatureInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
+			signatureInfo.add(FormUtil.makePaddedLabel("Date:"), 1, 0);
+			signatureInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
 		}
 		
-		signatureInfo.add(FormUtil.newPaddedLabel("Supervisor Signed:"), 0, 2);
-		signatureInfo.add(FormUtil.newPaddedLabel(FormUtil.booleanToYesNo(incident.hasSupervisorSignature)), 0, 3);
+		signatureInfo.add(FormUtil.makePaddedLabel("Supervisor Signed:"), 0, 2);
+		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(incident.hasSupervisorSignature)), 0, 3);
 		
 		if(incident.hasSupervisorSignature) {
-			signatureInfo.add(FormUtil.newPaddedLabel("Date:"), 1, 2);
-			signatureInfo.add(FormUtil.newPaddedLabel(Utilities.convertDate(incident.supervisorSignDate)), 1, 3);
+			signatureInfo.add(FormUtil.makePaddedLabel("Date:"), 1, 2);
+			signatureInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(incident.supervisorSignDate)), 1, 3);
 		}
 		
 		GridPane findingInfo = new GridPane();
@@ -391,8 +388,8 @@ public class SearchForm extends Application{
 		findingInfo.setGridLinesVisible(true);
 		medicalInfo.getChildren().add(findingInfo);
 		
-		findingInfo.add(FormUtil.newPaddedLabel("Reviewing Supervisor Finding:"), 0, 0);
-		findingInfo.add(FormUtil.newPaddedLabel(incident.supervisorFinding), 0, 1);
+		findingInfo.add(FormUtil.makePaddedLabel("Reviewing Supervisor Finding:"), 0, 0);
+		findingInfo.add(FormUtil.makePaddedLabel(incident.supervisorFinding), 0, 1);
 		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
