@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 public class UOFSubjectForm extends Application {
 
 	private Subject subject;
+	
 	private Pane pneSubject;
 	private HBox hbxSubject;
 	private VBox vbxSubjectInfo;
@@ -39,7 +40,7 @@ public class UOFSubjectForm extends Application {
 	private Label lblRace;
 	private TextField txfRace;
 	private Label lblAge;
-	private TextField txfDOB;
+	private TextField txfAge;
 	private CheckBox cbxSubjectInjured;
 	private CheckBox cbxSubjectKilled;
 	private CheckBox cbxSubjectWeaponed;
@@ -140,8 +141,9 @@ public class UOFSubjectForm extends Application {
 		
 		lblAge = new Label("Age");
 		grdSubjectInfo.add(lblAge, 0, 5);
-		txfDOB = new TextField(Integer.toString(subject.age));
-		grdSubjectInfo.add(txfDOB, 1, 5);
+		txfAge = new TextField(Integer.toString(subject.age));
+		FormUtil.makeTextFieldNumeric(txfAge);
+		grdSubjectInfo.add(txfAge, 1, 5);
 		// Subject's personal information end
 		
 		// Subject's incident information start
@@ -170,7 +172,7 @@ public class UOFSubjectForm extends Application {
 		vbxSubjectInfo.getChildren().add(lblInjuries);
 		txaInjuries = new TextArea(subject.injuries);
 		txaInjuries.setPrefSize(100.0, 80.0);
-		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(injuriesLabelIndex));
+		FormUtil.toggleTextInputWithLabelEvent(cbxSubjectInjured, txaInjuries, vbxSubjectInfo.getChildren().get(injuriesLabelIndex));
 		if(!cbxSubjectInjured.isSelected()) {
 			vbxSubjectInfo.getChildren().get(injuriesLabelIndex).setVisible(false);
 			txaInjuries.setVisible(false);
@@ -198,7 +200,7 @@ public class UOFSubjectForm extends Application {
 		vbxSubjectInfo.getChildren().add(cbxOtherCondition);
 		
 		txfOtherCondition = new TextField(subject.otherInfluence);
-		UOFFormUtil.toggleTextInputEvent(cbxOtherCondition, txfOtherCondition);
+		FormUtil.toggleTextInputEvent(cbxOtherCondition, txfOtherCondition);
 		if(!cbxOtherCondition.isSelected()) {
 			txfOtherCondition.setVisible(false);
 		}
@@ -210,7 +212,7 @@ public class UOFSubjectForm extends Application {
 		vbxSubjectInfo.getChildren().add(lblCharges);
 		txaCharges = new TextArea(subject.charges);
 		txaCharges.setPrefSize(100.0,80.0);
-		UOFFormUtil.toggleTextInputWithLabelEvent(cbxSubjectArrested, txaCharges, vbxSubjectInfo.getChildren().get(chargesLabelIndex));
+		FormUtil.toggleTextInputWithLabelEvent(cbxSubjectArrested, txaCharges, vbxSubjectInfo.getChildren().get(chargesLabelIndex));
 		if(!cbxSubjectArrested.isSelected()) {
 			vbxSubjectInfo.getChildren().get(chargesLabelIndex).setVisible(false);
 			txaCharges.setVisible(false);
@@ -259,7 +261,7 @@ public class UOFSubjectForm extends Application {
 		vbxActions.getChildren().add(cbxOtherAction);
 		
 		txfOtherAction = new TextField(subject.otherActions);
-		UOFFormUtil.toggleTextInputEvent(cbxOtherAction, txfOtherAction);
+		FormUtil.toggleTextInputEvent(cbxOtherAction, txfOtherAction);
 		if(!cbxOtherAction.isSelected()) {
 			txfOtherAction.setVisible(false);
 		}
@@ -298,7 +300,7 @@ public class UOFSubjectForm extends Application {
 		vbxActions.getChildren().add(cbxOtherUOF);
 		
 		txfOtherUOF = new TextField(subject.otherUOF);
-		UOFFormUtil.toggleTextInputEvent(cbxOtherUOF, txfOtherUOF);
+		FormUtil.toggleTextInputEvent(cbxOtherUOF, txfOtherUOF);
 		if(!cbxOtherUOF.isSelected()) {
 			txfOtherUOF.setVisible(false);
 		}
@@ -323,6 +325,7 @@ public class UOFSubjectForm extends Application {
 		hbxNumberOfShots.getChildren().add(lblNumberOfShots);
 		
 		txfNumberOfShots = new TextField("" + subject.numberOfShots);
+		FormUtil.makeTextFieldNumeric(txfNumberOfShots);
 		hbxNumberOfShots.getChildren().add(txfNumberOfShots);
 		// Officer's use of force end
 		
@@ -337,42 +340,42 @@ public class UOFSubjectForm extends Application {
 		btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	subject.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
-            	subject.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
-            	subject.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
-            	subject.sex = UOFFormUtil.cleanInput(txfSex.getText());
-            	subject.race = UOFFormUtil.cleanInput(txfRace.getText());
-            	subject.age = UOFFormUtil.textToInteger(txfDOB.getText());
+            	subject.firstName = FormUtil.cleanInput(txfFirstName.getText());
+            	subject.middleName = FormUtil.cleanInput(txfMiddleName.getText());
+            	subject.lastName = FormUtil.cleanInput(txfLastName.getText());
+            	subject.sex = FormUtil.cleanInput(txfSex.getText());
+            	subject.race = FormUtil.cleanInput(txfRace.getText());
+            	subject.age = FormUtil.textToInteger(txfAge.getText());
             	subject.wasInjured = cbxSubjectInjured.isSelected();
             	subject.wasKilled = cbxSubjectKilled.isSelected();
             	subject.wasWeaponed = cbxSubjectWeaponed.isSelected();
             	subject.wasArrested = cbxSubjectArrested.isSelected();
             	subject.hadMedicalTreatment = cbxSubjectHadTreatment.isSelected();
-            	subject.injuries = UOFFormUtil.cleanInput(txaInjuries.getText());
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxDrugs, subject.influence);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxAlcohol, subject.influence);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxMentalIllness, subject.influence);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherCondition, subject.influence);
-            	subject.otherInfluence = UOFFormUtil.cleanInput(txfOtherCondition.getText());
-            	subject.charges = UOFFormUtil.cleanInput(txaCharges.getText());
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxResisted, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxThreatOrAttack, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxKnife, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxMotorVehicle, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearm, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxShotFirearm, subject.actions);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherAction, subject.actions);
-            	subject.otherActions = UOFFormUtil.cleanInput(txfOtherAction.getText());
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxComplianceHold, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxHandsFistFeet, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxElectric, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxChemical, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxBaton, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxOtherUOF, subject.uofAgainst);
-            	subject.otherUOF = UOFFormUtil.cleanInput(txfOtherUOF.getText());
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmAimed, subject.uofAgainst);
-            	UOFFormUtil.removeOrAddFromCheckBox(cbxFirearmDischarged, subject.uofAgainst);
-            	subject.numberOfShots = UOFFormUtil.textToInteger(txfNumberOfShots.getText());
+            	subject.injuries = FormUtil.cleanInput(txaInjuries.getText());
+            	FormUtil.removeOrAddFromCheckBox(cbxDrugs, subject.influence);
+            	FormUtil.removeOrAddFromCheckBox(cbxAlcohol, subject.influence);
+            	FormUtil.removeOrAddFromCheckBox(cbxMentalIllness, subject.influence);
+            	FormUtil.removeOrAddFromCheckBox(cbxOtherCondition, subject.influence);
+            	subject.otherInfluence = FormUtil.cleanInput(txfOtherCondition.getText());
+            	subject.charges = FormUtil.cleanInput(txaCharges.getText());
+            	FormUtil.removeOrAddFromCheckBox(cbxResisted, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxThreatOrAttack, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxKnife, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxMotorVehicle, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxFirearm, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxShotFirearm, subject.actions);
+            	FormUtil.removeOrAddFromCheckBox(cbxOtherAction, subject.actions);
+            	subject.otherActions = FormUtil.cleanInput(txfOtherAction.getText());
+            	FormUtil.removeOrAddFromCheckBox(cbxComplianceHold, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxHandsFistFeet, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxElectric, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxChemical, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxBaton, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxOtherUOF, subject.uofAgainst);
+            	subject.otherUOF = FormUtil.cleanInput(txfOtherUOF.getText());
+            	FormUtil.removeOrAddFromCheckBox(cbxFirearmAimed, subject.uofAgainst);
+            	FormUtil.removeOrAddFromCheckBox(cbxFirearmDischarged, subject.uofAgainst);
+            	subject.numberOfShots = FormUtil.textToInteger(txfNumberOfShots.getText());
             	form.close();
             }
 

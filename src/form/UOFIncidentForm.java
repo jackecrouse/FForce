@@ -48,7 +48,7 @@ public class UOFIncidentForm extends Application {
 	private ToggleGroup tgrType;
 	private RadioButton rdbInProgress, rdbDomestic, rdbSuspicious, rdbTrafficStop,
 						rdbArrest, rdbOtherType;
-	private Button btnCreateSubject, btnDeleteSubject, btnEditSubject, btnSubmit, btnQuit;;
+	private Button btnCreateSubject, btnDeleteSubject, btnEditSubject, btnSubmit, btnQuit;
 	private ComboBox<String> cobAmPm, cobHour, cobMinutes, cobSeconds, cobSubjectChoice;
 	
 	public static void run() {
@@ -119,6 +119,7 @@ public class UOFIncidentForm extends Application {
 			txfBadgeNumber.setDisable(true);
 			txfBadgeNumber.setOpacity(0.7);
 		}
+		FormUtil.makeTextFieldNumeric(txfBadgeNumber);
 		grdOfficerInfo.add(txfBadgeNumber, 1, 0);
 		
 		grdOfficerInfo.add(new Label("First Name"), 0, 1);
@@ -162,7 +163,7 @@ public class UOFIncidentForm extends Application {
 		grdOfficerInfo.add(txfRace, 1, 5);
 		
 		grdOfficerInfo.add(new Label("Date Of Birth"), 0, 6);
-		dtpDOB = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.dateOfBirth));
+		dtpDOB = new DatePicker(FormUtil.dateToLocalDate(incident.officer.info.dateOfBirth));
 		if(sql.get_userPrivlege() == SQL.USER) {
 			dtpDOB.setDisable(true);
 			dtpDOB.setOpacity(0.7);
@@ -170,7 +171,7 @@ public class UOFIncidentForm extends Application {
 		grdOfficerInfo.add(dtpDOB, 1, 6);
 		
 		grdOfficerInfo.add(new Label("Started Service"), 0, 7);
-		dtpServiceStart = new DatePicker(UOFFormUtil.dateToLocalDate(incident.officer.info.serviceStart));
+		dtpServiceStart = new DatePicker(FormUtil.dateToLocalDate(incident.officer.info.serviceStart));
 		if(sql.get_userPrivlege() == SQL.USER) {
 			dtpServiceStart.setDisable(true);
 			dtpServiceStart.setOpacity(0.7);
@@ -217,7 +218,7 @@ public class UOFIncidentForm extends Application {
 		txaOfficerInjuriesDesc = new TextArea();
 		txaOfficerInjuriesDesc.setPrefSize(200, 150);
 		txaOfficerInjuriesDesc.setVisible(false);
-		UOFFormUtil.toggleTextInputWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
+		FormUtil.toggleTextInputWithLabelEvent(cbxOfficerInjured, txaOfficerInjuriesDesc,
 				 								  vbxOfficerFull.getChildren().get(injuresLabelIndex));
 		vbxOfficerFull.getChildren().add(txaOfficerInjuriesDesc);
 	}
@@ -333,7 +334,7 @@ public class UOFIncidentForm extends Application {
 
 		txfOtherDesc = new TextField();
 		txfOtherDesc.setVisible(false);
-		UOFFormUtil.toggleTextFieldFromRadioButtonEvent(tgrType, otherIndex, txfOtherDesc);
+		FormUtil.toggleTextFieldFromRadioButtonEvent(tgrType, otherIndex, txfOtherDesc);
 		vbxIncidentType.getChildren().add(txfOtherDesc);
 	}
 	
@@ -382,7 +383,7 @@ public class UOFIncidentForm extends Application {
 			public void handle(ActionEvent event) {
 				int lastPos = cobSubjectChoice.getItems().size();
 				if (lastPos >= 2) {
-					int index = UOFFormUtil.getCurrentIndex(cobSubjectChoice);
+					int index = FormUtil.getCurrentIndex(cobSubjectChoice);
 					incident.subjects.remove(incident.subjects.get(index));
 					cobSubjectChoice.getItems().remove(index);
 					for (int i = index; i < lastPos-1; i++) {
@@ -398,7 +399,7 @@ public class UOFIncidentForm extends Application {
 		btnEditSubject.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				new UOFSubjectForm().run(incident.subjects.get(UOFFormUtil.getCurrentIndex(cobSubjectChoice)));
+				new UOFSubjectForm().run(incident.subjects.get(FormUtil.getCurrentIndex(cobSubjectChoice)));
 			}
 		});
 	}
@@ -453,27 +454,27 @@ public class UOFIncidentForm extends Application {
 	
 	private void fillIncidentFromForm() {
 		Officer officer = incident.officer;
-		officer.info.badgeNumber = UOFFormUtil.textToInteger(txfBadgeNumber.getText());
-		officer.info.firstName = UOFFormUtil.cleanInput(txfFirstName.getText());
-		officer.info.middleName = UOFFormUtil.cleanInput(txfMiddleName.getText());
-		officer.info.lastName = UOFFormUtil.cleanInput(txfLastName.getText());
-		officer.info.sex = UOFFormUtil.cleanInput(txfSex.getText());
-		officer.info.race = UOFFormUtil.cleanInput(txfRace.getText());
-		officer.info.dateOfBirth = UOFFormUtil.datePickerToDate(dtpDOB);
-		officer.info.serviceStart = UOFFormUtil.datePickerToDate(dtpServiceStart);
-		officer.info.rank = UOFFormUtil.cleanInput(txfRank.getText());
-		officer.info.duty = UOFFormUtil.cleanInput(txfDutyAssignment.getText());
+		officer.info.badgeNumber = FormUtil.textToInteger(txfBadgeNumber.getText());
+		officer.info.firstName = FormUtil.cleanInput(txfFirstName.getText());
+		officer.info.middleName = FormUtil.cleanInput(txfMiddleName.getText());
+		officer.info.lastName = FormUtil.cleanInput(txfLastName.getText());
+		officer.info.sex = FormUtil.cleanInput(txfSex.getText());
+		officer.info.race = FormUtil.cleanInput(txfRace.getText());
+		officer.info.dateOfBirth = FormUtil.datePickerToDate(dtpDOB);
+		officer.info.serviceStart = FormUtil.datePickerToDate(dtpServiceStart);
+		officer.info.rank = FormUtil.cleanInput(txfRank.getText());
+		officer.info.duty = FormUtil.cleanInput(txfDutyAssignment.getText());
 		officer.wasInjured = cbxOfficerInjured.isSelected();
 		officer.wasKilled = cbxOfficerKilled.isSelected();
 		officer.wasOnDuty = cbxOfficerOnDuty.isSelected();
 		officer.wasUniformed = cbxOfficerUniformed.isSelected();
 		officer.hadMedicalTreatment = cbxOfficerTreatment.isSelected();
-		officer.injuries = UOFFormUtil.cleanInput(txaOfficerInjuriesDesc.getText());
-		incident.id = UOFFormUtil.textToInteger(txfIncidentNumber.getText());
-		incident.incidentDate = UOFFormUtil.datePickerToDate(dtpIncidentDate);
-		incident.incidentDate = UOFFormUtil.addMinorTimeFromText(incident.incidentDate, cobHour.getValue(), cobMinutes.getValue(),
+		officer.injuries = FormUtil.cleanInput(txaOfficerInjuriesDesc.getText());
+		incident.id = FormUtil.textToInteger(txfIncidentNumber.getText());
+		incident.incidentDate = FormUtil.datePickerToDate(dtpIncidentDate);
+		incident.incidentDate = FormUtil.addMinorTimeFromText(incident.incidentDate, cobHour.getValue(), cobMinutes.getValue(),
 																cobSeconds.getValue(), cobAmPm.getValue());
-		incident.location = UOFFormUtil.cleanInput(txfIncidentLocation.getText());
+		incident.location = FormUtil.cleanInput(txfIncidentLocation.getText());
 		incident.type = ((RadioButton)tgrType.getSelectedToggle()).getText();
 		incident.otherType = txfOtherDesc.getText();
 	}

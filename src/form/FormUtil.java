@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-
+import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -14,10 +14,11 @@ import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
 
-public class UOFFormUtil {
+public class FormUtil {
 	
 	public static Date addMinorTimeFromText(Date date, String hour, String minute, String second, String amPM) {
 		try {
@@ -141,6 +142,14 @@ public class UOFFormUtil {
 		LocalDate output;
 		output = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return output;
+	}
+	
+	public static void makeTextFieldNumeric(TextField txf) {
+		txf.textProperty().addListener((InvalidationListener) observable -> {
+			if(!txf.getText().replaceAll("[^0-9]", "").equals(txf.getText())) {
+				txf.setText(txf.getText().replaceAll("[^0-9]", ""));
+			}
+		});
 	}
 	
 }
