@@ -28,7 +28,38 @@ class SQLTest {
 			e.printStackTrace();
 		}
 		
-		//assertThrows(SQLException.class, ()->{ new SQL("notAUser", "notAPassword"); });
+	}
+	@Test
+	void testGetForm() {
+	}
+	
+	@Test
+	void testAddUser() {
+		try {
+			SQL testWithAdmin = new SQL("jdewey", "csc353");
+			assertTrue(testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
+			testWithAdmin.deleteUser("test");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			SQL testWithPlainJane = new SQL("jsmith", "jsmith123");
+			assertFalse(testWithPlainJane.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testGetLastCaseID() {
+		
+	}
+	
+	@Test
+	void testGetOfficer() {
 		
 	}
 	
@@ -62,27 +93,6 @@ class SQLTest {
 	}
 	
 	@Test
-	void testAddOfficer() {
-		try {
-			SQL testWithAdmin = new SQL("jdewey", "csc353");
-			assertTrue(testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
-			testWithAdmin.deleteUser("test");
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			SQL testWithPlainJane = new SQL("jsmith", "jsmith123");
-			assertFalse(testWithPlainJane.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@Test
 	void testDeleteUser() {
 		try {
 			SQL testWithAdmin = new SQL("jdewey", "csc353");
@@ -101,5 +111,19 @@ class SQLTest {
 		}
 	
 	}
-
+	
+	@Test
+	void testDeleteForm() {
+		
+	}
+	
+	@Test
+	void testChangePassword() {
+		
+	}
+	
+	@Test
+	void testIsUser() {
+		
+	}
 }
