@@ -63,7 +63,6 @@ public class Utilities {
 		}
 	}
 	
-	//Calendar
 	public static int dateToSeconds(Date date) {
 		Calendar seconds = Calendar.getInstance();
 		seconds.setTime(date);
