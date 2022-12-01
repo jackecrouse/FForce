@@ -2,6 +2,8 @@ package database;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -65,6 +67,21 @@ public class Utilities {
 		}
 	}
 	
+	public static boolean intToBool(int i) {
+		if(i >= 0 && i <= 1) {
+			return i == 1;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public static ArrayList<String> parseToArrayList(String input) {
+		return (ArrayList<String>)Arrays.asList(input.split(","));
+		
+	}
+	
+	//Calendar
 	public static int dateToSeconds(Date date) {
 		Calendar seconds = Calendar.getInstance();
 		seconds.setTime(date);
