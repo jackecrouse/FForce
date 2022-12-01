@@ -77,7 +77,7 @@ public class Utilities {
 	}
 	
 	public static ArrayList<String> parseToArrayList(String input) {
-		return (ArrayList<String>)Arrays.asList(input.split(","));
+		return new ArrayList<String>(Arrays.asList(input.split(",")));
 		
 	}
 	
