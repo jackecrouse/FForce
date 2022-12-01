@@ -183,8 +183,7 @@ public class SearchForm extends Application{
 		incidentInfo.getChildren().add(incidentType);
 		
 		incidentType.add(FormUtil.makePaddedLabel("Type of Incident"), 0, 0);
-		
-		incidentType.add(FormUtil.makePaddedLabel(incident.type), 0, 1);
+		incidentType.add(FormUtil.makePaddedLabel(Utilities.type(incident)), 0, 1);
 		
 		result.getChildren().add(new Separator());
 		((Region) result.getChildren().get(2)).setPadding(new Insets(MEDIUM_INSET));
