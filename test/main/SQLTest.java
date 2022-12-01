@@ -36,9 +36,9 @@ class SQLTest {
 			SQL normalTest = new SQL("jdewey", "csc353");
 			int caseID = 19;
 			int badgeNumber = 21;
-			ResultSet rs = normalTest.getForm(caseID);
-			assertEquals(rs.getString("CaseID"), caseID);
-			assertEquals(rs.getString("BadgeNumber"), badgeNumber);
+			ArrayList<Incident> rs = normalTest.getForm(caseID);
+			assertEquals(rs.get(0).id, caseID);
+			assertEquals(rs.get(0).officer.info.badgeNumber, badgeNumber);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
