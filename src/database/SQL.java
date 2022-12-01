@@ -354,28 +354,30 @@ public class SQL {
 			{
 				ArrayList<String> sbj = new ArrayList<String>();
 				
-				sbj.add(set.getString("SubjectFirstName"));
-				sbj.add(set.getString("SubjectMiddleName"));
-				sbj.add(set.getString("SubjectLastName"));
-				sbj.add(set.getString("SubjectSex"));
-				sbj.add(set.getString("SubjectRace"));
-				sbj.add(set.getString("SubjectAge"));
-				sbj.add(set.getString("SubjectHadWeapon"));
-				sbj.add(set.getString("SubjectInjured"));
-				sbj.add(set.getString("SubjectInjuries"));
-				sbj.add(set.getString("SubjectKilled"));
-				sbj.add(set.getString("SubjectWasArrested"));
-				sbj.add(set.getString("SubjectHadTreatment"));
-				sbj.add(set.getString("SubjectInfluencedBy"));
-				sbj.add(set.getString("SubjectCharges")); 
-				sbj.add(set.getString("SubjectActions"));
-				sbj.add(set.getString("UOFAgainstSubject"));
-				sbj.add(set.getString("ShotsFired"));
+				String firstName = set.getString("SubjectFirstName");
+				String middleName = set.getString("SubjectMiddleName");
+				String lastName = set.getString("SubjectLastName");
+				String sex = set.getString("SubjectSex");
+				String race = set.getString("SubjectRace");
+				int age = Integer.parseInt(set.getString("SubjectAge"));
+				boolean wasInjured = Boolean.parseBoolean(set.getString("SubjectHadWeapon"));
+				set.getString("SubjectInjured"));
+				set.getString("SubjectInjuries"));
+				set.getString("SubjectKilled"));
+				set.getString("SubjectWasArrested"));
+				set.getString("SubjectHadTreatment"));
+				set.getString("SubjectInfluencedBy"));
+				set.getString("SubjectCharges")); 
+				set.getString("SubjectActions"));
+				set.getString("UOFAgainstSubject"));
+				set.getString("ShotsFired"));
 				
 				String[] sbjArray = new String[sbj.size()];
 				sbjArray = sbj.toArray(sbjArray);
 				
-				Subject sub = new Subject(sbjArray);
+				Subject sub = new Subject(String firstName, String middleName, String lastName, String sex, String race, int age, boolean wasInjured, boolean wasKilled,
+						   				  boolean wasWeaponed, boolean wasArrested, boolean hadMedicalTreatment, String injuries, String charges, ArrayList<String> influence,
+						   				  String otherInfluence, ArrayList<String> actions, String otherActions, ArrayList<String> uofAgainst, String otherUOF, int numberOfShots);
 				result.add(sub);
 			}
 			return result;

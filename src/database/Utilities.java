@@ -65,6 +65,10 @@ public class Utilities {
 		}
 	}
 	
+	public static boolean intToBool(int i) {
+		return i == 1;
+	}
+	
 	//Calendar
 	public static int dateToSeconds(Date date) {
 		Calendar seconds = Calendar.getInstance();
