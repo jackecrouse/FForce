@@ -97,7 +97,7 @@ public class SearchForm extends Application{
 		
 		search.add(FormUtil.makePaddedLabel("Search By:"), 0, 0);
 		ChoiceBox<String> criteria = new ChoiceBox<String>();
-		criteria.getItems().addAll("Incident Number", "Badge Number");
+		criteria.getItems().addAll("Incident Number");
 		criteria.getSelectionModel().select(0);
 		search.add(criteria, 0, 1);
 		
@@ -111,16 +111,11 @@ public class SearchForm extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				incidents.clear();
-				if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Incident Number")) {
-					try {
-						incidents = sql.getForm(Integer.parseInt(value.getText()));
-						System.out.println(incidents.get(0).id);
-					} catch (Exception e) {
-						e.printStackTrace();
-					} //TODO: retrieve sql data
-				}
-				else if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Badge Number")) {
-//					incidents = getIncidentsFromBadgeNumber(value.getText()); //TODO: retrieve sql data
+				try {
+					incidents = sql.getForm(Integer.parseInt(value.getText()));
+					System.out.println(incidents.get(0).id);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				((ScrollPane) screen.getChildren().get(1)).setContent(createResultsPane());
 			}
