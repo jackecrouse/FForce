@@ -111,7 +111,12 @@ public class SearchForm extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				incidents.clear();
-				incidents.add(createSampleIncident()); //TODO: retrieve sql data
+				if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Incident Number")) {
+					incidents.add(createSampleIncident()); //TODO: retrieve sql data
+				}
+				else if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("BadgeNumber")) {
+					incidents.add(createSampleIncident()); //TODO: retrieve sql data
+				}
 				((ScrollPane) screen.getChildren().get(1)).setContent(createResultsPane());
 			}
 		});
