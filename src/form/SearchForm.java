@@ -112,10 +112,10 @@ public class SearchForm extends Application{
 			public void handle(ActionEvent event) {
 				incidents.clear();
 				if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Incident Number")) {
-					incidents.add(createSampleIncident()); //TODO: retrieve sql data
+					incidents = getForm(value.getText()); //TODO: retrieve sql data
 				}
-				else if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("BadgeNumber")) {
-					incidents.add(createSampleIncident()); //TODO: retrieve sql data
+				else if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Badge Number")) {
+//					incidents = getIncidentsFromBadgeNumber(value.getText()); //TODO: retrieve sql data
 				}
 				((ScrollPane) screen.getChildren().get(1)).setContent(createResultsPane());
 			}
@@ -376,9 +376,9 @@ public class SearchForm extends Application{
 		medicalInfo.getChildren().add(signatureInfo);
 		
 		signatureInfo.add(FormUtil.makePaddedLabel("Officer Signed:"), 0, 0);
-		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSignature)), 0, 1);
+		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
 		
-		if(officer.hasSignature) {
+		if(officer.hasSigniture) {
 			signatureInfo.add(FormUtil.makePaddedLabel("Date:"), 1, 0);
 			signatureInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
 		}
