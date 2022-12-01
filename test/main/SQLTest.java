@@ -2,6 +2,7 @@ package main;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ class SQLTest {
 	
 	
 	@Test
-	void testLogin() {
+	void testIsUser() {
 		try {
 			SQL test = new SQL("jdewey", "csc353");
 			assertTrue(test.isUser("jdewey","csc353"));
@@ -31,6 +32,17 @@ class SQLTest {
 	}
 	@Test
 	void testGetForm() {
+		try {
+			SQL normalTest = new SQL("jdewey", "csc353");
+			int caseID = 19;
+			int badgeNumber = 21;
+			ResultSet rs = normalTest.getForm(caseID, badgeNumber);
+			assertEquals(rs.getString("CaseID"), caseID);
+			assertEquals(rs.getString("BadgeNumber"), badgeNumber);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -54,18 +66,7 @@ class SQLTest {
 	}
 	
 	@Test
-	void testGetLastCaseID() {
-		
-	}
-	
-	@Test
-	void testGetOfficer() {
-		
-	}
-	
-	@Test
 	void testInsertNewForm() {
-		//NO ' IN INPUT
 		
 		OfficerInfo info = new OfficerInfo(21, "Johnathan", "Tyler", "Dewey", "Male", "White", new Date(), new Date(), "Private", "Patrol");
 		
@@ -77,7 +78,7 @@ class SQLTest {
 		actions.addAll(0, Arrays.asList(""));
 		ArrayList<String> uofAgainst = new ArrayList<String>();
 		uofAgainst.addAll(0, Arrays.asList(""));
-		Subject subject = new Subject("Joe", "Damn", "Mama", "Other", "White", 1, false, false, false, false, false, "B", "C", influence, "D", actions, "E", uofAgainst, "F", 0);
+		Subject subject = new Subject("John", "Alan", "Doe", "Other", "White", 1, false, false, false, false, false, "B", "C", influence, "D", actions, "E", uofAgainst, "F", 0);
 		
 		ArrayList<Subject> subjects = new ArrayList<Subject>();
 		subjects.add(subject);
@@ -110,20 +111,5 @@ class SQLTest {
 			e.printStackTrace();
 		}
 	
-	}
-	
-	@Test
-	void testDeleteForm() {
-		
-	}
-	
-	@Test
-	void testChangePassword() {
-		
-	}
-	
-	@Test
-	void testIsUser() {
-		
 	}
 }
