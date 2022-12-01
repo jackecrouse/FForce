@@ -45,17 +45,19 @@ public class SearchForm extends Application{
 	private final int LARGE_INSET = 10;
 	
 	private VBox screen;
-
-	public static void main(String [] args) {
-		launch();
-	}
 	
 	@Override
-	public void start(Stage root) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
+		SearchForm searchStage = new SearchForm();
+		searchStage.create(primaryStage);
+		primaryStage.show();
+	}
+	
+	public Stage create(Stage root) {
 		incidents = new ArrayList<Incident>();
 		
 		try {
-			sql = new SQL(/*FForce.getUsername(), FForce.getPassword()*/);
+			sql = new SQL(FForce.getUsername(), FForce.getPassword());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -85,6 +87,8 @@ public class SearchForm extends Application{
 		root.show();
 		
 		results.setPrefViewportHeight(screen.getHeight()-search.getHeight()-SCROLL_OFFSET);
+		
+		return root;
 	}
 	
 	private GridPane createSearchPane() {
