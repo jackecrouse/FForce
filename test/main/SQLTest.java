@@ -36,7 +36,7 @@ class SQLTest {
 			SQL normalTest = new SQL("jdewey", "csc353");
 			int caseID = 19;
 			int badgeNumber = 21;
-			ResultSet rs = normalTest.getForm(caseID, badgeNumber);
+			ResultSet rs = normalTest.getForm(caseID);
 			assertEquals(rs.getString("CaseID"), caseID);
 			assertEquals(rs.getString("BadgeNumber"), badgeNumber);
 		}
