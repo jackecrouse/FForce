@@ -1,31 +1,41 @@
 package main;
 
+import java.sql.SQLException;
+
+import database.SQL;
+import form.SearchForm;
+import form.UOFIncidentForm;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Parent;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FForce extends Application {
-	private Scene loginScene, homePageScene, formCreationScene, browseFormsScene;
-	private Stage window;
-	private Button submitButton, toLoginButton, createForm, browseForms;
+	private static Scene loginScene;
+	public static Scene homePageScene, formCreationScene, browseFormsScene;
+	public static Stage window;
+	private static Button submitButton;
+	private static Button toLoginButton;
+	private static Button createForm;
+	private static Button browseForms;
+	private static TextField _username;
+	private static PasswordField _password;
 
 	public FForce() {
+	}
 
+	public static String getUsername() {
+		return _username.getText();
+	}
+
+	public static String getPassword() {
+		return _password.getText();
 	}
 
 	@Override
@@ -44,31 +54,69 @@ public class FForce extends Application {
 		GridPane browseGrid = createBrowsePage();
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
-		submitButton.setOnAction(e -> window.setScene(homePageScene)); // need to have an event handler method that
-																		// authenticates the user, for now just change
-																		// scene
+		submitButton.setOnAction(e -> {
+
+			try {
+				if (validateLogin(_username, _password)) {
+					System.out.println("Success, logged in: " + _username.getText());
+					window.setScene(homePageScene);
+				} else {
+					System.out.println("Failure, did not log in: " + _username.getText());
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+		}); // need to have an event handler method that
+			// authenticates the user, for now just change
+			// scene
 		toLoginButton.setOnAction(e -> window.setScene(loginScene));
-		createForm.setOnAction(e -> window.setScene(formCreationScene));
-		browseForms.setOnAction(e -> window.setScene(browseFormsScene));
+		createForm.setOnAction(e -> {
+			window.setScene(formCreationScene);
+			UOFIncidentForm incidentStage = new UOFIncidentForm();
+			Stage form = incidentStage.create(primaryStage);
+			form.show();
+		});
+		browseForms.setOnAction(e -> {
+			window.setScene(browseFormsScene);
+			SearchForm SearchStage = new SearchForm();
+			Stage form = SearchStage.create(primaryStage);
+			form.show();
+		});
 
 		window.setScene(loginScene); // sets first scene shown
 		window.setTitle("Fupo Force App");
 		window.show();
 	}
 
-	private GridPane createBrowsePage() {
+	private static boolean validateLogin(TextField username, PasswordField password) throws SQLException {
+		SQL connection = new SQL();
+		String user = username.getText();
+		String pass = password.getText();
+		return connection.isUser(user, pass);
+	}
+
+	public static GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
 		GridPane grid = new GridPane();
+		Button back = new Button("go back");
+		back.setOnAction((ActionEvent e) -> {
+			window.setScene(homePageScene);
+		});
 
 		grid.setHgap(3);
 		grid.setVgap(3);
 
+		back.setTranslateX(2);
+		back.setTranslateY(25);
+
 		grid.add(browse, 0, 0);
+		grid.add(back, 0, 0);
 
 		return grid;
 	}
 
-	private GridPane createFormPage() {
+	public static GridPane createFormPage() {
 		Label creation = new Label("form creation page");
 		GridPane grid = new GridPane();
 
@@ -80,7 +128,7 @@ public class FForce extends Application {
 		return grid;
 	}
 
-	private StackPane createHomePage() {
+	public static StackPane createHomePage() {
 		StackPane homePage = new StackPane();
 		toLoginButton = new Button("go to login page");
 		createForm = new Button("go to form creation");
@@ -101,24 +149,24 @@ public class FForce extends Application {
 
 	}
 
-	private GridPane createLoginPage() {
+	public static GridPane createLoginPage() {
 		Label welcome = new Label("Welcome to the login page!");
 		submitButton = new Button("Log in");
 		Label user = new Label("Username:");
 		Label pass = new Label("Password:");
 
 		GridPane grid = new GridPane();
-		TextField username = new TextField();
-		PasswordField password = new PasswordField();
+		_username = new TextField();
+		_password = new PasswordField();
 
 		grid.setHgap(3); // width gap
 		grid.setVgap(3); // vertical gap
 
 		grid.add(welcome, 20, 0, 10, 10);
 		grid.add(user, 0, 0, 1, 2);
-		grid.add(username, 0, 5, 1, 10);
+		grid.add(_username, 0, 5, 1, 10);
 		grid.add(pass, 0, 15, 1, 2);
-		grid.add(password, 0, 20, 1, 10);
+		grid.add(_password, 0, 20, 1, 10);
 		grid.add(submitButton, 0, 30, 1, 10);
 
 		return grid;

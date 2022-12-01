@@ -1,66 +1,115 @@
 package main;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
 import database.SQL;
+import form.Incident;
+import form.Officer;
+import form.OfficerInfo;
+import form.Subject;
 
 class SQLTest {
 	
-	@Test
-	void testInsetNewForm() {
-		//Without Section C2
-		String [] noC2 = {"2022-11-02","17:00:00","Wednesday","ITSC","Excessive Force",
-						  "John Smith","21","Private","Patrol","10", "Male","White","28","0","0","1","1",
-						  "Jane Doe","0","Female","White", "19","0","1","None","0","None","None","None",
-						  "None","0","None","0",
-						  "Signed","2022-11-02","Signed","2022-11-02", "0"};
-
-		SQL connection = new SQL();
-		assertTrue(connection.insertNewForm(noC2));
-		
-		//With Section C2
-		String [] C2 = {"2022-11-02","17:00:00","Wednesday","ITSC","Excessive Force",
-						"John Smith","21","Private","Patrol","10", "Male","White","28","0","0","1","1",
-						"Jane Doe","0","Female","White", "19","0","1","None","0","None","None","None",
-						"Jane Doe","0","Female","White", "19","0","1","None","0","None","None","None",
-						"None","0","None","0",
-						"Signed","2022-11-02","Signed","2022-11-02", "0"};
-		
-		connection = new SQL();
-		assertTrue(connection.insertNewForm(C2));
-		
-		//Null Values [without C2] (Should Fail)
-		
-		//Null Values [with C2] (Should Fail)
-	}
-	
-	@Test
-	void testChangePassword() {
-		//Passes
-		
-		//Fails
-		
-	}
 	
 	@Test
 	void testIsUser() {
-		//Passes
+		try {
+			SQL test = new SQL("jdewey", "csc353");
+			assertTrue(test.isUser("jdewey","csc353"));
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
 		
-		//Fails
-		
+	}
+	@Test
+	void testGetForm() {
+		try {
+			SQL normalTest = new SQL("jdewey", "csc353");
+			int caseID = 19;
+			int badgeNumber = 21;
+			ResultSet rs = normalTest.getForm(caseID);
+			assertEquals(rs.getString("CaseID"), caseID);
+			assertEquals(rs.getString("BadgeNumber"), badgeNumber);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
-	void testDeleteForm() {
-		int CASE_NUMBER = 1;
-		SQL connection = new SQL();
-		assertTrue(connection.deleteForm(CASE_NUMBER));
-		//Passes
+	void testAddUser() {
+		try {
+			SQL testWithAdmin = new SQL("jdewey", "csc353");
+			assertTrue(testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
+			testWithAdmin.deleteUser("test");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		
-		//Fails
+		try {
+			SQL testWithPlainJane = new SQL("jsmith", "jsmith123");
+			assertFalse(testWithPlainJane.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	@Test
+	void testInsertNewForm() {
+		
+		OfficerInfo info = new OfficerInfo(21, "Johnathan", "Tyler", "Dewey", "Male", "White", new Date(), new Date(), "Private", "Patrol");
+		
+		Officer officer = new Officer(info, false, false, false, false, false, "A", false, new Date());
+		
+		ArrayList<String> influence = new ArrayList<String>();
+		influence.addAll(0, Arrays.asList(""));
+		ArrayList<String> actions = new ArrayList<String>();
+		actions.addAll(0, Arrays.asList(""));
+		ArrayList<String> uofAgainst = new ArrayList<String>();
+		uofAgainst.addAll(0, Arrays.asList(""));
+		Subject subject = new Subject("John", "Alan", "Doe", "Other", "White", 1, false, false, false, false, false, "B", "C", influence, "D", actions, "E", uofAgainst, "F", 0);
+		
+		ArrayList<Subject> subjects = new ArrayList<Subject>();
+		subjects.add(subject);
+		Incident incident = new Incident(officer, subjects, new Date(), "Your Moms House", "Excessive Force", "", false, new Date(), "G");
+		
+		try {
+			SQL test = new SQL("jdewey", "csc353");
+			assertTrue(test.insertNewForm(incident));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
-
+	@Test
+	void testDeleteUser() {
+		try {
+			SQL testWithAdmin = new SQL("jdewey", "csc353");
+			testWithAdmin.addUser("test", "test", "test", "test", 1, "test@furman.edu", 1);
+			assertTrue(testWithAdmin.deleteUser("test"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			SQL testWithPlainJane = new SQL("jsmith", "jsmith123");
+			assertFalse(testWithPlainJane.deleteUser("test"));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
 }
