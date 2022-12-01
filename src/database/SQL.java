@@ -75,6 +75,7 @@ public class SQL {
 		String SQL_Command = String.format("SELECT * FROM forms WHERE CaseID = %d", caseID);
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
+		rs.first();
 
 		ArrayList<Subject> subjectArray = getSubjectArrayFromResultSet(getSubject(caseID));
 		OfficerInfo oInfo = getOfficerInfoFromResultSet(getOfficer(caseID));
@@ -86,13 +87,23 @@ public class SQL {
 		String SQL_Command = String.format("SELECT * FROM subjectInfo WHERE CaseID = %d", caseID);
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
+		rs.first();
 		return rs;
 	}
 
 	public ResultSet getOfficer(int caseID) throws SQLException {
-		String SQL_Command = String.format("SELECT * FROM officer WHERE CaseID = %d", caseID);
+		
+		String SQL_Command = String.format("SELECT BadgeNumber FROM forms WHERE CaseID = %d", caseID);
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
+		rs.first();
+		int badgeNumber = rs.getInt("BadgeNumber");
+		
+		SQL_Command = String.format("SELECT * FROM Officers WHERE badgeNumber = %d", badgeNumber);
+		getForm = _CON.createStatement();
+		rs = getForm.executeQuery(SQL_Command);
+		
+		rs.first();
 		return rs;
 	}
 
@@ -439,11 +450,8 @@ public class SQL {
 
 	public ArrayList<Incident> getIncidentFromResultSet(ResultSet rs, OfficerInfo officerData, ArrayList<Subject> subjectData)
 	{
-
-
 		try
 		{
-
 			Officer newOff = getOfficerFromOfficerInfo(officerData,
 					Utilities.intToBool(rs.getInt("OfficerInjured")),
 					Utilities.intToBool(rs.getInt("OfficerKilled")),
@@ -454,8 +462,7 @@ public class SQL {
 					Utilities.intToBool(rs.getInt("OfficerSign")),
 					rs.getDate("OfficerSignDate")
 					);
-
-
+			
 			ArrayList<Incident> result = new ArrayList<Incident>(); 
 
 			while(rs.next())

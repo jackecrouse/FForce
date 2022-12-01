@@ -112,7 +112,12 @@ public class SearchForm extends Application{
 			public void handle(ActionEvent event) {
 				incidents.clear();
 				if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Incident Number")) {
-					incidents = getForm(value.getText()); //TODO: retrieve sql data
+					try {
+						incidents = sql.getForm(Integer.parseInt(value.getText()));
+						System.out.println(incidents.get(0).id);
+					} catch (Exception e) {
+						e.printStackTrace();
+					} //TODO: retrieve sql data
 				}
 				else if(criteria.getItems().get(FormUtil.getCurrentIndex(criteria)).equals("Badge Number")) {
 //					incidents = getIncidentsFromBadgeNumber(value.getText()); //TODO: retrieve sql data
@@ -376,9 +381,9 @@ public class SearchForm extends Application{
 		medicalInfo.getChildren().add(signatureInfo);
 		
 		signatureInfo.add(FormUtil.makePaddedLabel("Officer Signed:"), 0, 0);
-		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
+		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSignature)), 0, 1);
 		
-		if(officer.hasSigniture) {
+		if(officer.hasSignature) {
 			signatureInfo.add(FormUtil.makePaddedLabel("Date:"), 1, 0);
 			signatureInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
 		}
