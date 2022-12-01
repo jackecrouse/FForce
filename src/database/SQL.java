@@ -360,24 +360,23 @@ public class SQL {
 				String sex = set.getString("SubjectSex");
 				String race = set.getString("SubjectRace");
 				int age = Integer.parseInt(set.getString("SubjectAge"));
-				boolean wasInjured = Boolean.parseBoolean(set.getString("SubjectHadWeapon"));
-				set.getString("SubjectInjured"));
-				set.getString("SubjectInjuries"));
-				set.getString("SubjectKilled"));
-				set.getString("SubjectWasArrested"));
-				set.getString("SubjectHadTreatment"));
-				set.getString("SubjectInfluencedBy"));
-				set.getString("SubjectCharges")); 
-				set.getString("SubjectActions"));
-				set.getString("UOFAgainstSubject"));
-				set.getString("ShotsFired"));
+				boolean wasInjured = Utilities.intToBool(Integer.parseInt(set.getString("SubjectInjured")));
+				boolean wasKilled =  Utilities.intToBool(Integer.parseInt(set.getString("SubjectKilled")));
+				boolean wasWeaponed = Utilities.intToBool(Integer.parseInt(set.getString("SubjectHadWeapon")));
+				boolean wasArrested = Utilities.intToBool(Integer.parseInt(set.getString("SubjectWasArrested")));
+				boolean hadMedicalTreatment = Utilities.intToBool(Integer.parseInt(set.getString("SubjectHadTreatment")));
+				String injuries = set.getString("SubjectInjuries");
+				String charges = set.getString("SubjectCharges");
+				ArrayList<String> influence = Utilities.parseToArrayList(set.getString("SubjectInfluencedBy")); 
+				ArrayList<String> actions = Utilities.parseToArrayList(set.getString("SubjectActions"));
+				ArrayList<String> uofAgainst = Utilities.parseToArrayList(set.getString("UOFAgainstSubject"));
+				int numberOfShots = Integer.parseInt(set.getString("ShotsFired"));
 				
 				String[] sbjArray = new String[sbj.size()];
 				sbjArray = sbj.toArray(sbjArray);
 				
-				Subject sub = new Subject(String firstName, String middleName, String lastName, String sex, String race, int age, boolean wasInjured, boolean wasKilled,
-						   				  boolean wasWeaponed, boolean wasArrested, boolean hadMedicalTreatment, String injuries, String charges, ArrayList<String> influence,
-						   				  String otherInfluence, ArrayList<String> actions, String otherActions, ArrayList<String> uofAgainst, String otherUOF, int numberOfShots);
+				Subject sub = new Subject(firstName, middleName, lastName, sex, race, age, wasInjured, wasKilled, wasWeaponed, wasArrested, hadMedicalTreatment,
+						injuries, charges, influence, "", actions, "", uofAgainst, "", numberOfShots);
 				result.add(sub);
 			}
 			return result;
