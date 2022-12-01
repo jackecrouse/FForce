@@ -1,11 +1,12 @@
 package main;
 
-
 import java.sql.SQLException;
 
 import database.SQL;
+import form.SearchForm;
 import form.UOFIncidentForm;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,15 +29,15 @@ public class FForce extends Application {
 
 	public FForce() {
 	}
-	
+
 	public static String getUsername() {
 		return _username.getText();
 	}
-	
+
 	public static String getPassword() {
 		return _password.getText();
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		window = primaryStage;
@@ -54,23 +55,18 @@ public class FForce extends Application {
 		browseFormsScene = new Scene(browseGrid, 400, 300);
 
 		submitButton.setOnAction(e -> {
-			
 
 			try {
-				if(validateLogin(_username, _password))
-				{
+				if (validateLogin(_username, _password)) {
 					System.out.println("Success, logged in: " + _username.getText());
 					window.setScene(homePageScene);
-				}
-				else
-				{
+				} else {
 					System.out.println("Failure, did not log in: " + _username.getText());
 				}
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			
-			
+
 		}); // need to have an event handler method that
 			// authenticates the user, for now just change
 			// scene
@@ -81,31 +77,41 @@ public class FForce extends Application {
 			Stage form = incidentStage.create(primaryStage);
 			form.show();
 		});
-		browseForms.setOnAction(e -> window.setScene(browseFormsScene));
+		browseForms.setOnAction(e -> {
+			window.setScene(browseFormsScene);
+			SearchForm SearchStage = new SearchForm();
+			Stage form = SearchStage.create(primaryStage);
+			form.show();
+		});
 
 		window.setScene(loginScene); // sets first scene shown
 		window.setTitle("Fupo Force App");
 		window.show();
 	}
 
-	
-	private static boolean validateLogin(TextField username, PasswordField password) throws SQLException
-	{
+	private static boolean validateLogin(TextField username, PasswordField password) throws SQLException {
 		SQL connection = new SQL();
 		String user = username.getText();
 		String pass = password.getText();
 		return connection.isUser(user, pass);
 	}
 
-
 	public static GridPane createBrowsePage() {
 		Label browse = new Label("form browsing page");
 		GridPane grid = new GridPane();
+		Button back = new Button("go back");
+		back.setOnAction((ActionEvent e) -> {
+			window.setScene(homePageScene);
+		});
 
 		grid.setHgap(3);
 		grid.setVgap(3);
 
+		back.setTranslateX(2);
+		back.setTranslateY(25);
+
 		grid.add(browse, 0, 0);
+		grid.add(back, 0, 0);
 
 		return grid;
 	}
