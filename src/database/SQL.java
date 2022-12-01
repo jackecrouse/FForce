@@ -88,7 +88,6 @@ public class SQL {
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
 		rs.first();
-		System.out.println(rs.getString("SubjectFirstName"));
 		return rs;
 	}
 
@@ -364,12 +363,13 @@ public class SQL {
 	public ArrayList<Subject> getSubjectArrayFromResultSet(ResultSet set)
 	{
 		ArrayList<Subject> result = new ArrayList<Subject>();
+
 		try
 		{
-			while(set.next())
+			do
 			{
 				ArrayList<String> sbj = new ArrayList<String>();
-
+								
 				String firstName = set.getString("SubjectFirstName");
 				String middleName = set.getString("SubjectMiddleName");
 				String lastName = set.getString("SubjectLastName");
@@ -388,14 +388,12 @@ public class SQL {
 				ArrayList<String> uofAgainst = Utilities.parseToArrayList(set.getString("UOFAgainstSubject"));
 				int numberOfShots = Integer.parseInt(set.getString("ShotsFired"));
 
-				String[] sbjArray = new String[sbj.size()];
-				sbjArray = sbj.toArray(sbjArray);
-
 				Subject sub = new Subject(firstName, middleName, lastName, sex, race, age, wasInjured, wasKilled, wasWeaponed, wasArrested, hadMedicalTreatment,
 						injuries, charges, influence, "", actions, "", uofAgainst, "", numberOfShots);
 
 				result.add(sub);
 			}
+			while(set.next());
 			return result;
 
 		}
@@ -466,7 +464,7 @@ public class SQL {
 			
 			ArrayList<Incident> result = new ArrayList<Incident>(); 
 
-			while(rs.next())
+			do
 			{	
 				Incident inc = new Incident(); 
 				Date date = rs.getDate("Date");
@@ -483,7 +481,8 @@ public class SQL {
 
 				result.add(inc);
 			}
-
+			while(rs.next());
+			
 			return result;
 		}
 
