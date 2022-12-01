@@ -4,6 +4,7 @@ package main;
 import java.sql.SQLException;
 
 import database.SQL;
+import form.SearchForm;
 import form.UOFIncidentForm;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -81,7 +82,12 @@ public class FForce extends Application {
 			Stage form = incidentStage.create(primaryStage);
 			form.show();
 		});
-		browseForms.setOnAction(e -> window.setScene(browseFormsScene));
+		browseForms.setOnAction(e -> {
+			window.setScene(browseFormsScene);
+			SearchForm SearchStage = new SearchForm();
+			Stage form = SearchStage.create(primaryStage);
+			form.show();
+		});
 
 		window.setScene(loginScene); // sets first scene shown
 		window.setTitle("Fupo Force App");
