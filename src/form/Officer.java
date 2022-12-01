@@ -11,7 +11,7 @@ public class Officer {
 	public boolean wasUniformed;
 	public boolean hadMedicalTreatment;
 	public String injuries;
-	public boolean hasSigniture;
+	public boolean hasSignature;
 	public Date signDate;
 	
 	public Officer() {
@@ -22,7 +22,7 @@ public class Officer {
 		wasUniformed = false;
 		hadMedicalTreatment = false;
 		injuries = "";
-		hasSigniture = false;
+		hasSignature = false;
 		signDate = new Date();
 	}
 	
@@ -36,7 +36,7 @@ public class Officer {
 		this.wasUniformed = wasUniformed;
 		this.hadMedicalTreatment = hadMedicalTreatment;
 		this.injuries = injuries;
-		this.hasSigniture = hasSigniture;
+		this.hasSignature = hasSigniture;
 		this.signDate = signDate;
 	}
 	

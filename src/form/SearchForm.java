@@ -376,9 +376,9 @@ public class SearchForm extends Application{
 		medicalInfo.getChildren().add(signatureInfo);
 		
 		signatureInfo.add(FormUtil.makePaddedLabel("Officer Signed:"), 0, 0);
-		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSigniture)), 0, 1);
+		signatureInfo.add(FormUtil.makePaddedLabel(FormUtil.booleanToYesNo(officer.hasSignature)), 0, 1);
 		
-		if(officer.hasSigniture) {
+		if(officer.hasSignature) {
 			signatureInfo.add(FormUtil.makePaddedLabel("Date:"), 1, 0);
 			signatureInfo.add(FormUtil.makePaddedLabel(Utilities.convertDate(officer.signDate)), 1, 1);
 		}
