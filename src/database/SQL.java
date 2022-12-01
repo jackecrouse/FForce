@@ -312,7 +312,7 @@ public class SQL {
 				officer.info.firstName, officer.info.middleName, officer.info.lastName, officer.info.sex, officer.info.rank, officer.info.duty,
 				Utilities.boolToInt(officer.wasInjured), officer.injuries, Utilities.boolToInt(officer.wasKilled),
 				Utilities.boolToInt(officer.wasOnDuty), Utilities.boolToInt(officer.wasUniformed),
-				Utilities.boolToInt(officer.hadMedicalTreatment), Utilities.boolToInt(officer.hasSigniture),
+				Utilities.boolToInt(officer.hadMedicalTreatment), Utilities.boolToInt(officer.hasSignature),
 				Utilities.convertDate(officer.signDate), Utilities.boolToInt(incident.hasSupervisorSignature),
 				Utilities.convertDate(incident.supervisorSignDate), incident.supervisorFinding);
 
