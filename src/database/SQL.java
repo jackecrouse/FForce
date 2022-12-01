@@ -63,19 +63,23 @@ public class SQL {
 			_username = rs.getString("username");
 			_password = rs.getString("password");
 			_userPrivlege = rs.getInt("systemRole");
-
 		}
+
 		catch (Exception e)
 		{
 			throw new SQLException("Invalid Login");
 		}
 	}
 
-	public ResultSet getForm(int caseID, int badgeNumber) throws SQLException {
-		String SQL_Command = String.format("SELECT * FROM forms WHERE CaseID = %d AND BadgeNumber = %d", caseID, badgeNumber);
+	public ArrayList<Incident> getForm(int caseID) throws SQLException {
+		String SQL_Command = String.format("SELECT * FROM forms WHERE CaseID = %d", caseID);
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
-		return rs;
+
+		ArrayList<Subject> subjectArray = getSubjectArrayFromResultSet(getSubject(caseID));
+		OfficerInfo oInfo = getOfficerInfoFromResultSet(getOfficer(caseID));
+		
+		return getIncidentFromResultSet(rs, oInfo, subjectArray);
 	}
 
 	public ResultSet getSubject(int caseID) throws SQLException {
@@ -391,7 +395,7 @@ public class SQL {
 	}
 
 	public OfficerInfo getOfficerInfoFromResultSet(ResultSet rs)
-	{		
+	{
 		try
 		{
 			OfficerInfo info = new OfficerInfo(); 
@@ -405,8 +409,8 @@ public class SQL {
 			info.serviceStart = Utilities.stringToDate(rs.getString("StartedService"));
 			info.rank = rs.getString("Rank");
 			info.duty = rs.getString("DutyAssignment");
-			return info;
 
+			return info;
 		}
 		catch(Exception e)
 		{
@@ -415,18 +419,51 @@ public class SQL {
 		}
 	}
 
-	public ArrayList<Incident> getIncidentFromResultSet(ResultSet rs, Officer officerData, ArrayList<Subject> subjectData)
+	public Officer getOfficerFromOfficerInfo(OfficerInfo offInfo, boolean wasInjured, boolean wasKilled, 
+			boolean wasOnDuty, boolean wasUniformed, boolean hadMedicalTreatment, String injuries, boolean hasSignature,
+			Date signDate)
 	{
+		Officer result = new Officer(); 
+		result.hadMedicalTreatment = hadMedicalTreatment;
+		result.hasSignature = hasSignature;
+		result.info = offInfo;
+		result.wasUniformed = wasUniformed;
+		result.wasOnDuty = wasOnDuty;
+		result.signDate = signDate;
+		result.injuries = injuries;
+		result.wasInjured = wasInjured;
+		result.wasKilled = wasKilled;
+
+		return result; 
+	}
+
+	public ArrayList<Incident> getIncidentFromResultSet(ResultSet rs, OfficerInfo officerData, ArrayList<Subject> subjectData)
+	{
+
+
 		try
 		{
+
+			Officer newOff = getOfficerFromOfficerInfo(officerData,
+					Utilities.intToBool(rs.getInt("OfficerInjured")),
+					Utilities.intToBool(rs.getInt("OfficerKilled")),
+					Utilities.intToBool(rs.getInt("OfficerOnDuty")),
+					Utilities.intToBool(rs.getInt("OfficerHadUniform")),
+					Utilities.intToBool(rs.getInt("OfficerHadTreatment")),
+					rs.getString("OfficerInjuries"),
+					Utilities.intToBool(rs.getInt("OfficerSign")),
+					rs.getDate("OfficerSignDate")
+					);
+
+
 			ArrayList<Incident> result = new ArrayList<Incident>(); 
 
 			while(rs.next())
-			{
+			{	
 				Incident inc = new Incident(); 
 				Date date = rs.getDate("Date");
 
-				inc.officer = officerData;
+				inc.officer = newOff;
 				inc.id = rs.getInt("CaseID");
 				inc.incidentDate = date;
 				inc.location = rs.getString("Location");
