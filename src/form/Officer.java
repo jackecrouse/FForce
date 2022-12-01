@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Officer {
 
-	public OfficerInfo info = new OfficerInfo();
+	public OfficerInfo info;
 	public boolean wasInjured;
 	public boolean wasKilled;
 	public boolean wasOnDuty;
@@ -27,16 +27,17 @@ public class Officer {
 	}
 	
 	//for testing
-	public Officer(String [] args) {
-		info = new OfficerInfo(args);
-		wasInjured = Boolean.getBoolean(args[10]);
-		wasKilled = Boolean.getBoolean(args[11]);
-		wasOnDuty = Boolean.getBoolean(args[12]);
-		wasUniformed = Boolean.getBoolean(args[13]);
-		hadMedicalTreatment = Boolean.getBoolean(args[14]);
-		injuries = args[15];
-		hasSigniture = Boolean.parseBoolean(args[16]);
-		signDate = new Date(System.currentTimeMillis());
+	public Officer(OfficerInfo info, boolean wasInjured, boolean wasKilled, boolean wasOnDuty, boolean wasUniformed, boolean hadMedicalTreatment,
+				   String injuries, boolean hasSigniture, Date signDate) {
+		this.info = info;
+		this.wasInjured = wasInjured;
+		this.wasKilled = wasKilled;
+		this.wasOnDuty = wasOnDuty;
+		this.wasUniformed = wasUniformed;
+		this.hadMedicalTreatment = hadMedicalTreatment;
+		this.injuries = injuries;
+		this.hasSigniture = hasSigniture;
+		this.signDate = signDate;
 	}
 	
 }

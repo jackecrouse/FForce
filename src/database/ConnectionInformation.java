@@ -9,13 +9,13 @@ public class ConnectionInformation {
 	private static String _p = "౥๥౥٥ڥ٥";
 	
 	public static String get_url() {
-		return _url;
+		return Utilities.format(_url);
 	}
 	public static String get_u() {
-		return _u;
+		return Utilities.format(_u);
 	}
 	public static String get_p() {
-		return _p;
+		return Utilities.format(_p);
 	}
 	
 	public static Connection establishConnection() {

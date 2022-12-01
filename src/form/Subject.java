@@ -49,27 +49,29 @@ public class Subject {
 	}
 	
 	//for testing
-	public Subject(String [] args) {
-		this.firstName = args[0];
-		this.middleName = args[1];
-		this.lastName = args[2];
-		this.sex = args[3];
-		this.race = args[4];
-		this.age = Integer.parseInt(args[5]);
-		this.wasInjured = Boolean.getBoolean(args[6]);
-		this.wasKilled = Boolean.getBoolean(args[7]);
-		this.wasWeaponed = Boolean.getBoolean(args[8]);
-		this.wasArrested = Boolean.getBoolean(args[9]);
-		this.hadMedicalTreatment = Boolean.getBoolean(args[10]);
-		this.injuries = args[11];
-		this.charges = args[12];
-		this.influence = new ArrayList<String>();
-		this.otherInfluence = args[14];
-		this.actions = new ArrayList<String>();
-		this.otherActions = args[16];
-		this.uofAgainst = new ArrayList<String>();
-		this.otherUOF = args[18];
-		this.numberOfShots = Integer.parseInt(args[19]);
+	public Subject(String firstName, String middleName, String lastName, String sex, String race, int age, boolean wasInjured, boolean wasKilled,
+				   boolean wasWeaponed, boolean wasArrested, boolean hadMedicalTreatment, String injuries, String charges, ArrayList<String> influence,
+				   String otherInfluence, ArrayList<String> actions, String otherActions, ArrayList<String> uofAgainst, String otherUOF, int numberOfShots) {
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.sex = sex;
+		this.race = race;
+		this.age = age;
+		this.wasInjured = wasInjured;
+		this.wasKilled = wasKilled;
+		this.wasWeaponed = wasWeaponed;
+		this.wasArrested = wasArrested;
+		this.hadMedicalTreatment = hadMedicalTreatment;
+		this.injuries = injuries;
+		this.charges = charges;
+		this.influence = influence;
+		this.otherInfluence = otherInfluence;
+		this.actions = actions;
+		this.otherActions = otherActions;
+		this.uofAgainst = uofAgainst;
+		this.otherUOF = otherUOF;
+		this.numberOfShots = numberOfShots;
 	}
 	
 }

@@ -15,7 +15,9 @@ public class Utilities {
 	}
 	
 	public static String convertTime(Date date) {
-		return String.format("%s:%s:%s", String.format("%1$2s",dateToHours(date)).replace(" ", "0"), String.format("%1$2s",dateToMinutes(date)).replace(" ", "0"),  String.format("%1$2s",dateToSeconds(date)).replace(" ", "0"));
+		return String.format("%s:%s:%s", String.format("%1$2s",dateToHours(date)).replace(" ", "0"),
+										 String.format("%1$2s",dateToMinutes(date)).replace(" ", "0"),
+										 String.format("%1$2s",dateToSeconds(date)).replace(" ", "0"));
 	}
 	
 	public static String type(Incident incident) {
