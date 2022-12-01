@@ -88,6 +88,7 @@ public class SQL {
 		Statement getForm = _CON.createStatement();
 		ResultSet rs = getForm.executeQuery(SQL_Command);
 		rs.first();
+		System.out.println(rs.getString("SubjectFirstName"));
 		return rs;
 	}
 
